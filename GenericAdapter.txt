@@ -1,0 +1,18 @@
+Trigger parametri
+	assembly file
+Event paramteri
+	assembly file
+
+
+il dev crea l assembly e nel configuration file metti le properties
+quando il trigger parte legge l' assembly e implementa la gestione delle propertie in reflection
+quando il evento parte legge l' assembly e implementa la gestione delle propertie in reflection
+
+
+
+inoltre 
+
+Fare un servizio rest trigger e event che e' in grado di implementare le properties di un assembly in reflection
+
+
+

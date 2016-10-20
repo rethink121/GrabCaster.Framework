@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.1.0\build\Microsoft.VisualStudio.Azure.Fabric.Application.props" Condition="Exists('..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.1.0\build\Microsoft.VisualStudio.Azure.Fabric.Application.props')" />
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>7430366c-472f-4633-9126-827e913fbd95</ProjectGuid>
+    <ProjectVersion>1.1</ProjectVersion>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ApplicationPackageRoot\ApplicationManifest.xml" />
+    <None Include="ApplicationParameters\Cloud.xml" />
+    <None Include="ApplicationParameters\Local.xml" />
+    <None Include="PublishProfiles\Cloud.xml" />
+    <None Include="PublishProfiles\Local.xml" />
+    <None Include="Scripts\Deploy-FabricApplication.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Create new Clone.cmd" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\CreateNewClone.cmd" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.BizTalk.Extensibility.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.cfg" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.exe" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.exe.config" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.Framework.Base.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.Framework.Common.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.Framework.Compression.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.Framework.Contracts.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.Framework.EmbeddedTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.Framework.Engine.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.Framework.Library.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.Framework.Log.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.Framework.PerfCounters.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.Framework.Serialization.Object.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.Framework.Serialization.Xml.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.Framework.Storage.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.Framework.Syncronization.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.vshost.exe" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.vshost.exe.config" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\GrabCaster.vshost.exe.manifest" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\712016-02655788-e2d2-4805-89ed-dbbd40669c09.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\712016-0f7ce0fc-5348-4352-b0e5-a204abe37ef0.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\712016-74477e41-f975-43b9-9cd7-0a6ddc7ff5c2.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\712016-8fb91a9d-7888-4b9b-9ac1-62e3d99f6125.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\712016-c1e4cd9f-59c2-4899-a003-409e14841c74.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\712016-c38828e7-db9f-461a-984c-4bb0071b7eb6.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\712016-c51dfd37-1ab1-4bf2-ac69-617a5bfda34f.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\712016-e97cc829-7bce-4de3-b2b7-3bb1ed03ea35.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-008f52b3-2aa8-4e85-b03f-1feca9715e67.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-0e388685-fa3a-4684-a3cf-4517571e93f1.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-25f1fdc2-ba3b-444f-917b-2e16ef963e18.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-3219b43a-a4f6-4942-b578-bcac85cad1b1.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-341cfe58-5f11-465b-8a3e-c8d362f76f80.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-3543534d-4527-4ede-85dd-aee96da5e49c.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-387118c6-f5cb-4c85-80a5-956a1ea13878.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-3f041afc-5596-460c-8312-cc4d3ea8389e.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-6b76e953-92e8-4cc4-b729-cc96b926ce33.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-7ee0c25b-7c54-4186-a0b9-6c8ce1128c7b.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-870a4160-0527-4263-987e-93b7cc2d92f9.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-9f41ac85-7f06-492c-98c4-f6375a069089.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-bd2410c8-08b4-420d-a5c6-04264da0040c.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-c021fc18-e29b-4e35-9443-143bc98bce4f.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-c866ead0-9ff3-4a2e-83ed-e49ccd48161c.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-dc3c4e51-7258-4a73-b590-a3a12c78d3ae.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-df953ddd-adc4-4754-88d2-9ad956654258.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-e540190c-6761-44b9-8c87-f4342dd93d89.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-ed51c3fa-d5ff-4c9e-affa-ebef73d28f21.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\722016-fc5e1b8f-3294-4d67-b885-870a519fb448.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\732016-42c8c936-117e-47db-a5ce-0a648f3d4769.txt" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\Console\Readme" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Log\Readme" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.Azure.KeyVault.Core.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.Azure.KeyVault.Core.xml" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.BizTalk.Bam.EventObservation.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.BizTalk.Pipeline.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.Build.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.Build.Engine.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.Build.Framework.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.Build.Tasks.Core.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.Build.Utilities.Core.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.CodeAnalysis.CSharp.Workspaces.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.CodeAnalysis.CSharp.Workspaces.xml" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.CodeAnalysis.CSharp.xml" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.CodeAnalysis.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.CodeAnalysis.VisualBasic.Workspaces.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.CodeAnalysis.VisualBasic.Workspaces.xml" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.CodeAnalysis.VisualBasic.xml" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.CodeAnalysis.Workspaces.Desktop.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.CodeAnalysis.Workspaces.Desktop.xml" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.CodeAnalysis.Workspaces.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.CodeAnalysis.Workspaces.xml" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.CodeAnalysis.xml" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.Data.Edm.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.Data.OData.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.Data.Services.Client.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.Samples.Eventing.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.ServiceBus.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.ServiceBus.Messaging.EventProcessorHost.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.WindowsAzure.Configuration.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.WindowsAzure.Storage.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Microsoft.XLANGs.BaseTypes.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Newtonsoft.Json.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Phidget21.NET.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\PipelineObjects.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Chains\Biztalk Pipeline Flat File.chain" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Components\Biztalk Pipeline.cmp" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Components\Biztalk Transform.cmp" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Events\Demo AzureBlob.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Events\Demo Chat.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Events\Demo CSharp.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Events\Demo DialogBox.evn" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Events\Demo Embedded Event.evn" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Events\Demo EventHub.evn" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Events\Demo File Out.evn" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Events\Demo MessageBox.evn" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Events\Demo PowerShell Backup.evn" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Events\Demo Queue.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Events\Demo SQL Bulk Insert.evn" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Events\Demo Topic.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Events\Demo Twilio.evn" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo EventViewer 2 EventHub.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo EventViewer 2 Local Notepad.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo File In_Local 2 Out_Local - Chain BizTalk.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo File In_Local 2 Out_Local.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo File In_LocalOverride 2 Out Override Properties.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo File In_LocalRemote 2 Out.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo File In_LocalRemoteAll 2 Out All Channels All Points.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo File In_LocalRemoteSingle 2 Out All Channels single Point.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo Notepad Chat.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo PowerShell EventViewer 2 Local Notepad.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo PowerShell EventViewer 2 PowerShell Job.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo PowerShell EventViewer 2 TextMessage.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo PowerShell Get File 2 Out.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo RFID 2 Local Notepad.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo SQL Bulk Select 2 SQL Bulk Insert All Points.trg" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo SQL Bulk Select 2 SQL Bulk Insert.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo SQL Select 2 Local Notepad - All points.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Bubbling\Triggers\Demo SQL Select 2 Local Notepad.off" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Components\GrabCaster.Framework.BTSPipelineComponent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Components\GrabCaster.Framework.BTSTransformComponent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Events\GrabCaster.Framework.AzureBlobEvent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Events\GrabCaster.Framework.AzureQueueEvent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Events\GrabCaster.Framework.AzureTopicEvent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Events\GrabCaster.Framework.BulksqlServerEvent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Events\GrabCaster.Framework.ChatEvent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Events\GrabCaster.Framework.CSharpEvent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Events\GrabCaster.Framework.DialogBoxEvent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Events\GrabCaster.Framework.EmbeddedEvent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Events\GrabCaster.Framework.EventHubEvent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Events\GrabCaster.Framework.FileEvent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Events\GrabCaster.Framework.MessageBoxEvent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Events\GrabCaster.Framework.NopEvent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Events\GrabCaster.Framework.PowershellEvent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Events\GrabCaster.Framework.TwilioEvent.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\GrabCaster.Framework.Dcp.Azure.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\GrabCaster.Framework.Dcp.Redis.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\GrabCaster.Framework.Dpp.Azure.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\GrabCaster.Framework.Log.EventHubs.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\GrabCaster.Framework.Log.File.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.AzureBlobTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.AzureQueueTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.AzureTopicTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.BulkSqlServerTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.ChatTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.CSharpTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.EmbeddedTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.EtwTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.EventHubsTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.EventViewerTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.FileTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.NopTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.PowerShellTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.RfidTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Root_GrabCaster\Triggers\GrabCaster.Framework.SqlServerTrigger.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Roslyn.Compilers.CSharp.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\Roslyn.Compilers.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\StackExchange.Redis.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\System.Collections.Immutable.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\System.Composition.AttributedModel.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\System.Composition.Convention.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\System.Composition.Hosting.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\System.Composition.Runtime.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\System.Composition.TypedParts.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\System.Management.Automation.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\System.Reflection.Metadata.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Code\System.Spatial.dll" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Config\Settings.xml" />
+    <Content Include="ApplicationPackageRoot\GrabCasterPkg\ServiceManifest.xml" />
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
+  <PropertyGroup>
+    <ApplicationProjectTargetsPath>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Service Fabric Tools\Microsoft.VisualStudio.Azure.Fabric.ApplicationProject.targets</ApplicationProjectTargetsPath>
+  </PropertyGroup>
+  <Import Project="$(ApplicationProjectTargetsPath)" Condition="Exists('$(ApplicationProjectTargetsPath)')" />
+  <Import Project="..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.1.0\build\Microsoft.VisualStudio.Azure.Fabric.Application.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.1.0\build\Microsoft.VisualStudio.Azure.Fabric.Application.targets')" />
+</Project>

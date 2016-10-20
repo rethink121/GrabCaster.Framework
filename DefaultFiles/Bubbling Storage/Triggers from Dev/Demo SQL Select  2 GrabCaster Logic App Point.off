@@ -1,0 +1,40 @@
+{
+  "Trigger": {
+		"IdConfiguration": "",
+		"IdComponent": "{7920EE0F-CAC8-4ABB-82C2-1C69351EDD28}",
+		"Name": "SQL Server Trigger",
+		"Description": "SQL Server Trigger",
+	"TriggerProperties": [
+	{
+		"Name": "SqlQuery",
+		"Value": "SELECT *  FROM TableDemo where flag <> 0 for xml auto;update TableDemo set flag=0"
+	},
+	{
+		"Name": "ConnectionString",
+		"Value": "Data Source=.;Initial Catalog=Demo;Integrated Security=True"
+	}
+	]
+	},
+  "Events": [
+    {
+	"IdConfiguration": "{DF3F9F3F-938F-43F7-AE39-2DA5F9C1BD9E}",
+	"IdComponent": "{A31209D7-C989-4E5D-93DA-BD341D843870}",
+	"Name": "Send to embedded library",
+	"Description": "Send a eventviewer message to embedded library",
+		"Channels": [
+        {
+          "ChannelId": "*",
+          "ChannelName": "Channel Name",
+          "ChannelDescription": "Channel Description",
+          "Points": [
+            {
+              "PointId": "*",
+              "Name": "Point Name",
+              "Description": "Point Description"
+            }
+          ]
+        }
+	]
+    }
+  ]
+}

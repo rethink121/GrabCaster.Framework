@@ -1,0 +1,20 @@
+
+            long StartingTime = Stopwatch.GetTimestamp();
+
+            // Activity to be timed
+
+            for (int i = 0; i < 20; i++)
+            {
+                Thread.Sleep(1);
+            }
+
+            long EndingTime = Stopwatch.GetTimestamp();
+            long ElapsedTime = EndingTime - StartingTime;
+
+            double ElapsedSeconds = ElapsedTime * (1000.0 / Stopwatch.Frequency);
+
+
+
+
+            Console.WriteLine(ElapsedSeconds);
+            Console.ReadLine();

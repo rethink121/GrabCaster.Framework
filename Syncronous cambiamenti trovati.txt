@@ -1,0 +1,16 @@
+hai rimosso questo in //CHANGE0110.1706
+                foreach (var propertyInfo in trigger.GetType().GetProperties())
+                {
+                    var propertyFound =
+                        context.BubblingConfiguration.Properties.FirstOrDefault(obj => obj.Name == propertyInfo.Name);
+                    if (propertyFound != null && propertyFound.Name != "context"
+                        && propertyFound.Name != "SetEventActionTrigger")
+                    {
+                        propertyFound.Value = propertyInfo.GetValue(trigger);
+                    }
+                }
+
+
+
+				ArrayList cycleArray = new ArrayList(triggerConfiguration.Properties.Keys);
+

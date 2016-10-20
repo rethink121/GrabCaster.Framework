@@ -1,0 +1,86 @@
+
+ExecuteTriggerConfiguration
+	Crea oggetto ActionContext
+	ActionContext setta messageid
+	Setta TriggerAssembly.TriggerType.DataContext = embeddedContent
+	
+Viene eseguito il trigger fisico e il Datacontext passato nel trigger
+
+ActionTriggerReceived
+	arrivano ITriggerType trigger, ActionContext context
+	Se datacontext e' null allora esce
+	Se esiste una chain la esegue
+	
+	Per ogni evento nella context.BubblingObjectBag.Events
+	Setta:
+			context.BubblingObjectBag.DataContext = trigger.DataContext;
+			context.BubblingObjectBag.SenderPointId = ConfigurationBag.Configuration.PointId;
+			context.BubblingObjectBag.SenderChannelId = ConfigurationBag.Configuration.ChannelId;
+			context.BubblingObjectBag.Syncronous = trigger.Syncronous;
+			
+	Se e' un evento locale esegue ExecuteEventsInTrigger
+	
+	Altrimenti clona un nuovo eventolo inserisce nella coda 
+	Per ogni channel ed evento nell evento esegue SendMessageOnRamp	
+	
+	
+SendMessageOnRamp
+
+	setta il bubblingObject messageid
+	Serializza il bubblingObject
+	se il risultato della serializzazione supera il limite impostato in configurazione allora esegue DevicePersistentProvider.PersistEventToStorage
+	Setta il bubblingObject message type
+	Se e' statopassato uno specifico point id in funzione allora setta 
+	bubblingObject.SenderPointId = pointIdOverrided;
+	altrimenti bubblingObject.SenderPointId = ConfigurationBag.Configuration.PointId;
+	
+	setta:
+		bubblingObject.SenderName = ConfigurationBag.Configuration.PointName;
+		bubblingObject.SenderDescriprion= ConfigurationBag.Configuration.PointDescription;
+		bubblingObject.SenderChannelId= ConfigurationBag.Configuration.ChannelId;
+		bubblingObject.SenderChannelName= ConfigurationBag.Configuration.ChannelName;
+		bubblingObject.SenderChannelDescription= ConfigurationBag.Configuration.ChannelDescription;
+		bubblingObject.DestinationChannelId= channelId;
+		bubblingObject.DestinationPointId= pointId;
+	
+	e mette in coda il bubbling object
+	
+	
+IngestMessagge
+
+	Riceve il bubblingObject
+	Controlla se e' per lui
+	Se era persistito allora esegue DevicePersistentProvider.PersistEventFromStorage
+	Se e' un evento 
+	Se e' sincrono esegue SyncAsyncEventsExecuteDelegate
+	Altrimenti esegue EventsEngine.ExecuteEventsInTrigger
+	
+	
+ExecuteEventsInTrigger
+	Se ce una correlazione mette la correlazione
+	prende listanza evento
+	gli passa il datacontext del trigger
+	Se il trigger ricevuto e' embedded 
+		mette il datacontext a null
+		deserializza le propieta passate dalla funzione di source trigger e crea la List<> delle properties
+		Le mappa con le propieta' dellevento ed esegue l'evento
+	Altrimenti
+	    setta il datacontext dell evento con quello del trigger
+		Se sono passate dellepropieta dall evento di source allora fa loverride delle propita dellevento di destinazione con quelle del sorgennte
+		
+Esegue l evento
+	
+Levento mette il vlore nel datacontext dellevento
+
+viene eseguito ActionEventReceived
+
+ActionEventReceived
+
+	Se e' sincronous
+		context.BubblingObjectBag.DataContext
+		se e' locale esegue SyncAsyncEventsExecuteDelegate
+		altrimenti SendMessageOnRamp
+		
+	dopo ci sono le correlazioni da controllare e va testato ancora
+
+	

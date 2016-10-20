@@ -1,0 +1,75 @@
+namespace HTTPSendContentEvent.Event
+{
+    using GrabCaster.Framework.Contracts.Attributes;
+    using GrabCaster.Framework.Contracts.Events;
+    using GrabCaster.Framework.Contracts.Globals;
+    
+using System.IO;
+using System.Net;
+
+
+    /// <summary>
+    /// The no operation event.
+    /// </summary>
+    [EventContract("{8c87cf14-7a9c-4a62-91b5-d47cd57695d8}", "HTTPSendContentEvent", "HTTPSendContentEvent Event component", true)]
+    public class HTTPSendContentEvent : IEventType
+    {
+        
+		[EventPropertyContract("url", "url property")]
+		public string url { get; set; }
+
+        /// <summary>
+        /// Gets or sets the context.
+        /// </summary>
+        public ActionContext Context { get; set; }
+
+        /// <summary>
+        /// Gets or sets the set event action event.
+        /// </summary>
+        public ActionEvent ActionEvent { get; set; }
+
+
+        /// <summary>
+        /// Gets or sets the data context.
+        /// </summary>
+        [EventPropertyContract("DataContext", "Main data context")]
+        public byte[] DataContext { get; set; }
+
+        /// <summary>
+        /// The execute.
+        /// </summary>
+        /// <param name="actionEvent">
+        /// The set event action event.
+        /// </param>
+        /// <param name="context">
+        /// The context.
+        /// </param>
+        [EventActionContract("{83029d5b-dd61-4184-a884-f3b937ce2da1}", "Main action", "Main action executed by the event")]
+        public byte[] Execute(ActionEvent actionEvent, ActionContext context)
+        {
+            
+
+            // declare httpwebrequet wrt url defined above
+            HttpWebRequest webrequest = (HttpWebRequest)WebRequest.Create(url);
+            // set method as post
+            webrequest.Method = "POST";
+            // set content type
+            webrequest.ContentType = "application/soap+xml";
+            // set content length
+            webrequest.ContentLength = DataContext.Length;
+            // get stream data out of webrequest object
+            Stream newStream = webrequest.GetRequestStream();
+            newStream.Write(DataContext, 0, DataContext.Length);
+            newStream.Close();
+            // declare & read response from service
+            HttpWebResponse webresponse = (HttpWebResponse)webrequest.GetResponse();
+
+       
+
+            actionEvent(this, context);
+            return null;
+        }
+        
+
+    }
+}

@@ -1,0 +1,15 @@
+{
+	"Chain": {
+		"idChain": "Specify any ID to identify this chain",
+		"Name": "Specify any name to identify this configuration chain",
+		"Description": "Specify any description to describe this configuration chain",
+	"Components": [
+	{
+		"idComponent": "Specify the ID Component to call"
+	},
+	{
+		"idComponent": "Specify the ID Component to call"
+	}
+	]
+	}
+}
