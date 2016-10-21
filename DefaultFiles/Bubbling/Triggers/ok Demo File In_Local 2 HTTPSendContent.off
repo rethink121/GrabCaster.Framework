@@ -10,8 +10,12 @@
 			"Value": "false"
 		},
 		{
+			"Name": "BatchFilesSize",
+			"Value": "30"
+		},
+		{
 			"Name": "RegexFilePattern",
-			"Value": ".(txt|a)"
+			"Value": ".txt"
 		},
 		{
 			"Name": "DoneExtensionName",
@@ -19,7 +23,7 @@
 		},
 		{
 			"Name": "PollingTime",
-			"Value": "5000"
+			"Value": "1000"
 		},
 		{
 			"Name": "InputDirectory",

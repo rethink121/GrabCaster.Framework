@@ -51,6 +51,11 @@ namespace GrabCaster.Framework.FileTrigger
         /// <summary>
         /// Gets or sets the polling time.
         /// </summary>
+        [TriggerPropertyContract("BatchFilesSize", "Number of file to receive fro each batch.")]
+        public int BatchFilesSize { get; set; }
+        /// <summary>
+        /// Gets or sets the polling time.
+        /// </summary>
         [TriggerPropertyContract("PollingTime", "Polling time.")]
         public int PollingTime { get; set; }
 
@@ -104,20 +109,27 @@ namespace GrabCaster.Framework.FileTrigger
                 //context.SyncAsyncEventAction = SyncAsyncActionReceived;
                 while (true)
                 {
-                    var reg = new Regex(this.RegexFilePattern);
-                    if (Directory.GetFiles(this.InputDirectory, "*.txt").Where(path => reg.IsMatch(path)).ToList().Any())
+                    var files = Directory.GetFiles(this.InputDirectory, "*.*", SearchOption.AllDirectories).Where(path => Path.GetExtension(path) == RegexFilePattern).ToArray();
+
+                    if (files.Length != 0)
                     {
-                        var files =
-                            Directory.GetFiles(this.InputDirectory, "*.txt").Where(path => reg.IsMatch(path)).ToList();
-                        foreach (var file in files)
+                        int numberOfBatch = 0;
+                        if (files.Length >= BatchFilesSize)
+                            numberOfBatch = BatchFilesSize;
+                        else
+                            numberOfBatch = files.Length;
+                        string file = string.Empty;
+
+                        for (int i = 0; i < numberOfBatch; i++)
                         {
+                            file = files[i];
                             var data = File.ReadAllBytes(file);
                             File.Delete(Path.ChangeExtension(file, this.DoneExtensionName));
                             File.Move(file, Path.ChangeExtension(file, this.DoneExtensionName));
                             this.DataContext = data;
                             actionTrigger(this, context);
-                            
                         }
+
 
                     }
 

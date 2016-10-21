@@ -7,7 +7,7 @@
 		"EventProperties": [
 				{
 		"Name": "url",
-		"Value": "fsdfsdfsd"
+		"Value": "http://win-mt4c625nokv/HMSPGGateway/WcfService_HM_OMS_Common_Processes.svc"
 		}
 		]
 	}
