@@ -2448,7 +2448,7 @@ namespace GrabCaster.Framework.Engine
 
                 LogEngine.WriteLog(
                     ConfigurationBag.EngineName, 
-                    $"Event Hubs transfort Type: {ConfigurationBag.Configuration.ServiceBusConnectivityMode}", 
+                    $"Creating event up stream.", 
                     Constant.LogLevelError, 
                     Constant.TaskCategoriesError, 
                     null, 

@@ -24,6 +24,10 @@ copy Framework.Log.File\bin\Debug\GrabCaster.Framework.Log.File.dll Framework\bi
 copy Framework.Log.File\bin\Debug\GrabCaster.Framework.Log.File.pdb Framework\bin\Debug\Root_GrabCaster\* /y
 copy Framework.Log.File\bin\Release\GrabCaster.Framework.Log.File.dll Framework\bin\Release\Root_GrabCaster\* /y
 
+copy Framework.Log.AzureTableStorage\bin\Debug\GrabCaster.Framework.Log.AzureTableStorage.dll Framework\bin\Debug\Root_GrabCaster\* /y
+copy Framework.Log.AzureTableStorage\bin\Debug\GrabCaster.Framework.Log.AzureTableStorage.pdb Framework\bin\Debug\Root_GrabCaster\* /y
+copy Framework.Log.AzureTableStorage\bin\Release\GrabCaster.Framework.Log.AzureTableStorage.dll Framework\bin\Release\Root_GrabCaster\* /y
+
 copy Framework.Dcp.Azure\bin\Debug\GrabCaster.Framework.Dcp.Azure.dll Framework\bin\Debug\Root_GrabCaster\* /y
 copy Framework.Dcp.Azure\bin\Debug\GrabCaster.Framework.Dcp.Azure.pdb Framework\bin\Debug\Root_GrabCaster\* /y
 copy Framework.Dcp.Azure\bin\Release\GrabCaster.Framework.Dcp.Azure.dll Framework\bin\Release\Root_GrabCaster\* /y
@@ -37,9 +41,10 @@ copy Framework.Dpp.Azure\bin\Debug\GrabCaster.Framework.Dpp.Azure.pdb Framework\
 copy Framework.Dpp.Azure\bin\Release\GrabCaster.Framework.Dpp.Azure.dll Framework\bin\Release\Root_GrabCaster\* /y
 
 echo copy the deployment features
-copy GrabCaster.Framework.Deployment\bin\Debug\GrabCaster.Framework.Deployment.dll Framework\bin\Debug\* /y
-copy GrabCaster.Framework.Deployment\bin\Debug\GrabCaster.Framework.Deployment.pdb Framework\bin\Debug\* /y
-copy GrabCaster.Framework.Deployment\bin\Release\GrabCaster.Framework.Deployment.dll Framework\bin\Release\* /y
+copy Framework.Deployment\bin\Debug\GrabCaster.Framework.Deployment.dll Framework\bin\Debug\* /y
+copy Framework.Deployment\bin\Debug\GrabCaster.Framework.Deployment.pdb Framework\bin\Debug\* /y
+copy Framework.Deployment\bin\Release\GrabCaster.Framework.Deployment.dll Framework\bin\Release\* /y
+
 xcopy DefaultFiles\DynamicDeployment\* Framework\bin\Debug\Root_GrabCaster\Deploy\ /s /y
 xcopy DefaultFiles\DynamicDeployment\* Framework\bin\Release\Root_GrabCaster\Deploy\ /s /y
 

@@ -58,5 +58,10 @@ namespace GrabCaster.Framework.Log.EventHubs
         {
             return LogEventUpStream.SendMessage(logMessage);
         }
+
+        public void Flush()
+        {
+            //NOP
+        }
     }
 }

@@ -54,13 +54,19 @@ xcopy DefaultFiles\PersistentStorage Setup\bin\Debug\Deploy\PersistentStorage\* 
 copy Framework.Log.EventHubs\bin\Debug\GrabCaster.Framework.Log.EventHubs.dll Setup\bin\Debug\Deploy\Root_GrabCaster\* /y
 copy Framework.Log.EventHubs\bin\Debug\GrabCaster.Framework.Log.EventHubs.pdb Setup\bin\Debug\Deploy\Root_GrabCaster\* /y
 copy Framework.Log.EventHubs\bin\Release\GrabCaster.Framework.Log.EventHubs.dll Setup\bin\Release\Deploy\Root_GrabCaster\* /y
+
 copy Framework.Log.File\bin\Debug\GrabCaster.Framework.Log.File.dll Setup\bin\Debug\Deploy\Root_GrabCaster\* /y
 copy Framework.Log.File\bin\Debug\GrabCaster.Framework.Log.File.pdb Setup\bin\Debug\Deploy\Root_GrabCaster\* /y
 copy Framework.Log.File\bin\Release\GrabCaster.Framework.Log.File.dll Setup\bin\Release\Deploy\Root_GrabCaster\* /y
 
-copy GrabCaster.Framework.Deployment\bin\Debug\GrabCaster.Framework.Deployment.dll Setup\bin\Debug\* /y
-copy GrabCaster.Framework.Deployment\bin\Debug\GrabCaster.Framework.Deployment.pdb Setup\bin\Debug\* /y
-copy GrabCaster.Framework.Deployment\bin\Release\GrabCaster.Framework.Deployment.dll Setup\bin\Release\* /y
+copy Framework.Log.AzureTableStorage\bin\Debug\GrabCaster.Framework.Log.AzureTableStorage.dll Setup\bin\Debug\Deploy\Root_GrabCaster\* /y
+copy Framework.Log.AzureTableStorage\bin\Debug\GrabCaster.Framework.Log.AzureTableStorage.pdb Setup\bin\Debug\Deploy\Root_GrabCaster\* /y
+copy Framework.Log.AzureTableStorage\bin\Release\GrabCaster.Framework.Log.AzureTableStorage.dll Setup\bin\Release\Deploy\Root_GrabCaster\* /y
+
+copy Framework.Deployment\bin\Debug\GrabCaster.Framework.Deployment.dll Setup\bin\Debug\* /y
+copy Framework.Deployment\bin\Debug\GrabCaster.Framework.Deployment.pdb Setup\bin\Debug\* /y
+copy Framework.Deployment\bin\Release\GrabCaster.Framework.Deployment.dll Setup\bin\Release\* /y
+
 xcopy DefaultFiles\DynamicDeploymentDeploy\* Setup\bin\Debug\Root_GrabCaster\Deploy\ /s /y
 xcopy DefaultFiles\DynamicDeploymentDeploy\* Setup\bin\Release\Root_GrabCaster\Deploy\ /s /y
 

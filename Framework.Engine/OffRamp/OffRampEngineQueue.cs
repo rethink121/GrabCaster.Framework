@@ -108,7 +108,7 @@ namespace GrabCaster.Framework.Engine.OffRamp
             try
             {
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                    $"Start performance counters.",
+                    $"Start engine initialization.",
                     Constant.LogLevelError,
                     Constant.TaskCategoriesError,
                     null,

@@ -220,6 +220,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\BizTalkFormWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BizTalkFormWizard.Designer.cs">
+      <DependentUpon>BizTalkFormWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CreationModeEnum.cs" />
     <Compile Include="Forms\ServiceFormSettingsCreationParameters.cs" />
     <Compile Include="Forms\StartupModeEnum.cs" />
@@ -574,6 +580,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\BizTalkFormWizard.resx">
+      <DependentUpon>BizTalkFormWizard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="NTService\ProjectInstaller.resx">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
       <SubType>Designer</SubType>

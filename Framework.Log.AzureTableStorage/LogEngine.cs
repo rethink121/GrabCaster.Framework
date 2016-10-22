@@ -1,4 +1,6 @@
-﻿// --------------------------------------------------------------------------------------------------
+﻿
+//https://azure.microsoft.com/en-gb/documentation/articles/storage-dotnet-how-to-use-tables/
+// --------------------------------------------------------------------------------------------------
 // <copyright file = "LogEngine.cs" company="GrabCaster Ltd">
 //   Copyright (c) 2013 - 2016 GrabCaster Ltd All Rights Reserved.
 // </copyright>
@@ -23,7 +25,11 @@
 //    http://www.opensource.org/licenses/rpl1.5.txt
 //  </summary>
 // --------------------------------------------------------------------------------------------------
-namespace GrabCaster.Framework.Log.File
+
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Table;
+
+namespace GrabCaster.Framework.Log.AzureTableStorage
 {
     using Base;
     using GrabCaster.Framework.Contracts.Attributes;
@@ -33,11 +39,12 @@ namespace GrabCaster.Framework.Log.File
     /// <summary>
     /// The log engine, simple version.
     /// </summary>
-    [LogContract("{4DACE829-1462-4A3D-ACC9-1EE41B3C2D53}", "LogEngine", "File Log System")]
+    [LogContract("{CE541CB7-94CD-4421-B6C4-26FBC3088FF9}", "LogEngine", "Azure Table Storage Log System")]
     public class LogEngine : ILogEngine
     {
-        private string PathFile = "";
-        StreamWriter logFile = null; 
+        private CloudTableClient tableClien =null;
+        private TableBatchOperation batchOperation = null;
+        private CloudTable tableGlobal = null;
         /// <summary>
         /// Initialize log.
         /// </summary>
@@ -46,9 +53,17 @@ namespace GrabCaster.Framework.Log.File
         /// </returns>
         public bool InitLog()
         {
-            Directory.CreateDirectory(ConfigurationBag.DirectoryLog());
-            PathFile = Path.Combine(ConfigurationBag.DirectoryLog(),$"{DateTime.Now.Month.ToString()}{DateTime.Now.Day.ToString()}{DateTime.Now.Year.ToString()}-{Guid.NewGuid().ToString()}.txt");
-            logFile = File.AppendText(PathFile);
+            var storageAccountName = ConfigurationBag.Configuration.GroupEventHubsStorageAccountName;
+            var storageAccountKey = ConfigurationBag.Configuration.GroupEventHubsStorageAccountKey;
+            var connectionString =
+                $"DefaultEndpointsProtocol=https;AccountName={storageAccountName};AccountKey={storageAccountKey}";
+            var storageAccount = CloudStorageAccount.Parse(connectionString);
+
+            // Create the table client.
+            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
+            tableGlobal = tableClient.GetTableReference("grabcastergloballog");
+            tableGlobal.CreateIfNotExists();
+            batchOperation = new TableBatchOperation();
             return true;
         }
 
@@ -63,17 +78,19 @@ namespace GrabCaster.Framework.Log.File
         /// </returns>
         public bool WriteLog(LogMessage logMessage)
         {
-            lock (logFile)
-            {
-                logFile.WriteLine($"{DateTime.Now} - {logMessage.Message}");
-                return true;
-            }
+            //TableOperation insertOperation = TableOperation.Insert(logMessage);
+            //tableGlobal.Execute(insertOperation);
+
+            batchOperation.Insert(logMessage);
+            return true;
 
         }
 
         public void Flush()
         {
-            logFile.Flush();
+            // Execute the insert operation.
+            tableGlobal.ExecuteBatch(batchOperation);
+            batchOperation.Clear();
         }
     }
 }

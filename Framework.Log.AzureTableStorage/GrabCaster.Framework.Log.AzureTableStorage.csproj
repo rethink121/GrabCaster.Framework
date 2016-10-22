@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{24D9A738-C278-4047-8A4C-43C5DA78847B}</ProjectGuid>
+    <ProjectGuid>{A54F4261-D584-4739-BAD4-2128A1FB0B1E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GrabCaster.Framework.Log.File</RootNamespace>
-    <AssemblyName>GrabCaster.Framework.Log.File</AssemblyName>
+    <RootNamespace>GrabCaster.Framework.Log.AzureTableStorage</RootNamespace>
+    <AssemblyName>GrabCaster.Framework.Log.AzureTableStorage</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

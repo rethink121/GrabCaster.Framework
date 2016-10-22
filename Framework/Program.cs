@@ -139,12 +139,17 @@ namespace GrabCaster.Framework
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine(@"[M] Run GrabCaster in MS-DOS Console mode.");
+                        Console.WriteLine(@"[C] Configure GrabCaster Point.");
                         Console.WriteLine(@"[I] Install GrabCaster Windows NT Service.");
                         Console.WriteLine(@"[U] Uninstall GrabCaster Windows NT Service.");
-                        Console.WriteLine(@"[C] Clone a new GrabCaster Point.");
+                        Console.WriteLine(@"[S] Install GrabCaster Service Fabric.");
+                        Console.WriteLine(@"[B] Install and update GrabCaster BizTalk Adapter.");
+                        Console.WriteLine(@"[O] Clone a new GrabCaster Point.");
                         Console.WriteLine(@"[Ctrl + C] Exit.");
                         Console.ForegroundColor = ConsoleColor.White;
                         var consoleKeyInfo = Console.ReadKey();
+
+                        string param1 = ";";
 
                         switch (consoleKeyInfo.Key)
                         {
@@ -156,6 +161,10 @@ namespace GrabCaster.Framework
                                 CoreEngine.StartEventEngine(null);
                                 Console.WriteLine("\rEngine started...");
                                 Console.ReadLine();
+                                break;
+                            case ConsoleKey.C:
+                                //string CloneName = AskInputLine("Enter the Clone name.");
+                                Process.Start(Path.Combine(Application.StartupPath, "Create new Clone.cmd"));
                                 break;
                             case ConsoleKey.I:
                                 Console.ForegroundColor = ConsoleColor.White;
@@ -170,7 +179,15 @@ namespace GrabCaster.Framework
                                 CoreNtService.StopService();
                                 CoreNtService.UninstallService();
                                 break;
-                            case ConsoleKey.C:
+                            case ConsoleKey.S:
+                                //string CloneName = AskInputLine("Enter the Clone name.");
+                                Process.Start(Path.Combine(Application.StartupPath, "Create new Clone.cmd"));
+                                break;
+                            case ConsoleKey.B:
+                                param1 = AskInputLine("Enter the BizTalk installation folder.");
+                                Process.Start(Path.Combine(Application.StartupPath, $"Create new Clone.cmd {param1}"));
+                                break;
+                            case ConsoleKey.O:
                                 //string CloneName = AskInputLine("Enter the Clone name.");
                                 Process.Start(Path.Combine(Application.StartupPath, "Create new Clone.cmd"));
                                 break;
