@@ -77,7 +77,7 @@ namespace GrabCaster.Framework.Engine
 
                 BubblingObject bubblingObject = new BubblingObject(content);
                 bubblingObject.MessageType = "SyncPush";
-                OffRampEngineSending.SendMessageOnRamp(bubblingObject,
+                OffRampEngineSending.SendMessageOffRamp(bubblingObject,
                                                         "SyncPush",
                                                         destinationChannelId,
                                                         destinationPointId,
@@ -111,7 +111,7 @@ namespace GrabCaster.Framework.Engine
 
                 BubblingObject bubblingObject = new BubblingObject(null);
                 bubblingObject.MessageType = "SyncPull";
-                OffRampEngineSending.SendMessageOnRamp(bubblingObject,
+                OffRampEngineSending.SendMessageOffRamp(bubblingObject,
                                                         "SyncPull",
                                                         destinationChannelId,
                                                         destinationPointId,
@@ -621,7 +621,7 @@ namespace GrabCaster.Framework.Engine
                 Debug.WriteLine(
                     $"Syncronizing  Bubbling confuguration - Point ID {ConfigurationBag.Configuration.PointId}", 
                     ConsoleColor.Yellow);
-                OffRampEngineSending.SendNullMessageOnRamp(
+                OffRampEngineSending.SendNullMessageOffRamp(
                     "SyncSendRequestBubblingConfiguration", 
                     channelId, 
                     pointId, 
@@ -655,7 +655,7 @@ namespace GrabCaster.Framework.Engine
                 Debug.WriteLine(
                     $"Syncronizing  Bubbling confuguration - Point ID {ConfigurationBag.Configuration.PointId}", 
                     ConsoleColor.Yellow);
-                OffRampEngineSending.SendNullMessageOnRamp(
+                OffRampEngineSending.SendNullMessageOffRamp(
                     "SyncSendRequestConfiguration", 
                     channelId, 
                     pointId, 
@@ -802,7 +802,7 @@ namespace GrabCaster.Framework.Engine
                 Debug.WriteLine(
                     $"Send request for IDComponent {idComponent} to Point ID {pointId}", 
                     ConsoleColor.Yellow);
-                OffRampEngineSending.SendNullMessageOnRamp(
+                OffRampEngineSending.SendNullMessageOffRamp(
                     "SyncSendRequestComponent", 
                     channelId, 
                     pointId, 

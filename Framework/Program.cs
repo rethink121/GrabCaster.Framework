@@ -100,6 +100,7 @@ namespace GrabCaster.Framework
                                     "--GrabCaster Sevice Initialization--Start Engine.",
                                     ConsoleColor.Green);
                                 CoreEngine.StartEventEngine(null);
+                                Console.WriteLine("\rEngine started...");
                                 Console.ReadLine();
                                 break;
                             case "M":

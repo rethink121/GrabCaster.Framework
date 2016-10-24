@@ -387,53 +387,35 @@ namespace GrabCaster.Framework.Engine
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        /// http://localhost:8000/GrabCaster/ExecuteTrigger?ConfigurationID={3C62B951-C353-4899-8670-C6687B6EAEFC}TriggerID={3C62B951-C353-4899-8670-C6687B6EAEFC}&value=text
+        /// http://localhost:8000/GrabCaster/ExecuteTrigger?ConfigurationID={5D793BC4-B111-4BF4-BAAF-196F661E13E2}&TriggerID={9A989BD1-C8DE-4FC1-B4BA-02E7D8A4AD76}&value=text
         public string ExecuteTrigger(string configurationId,string triggerId,string value)
         {
             
+
             try
             {
-                var executed = false;
-                try
+                var BubblingObjects = (from trigger in EventsEngine.BubblingTriggerConfigurationsSingleInstance
+                                                where trigger.IdComponent == triggerId && trigger.IdConfiguration == (configurationId ?? "")
+                                                select trigger).ToArray();
+                if(BubblingObjects.Length !=0)
                 {
-                    var triggerSingleInstance = (from trigger in EventsEngine.BubblingTriggerConfigurationsSingleInstance
-                                                 where trigger.IdComponent == triggerId && trigger.IdConfiguration == (configurationId ?? "")
-                                                 select trigger).First();
-                    var bubblingTriggerConfiguration = triggerSingleInstance;
                     byte[] content = EncodingDecoding.EncodingString2Bytes(value ?? "");
-                    EventsEngine.ExecuteTriggerConfiguration(bubblingTriggerConfiguration,content);
-                    executed = true;
+                    EventsEngine.ExecuteTriggerConfiguration(BubblingObjects[0], content);
+                    return "Trigger executed.";
+
                 }
-                catch
+                else
                 {
-
-
-
-                }
-
-                try
-                {
-                    //Not executed 
-
-                    var triggerPollingInstance = (from trigger in EventsEngine.BubblingTriggerConfigurationsPolling
-                                                  where trigger.IdComponent == triggerId && trigger.IdConfiguration == (configurationId ?? "")
-                                                  select trigger).First();
-                    var bubblingTriggerConfiguration = triggerPollingInstance;
-                    byte[] content = EncodingDecoding.EncodingString2Bytes(value ?? "");
-                    EventsEngine.ExecuteTriggerConfiguration(bubblingTriggerConfiguration,content);
-                    executed = true;
-                }
-                catch 
-                {
+                    return $"Trigger not found. - Looking for Trigger Id {triggerId} and configuration Id {configurationId}.";
 
                 }
-
-                return executed ? "Trigger executed." : "Trigger not executed check the Windows event viewer and check the trigger Id and configuration Id are present and active in the trigger folder - Looking for Trigger Id {triggerId} and configuration Id {configurationId}.";
             }
             catch (Exception ex)
             {
-                return $"Error - {ex.Message} ";
+                return $"Trigger not executed check the Windows event viewer and check the trigger Id and configuration Id are present and active in the trigger folder - Looking for Trigger Id {triggerId} and configuration Id {configurationId} - Exception {ex.Message}.";
             }
+
+
         }
 
         /// <summary>

@@ -214,7 +214,7 @@ namespace GrabCaster.Framework.Engine.OffRamp
         /// <param name="properties">
         /// TODO The properties.
         /// </param>
-        public static void SendMessageOnRamp(
+        public static void SendMessageOffRamp(
             BubblingObject bubblingObject, 
             string messageType, 
             string channelId, 
@@ -260,6 +260,21 @@ namespace GrabCaster.Framework.Engine.OffRamp
                 bubblingObject.DestinationChannelId= channelId;
                 bubblingObject.DestinationPointId= pointId;
                 //
+
+                LogEngine.WriteLog(ConfigurationBag.EngineName,
+                    $"SendMessageOffRamp bubblingObject.SenderChannelId {bubblingObject.SenderChannelId } " +
+                    $"bubblingObject.SenderPointId {bubblingObject.SenderPointId} " +
+                    $"bubblingObject.DestinationChannelId {bubblingObject.DestinationChannelId} " +
+                    $" bubblingObject.DestinationPointId {bubblingObject.DestinationPointId} " +
+                    $"bubblingObject.MessageType {bubblingObject.MessageType}" +
+                    $"bubblingObject.Persisting {bubblingObject.Persisting} " +
+                    $"bubblingObject.MessageId {bubblingObject.MessageId} " +
+                    $"bubblingObject.Name {bubblingObject.Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesConsole,
+                    null,
+                    Constant.LogLevelInformation);
+
                 OffRampEngineQueue.Enqueue(bubblingObject);
        
             }
@@ -275,7 +290,7 @@ namespace GrabCaster.Framework.Engine.OffRamp
             }
         }
 
-        public static void SendNullMessageOnRamp(
+        public static void SendNullMessageOffRamp(
             string messageType, 
             string channelId, 
             string pointId, 
@@ -286,12 +301,12 @@ namespace GrabCaster.Framework.Engine.OffRamp
             try
             {
 
-                var data = new BubblingObject(EncodingDecoding.EncodingString2Bytes(string.Empty));
-                data.Persisting = false;
+                var bubblingObject = new BubblingObject(EncodingDecoding.EncodingString2Bytes(string.Empty));
+                bubblingObject.Persisting = false;
 
-                data.MessageId = Guid.NewGuid().ToString();
-                data.SubscriberId = subscriberId;
-                data.MessageType = messageType;
+                bubblingObject.MessageId = Guid.NewGuid().ToString();
+                bubblingObject.SubscriberId = subscriberId;
+                bubblingObject.MessageType = messageType;
 
                 string senderid;
 
@@ -300,18 +315,32 @@ namespace GrabCaster.Framework.Engine.OffRamp
                 else
                     senderid = ConfigurationBag.Configuration.PointId;
 
-                data.SenderPointId = senderid;
-                data.SenderName = ConfigurationBag.Configuration.PointName;
-                data.SenderDescriprion = ConfigurationBag.Configuration.PointDescription;
-                data.SenderChannelId= ConfigurationBag.Configuration.ChannelId;
-                data.SenderChannelName = ConfigurationBag.Configuration.ChannelName;
-                data.SenderChannelDescription = ConfigurationBag.Configuration.ChannelDescription;
-                data.DestinationChannelId = channelId;
-                data.DestinationPointId= pointId;
-                data.IdComponent= idComponent;
+                bubblingObject.SenderPointId = senderid;
+                bubblingObject.SenderName = ConfigurationBag.Configuration.PointName;
+                bubblingObject.SenderDescriprion = ConfigurationBag.Configuration.PointDescription;
+                bubblingObject.SenderChannelId= ConfigurationBag.Configuration.ChannelId;
+                bubblingObject.SenderChannelName = ConfigurationBag.Configuration.ChannelName;
+                bubblingObject.SenderChannelDescription = ConfigurationBag.Configuration.ChannelDescription;
+                bubblingObject.DestinationChannelId = channelId;
+                bubblingObject.DestinationPointId= pointId;
+                bubblingObject.IdComponent= idComponent;
+
+                LogEngine.WriteLog(ConfigurationBag.EngineName,
+                            $"SendNullMessageOffRamp bubblingObject.SenderChannelId {bubblingObject.SenderChannelId } " +
+                            $"bubblingObject.SenderPointId {bubblingObject.SenderPointId} " +
+                            $"bubblingObject.DestinationChannelId {bubblingObject.DestinationChannelId} " +
+                            $" bubblingObject.DestinationPointId {bubblingObject.DestinationPointId} " +
+                            $"bubblingObject.MessageType {bubblingObject.MessageType}" +
+                            $"bubblingObject.Persisting {bubblingObject.Persisting} " +
+                            $"bubblingObject.MessageId {bubblingObject.MessageId} " +
+                            $"bubblingObject.Name {bubblingObject.Name}",
+                            Constant.LogLevelError,
+                            Constant.TaskCategoriesConsole,
+                            null,
+                            Constant.LogLevelInformation);
 
                 // Queue the data
-                OffRampEngineQueue.Enqueue(data);
+                OffRampEngineQueue.Enqueue(bubblingObject);
 
                 Debug.WriteLine(
                     $"Sent Message Type: {messageType} - To ChannelID: {channelId} PointID: {pointId}");
@@ -338,9 +367,9 @@ namespace GrabCaster.Framework.Engine.OffRamp
             foreach (var bubblingObject in bubblingObjects)
             {
                 //todo optimization ho messo la ricezione per la ottimizzatione decommenta  // OffRampStream.SendMessage(bubblingObject);
-                MessageIngestor.IngestMessagge(bubblingObject);
+                //MessageIngestor.IngestMessagge(bubblingObject);
                 // Send message to message provider 
-                //OffRampStream.SendMessage(bubblingObject);
+                OffRampStream.SendMessage(bubblingObject);
             }
         }
     }

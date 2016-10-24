@@ -109,7 +109,19 @@ namespace GrabCaster.Framework.Engine.OnRamp
        
             try
             {
-
+                LogEngine.WriteLog(ConfigurationBag.EngineName,
+                                    $"IngestMessagge bubblingObject.SenderChannelId {bubblingObject.SenderChannelId } " +
+                                    $"bubblingObject.SenderPointId {bubblingObject.SenderPointId} " +
+                                    $"bubblingObject.DestinationChannelId {bubblingObject.DestinationChannelId} " +
+                                    $" bubblingObject.DestinationPointId {bubblingObject.DestinationPointId} " +
+                                    $"bubblingObject.MessageType {bubblingObject.MessageType}" +
+                                    $"bubblingObject.Persisting {bubblingObject.Persisting} " +
+                                    $"bubblingObject.MessageId {bubblingObject.MessageId} " +
+                                    $"bubblingObject.Name {bubblingObject.Name}",
+                                    Constant.LogLevelError,
+                                    Constant.TaskCategoriesConsole,
+                                    null,
+                                    Constant.LogLevelInformation);
                 //Check if message is for this point
                 var receiverChannelId = bubblingObject.DestinationChannelId;
                 var receiverPointId = bubblingObject.DestinationPointId;
@@ -129,12 +141,14 @@ namespace GrabCaster.Framework.Engine.OnRamp
                     return;
                 }
 
-
+                if (bubblingObject.SenderPointId == ConfigurationBag.Configuration.PointId)
+                    return;
                 // ****************************GET FROM STORAGE IF REQUIRED*************************
                 if (bubblingObject.Persisting)
                 {
                     bubblingObject = (BubblingObject)SerializationEngine.ByteArrayToObject(DevicePersistentProvider.PersistEventFromStorage(bubblingObject.MessageId));
                 }
+
 
                 #region EVENT
                 // ****************************IF EVENT TYPE*************************
@@ -178,7 +192,7 @@ namespace GrabCaster.Framework.Engine.OnRamp
 
                     BubblingObject bubblingObjectToSync = new BubblingObject(content);
                     bubblingObject.MessageType = "SyncPush";
-                    OffRampEngineSending.SendMessageOnRamp(bubblingObjectToSync,
+                    OffRampEngineSending.SendMessageOffRamp(bubblingObjectToSync,
                                                             "SyncPush",
                                                             bubblingObject.SenderChannelId,
                                                             bubblingObject.SenderPointId,

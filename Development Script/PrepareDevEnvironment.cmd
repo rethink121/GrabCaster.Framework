@@ -2,6 +2,7 @@ echo off
 echo Build the solution before running the bach.
 cd..
 rd /s /q Framework\bin\Debug\Root_GrabCaster
+rd /s /q Framework\bin\Release\Root_GrabCaster
 cd %~dp0
 
 call DevDefaultBubbligFiles2BubblingDirs.cmd

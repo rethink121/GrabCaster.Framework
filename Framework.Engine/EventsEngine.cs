@@ -362,6 +362,22 @@ namespace GrabCaster.Framework.Engine
             }
             try
             {
+                LogEngine.WriteLog(ConfigurationBag.EngineName,
+                    $"ActionTriggerReceived bubblingObject.SenderChannelId {context.BubblingObjectBag.SenderChannelId } " +
+                    $"bubblingObject.SenderPointId {context.BubblingObjectBag.SenderPointId} " +
+                    $"bubblingObject.DestinationChannelId {context.BubblingObjectBag.DestinationChannelId} " +
+                    $" bubblingObject.DestinationPointId {context.BubblingObjectBag.DestinationPointId} " +
+                    $"bubblingObject.MessageType {context.BubblingObjectBag.MessageType}" +
+                    $"bubblingObject.Persisting {context.BubblingObjectBag.Persisting} " +
+                    $"bubblingObject.MessageId {context.BubblingObjectBag.MessageId} " +
+                    $"bubblingObject.Name {context.BubblingObjectBag.Name}" +
+                    $"bubblingObject.IdConfiguration {context.BubblingObjectBag.IdConfiguration}" +
+                    $"bubblingObject.IdComponent {context.BubblingObjectBag.IdComponent}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesConsole,
+                    null,
+                    Constant.LogLevelInformation);
+
                 //If there is a chain to execute then execute the chain component
                 if (context.BubblingObjectBag.Chains != null)
                 {
@@ -376,9 +392,9 @@ namespace GrabCaster.Framework.Engine
                 //{
                 //    context.BubblingObjectBag.Properties[propertyInfo.Name].Value = propertyInfo.GetValue(trigger);
                 //}
-
+                Event[] events = context.BubblingObjectBag.Events.ToArray();
                 // Events mapping
-                foreach (var eventToExecute in context.BubblingObjectBag.Events)
+                foreach (var eventToExecute in events)
                 {
                     //Create a clone to copy a separate object in memory
 
@@ -404,7 +420,7 @@ namespace GrabCaster.Framework.Engine
                     {
                         foreach (var point in channel.Points)
                         {
-                            OffRampEngineSending.SendMessageOnRamp(context.BubblingObjectBag,
+                            OffRampEngineSending.SendMessageOffRamp(context.BubblingObjectBag,
                                                      "Event",
                                                      channel.ChannelId,
                                                      point.PointId,
@@ -480,7 +496,21 @@ namespace GrabCaster.Framework.Engine
 
             try
             {
-
+                LogEngine.WriteLog(ConfigurationBag.EngineName,
+                                    $"ActionEventReceived bubblingObject.SenderChannelId {context.BubblingObjectBag.SenderChannelId } " +
+                                    $"bubblingObject.SenderPointId {context.BubblingObjectBag.SenderPointId} " +
+                                    $"bubblingObject.DestinationChannelId {context.BubblingObjectBag.DestinationChannelId} " +
+                                    $" bubblingObject.DestinationPointId {context.BubblingObjectBag.DestinationPointId} " +
+                                    $"bubblingObject.MessageType {context.BubblingObjectBag.MessageType}" +
+                                    $"bubblingObject.Persisting {context.BubblingObjectBag.Persisting} " +
+                                    $"bubblingObject.MessageId {context.BubblingObjectBag.MessageId} " +
+                                    $"bubblingObject.Name {context.BubblingObjectBag.Name}" +
+                                    $"bubblingObject.IdConfiguration {context.BubblingObjectBag.IdConfiguration}" +
+                                    $"bubblingObject.IdComponent {context.BubblingObjectBag.IdComponent}",
+                                    Constant.LogLevelError,
+                                    Constant.TaskCategoriesConsole,
+                                    null,
+                                    Constant.LogLevelInformation);
                 //if SyncAsync == true 
                 //then send the event and keep going to exe
                 if (context.BubblingObjectBag.Syncronous)
@@ -500,7 +530,7 @@ namespace GrabCaster.Framework.Engine
                     }
                     else
                     {
-                        OffRampEngineSending.SendMessageOnRamp(context.BubblingObjectBag,
+                        OffRampEngineSending.SendMessageOffRamp(context.BubblingObjectBag,
                                         "Event",
                                         context.BubblingObjectBag.SenderChannelId,
                                         context.BubblingObjectBag.SenderPointId,
@@ -585,7 +615,7 @@ namespace GrabCaster.Framework.Engine
                             var remoteContext = new ActionContext(context.BubblingObjectBag);
                             remoteContext.BubblingObjectBag.Events.Clear();
                             remoteContext.BubblingObjectBag.Events.Add(eventToExecute);
-                            OffRampEngineSending.SendMessageOnRamp(
+                            OffRampEngineSending.SendMessageOffRamp(
                                 remoteContext.BubblingObjectBag,
                                 "Event",
                                 string.Empty,
@@ -729,7 +759,7 @@ namespace GrabCaster.Framework.Engine
         /// <param name="numOfTriggers"></param>
         /// <param name="assemblyFile"></param>
         /// <returns></returns>
-        public static BubblingObject CreateBubblingObjectTrigger( Type assemblyClass, Assembly assembly, string assemblyFile)
+        public static BubblingObject CreateBubblingObject( Type assemblyClass, Assembly assembly, string assemblyFile)
         {
             try
             {
@@ -1459,6 +1489,7 @@ namespace GrabCaster.Framework.Engine
                     // Assembly founded
                     if (triggerAssembly != null)
                     {
+
                         //Serialize clone to be abstracted in memory
                         //BubblingObject bubblingTriggerClone = (BubblingObject) ObjectHelper.CloneObject(bubblingTrigger);
                         //set the the 
@@ -1471,8 +1502,23 @@ namespace GrabCaster.Framework.Engine
                         bubblingOTriggerClone.Chains = triggerConfiguration.Trigger.Chains;
                         bubblingOTriggerClone.Events = triggerConfiguration.Events;
                         bubblingOTriggerClone.BubblingEventType = BubblingEventType.Trigger;
-                        //todo optimization
-                       
+
+                        //Set contract attributes
+                        var classAttributes = triggerAssembly.TriggerType.GetType().GetCustomAttributes(typeof(TriggerContract), true);
+                        if (classAttributes.Length > 0)
+                        {
+
+                            var trigger = (TriggerContract)classAttributes[0];
+                            // Create event bubbling
+                            bubblingOTriggerClone.Description = trigger.Description;
+                            bubblingOTriggerClone.IdComponent = trigger.Id;
+                            bubblingOTriggerClone.Name = trigger.Name;
+                            bubblingOTriggerClone.PollingRequired = trigger.PollingRequired;
+                            bubblingOTriggerClone.Nop = trigger.Nop;
+                            bubblingOTriggerClone.Shared = trigger.Shared;
+                            bubblingOTriggerClone.Version = triggerAssembly.Version;
+                        }
+
                         // Copy all the properties from configuration to assembly
                         IEnumerable<PropertyInfo> propertyInfos = triggerAssembly.TriggerType.GetType().GetProperties().ToList().Where(p => p.GetCustomAttributes(typeof(TriggerPropertyContract), true).Length > 0 && p.Name != "DataContext");
                         foreach (var propertyInfo in propertyInfos)

@@ -193,6 +193,8 @@ namespace GrabCaster.Framework.Log
                 logMessage.MessageId = Guid.NewGuid().ToString();
                 logMessage.Level = logLevel;
                 logMessage.Source = ConfigurationBag.EngineName;
+                logMessage.PointId = ConfigurationBag.Configuration.PointId;
+                logMessage.PointName = ConfigurationBag.Configuration.PointName;
                 logMessage.ChannelId = ConfigurationBag.Configuration.ChannelId;
 
                 logMessage.PartitionKey = ConfigurationBag.Configuration.PointId;
@@ -252,7 +254,9 @@ namespace GrabCaster.Framework.Log
 
                 LogEngineComponent.WriteLog(logMessage);
             }
-            LogEngineComponent.Flush();
+            //If something logged then flush
+            if(logMessages.Count > 0)
+                LogEngineComponent.Flush();
         }
 
 
