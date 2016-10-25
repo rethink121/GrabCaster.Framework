@@ -1,4 +1,4 @@
-Connect-ServiceFabricCluster -ConnectionEndpoint grabcaster.northeurope.cloudapp.azure.com:19000
+Connect-ServiceFabricCluster -ConnectionEndpoint localhost:19000
 
 $nodes = Get-ServiceFabricNode
 
