@@ -154,9 +154,21 @@ namespace GrabCaster.Framework.Engine.OnRamp
                 // ****************************IF EVENT TYPE*************************
                 if (bubblingObject.MessageType == "Event")
                 {
-                    //Check if is Syncronouse response
+                    //If HA group member and HA 
+                    if (bubblingObject.HAGroup == ConfigurationBag.Configuration.HAGroup && 
+                        EventsEngine.HAEnabled)
+                    {
+                        //Check if is the first in list, if not then discard
+                        EventsEngine.HAPoints.OrderBy(key => key.Key);
+                        if (EventsEngine.HAPoints.Count > 1 &&
+                            EventsEngine.HAPoints.First().Key != EventsEngine.HAPointTickId)
+                        {
+                            return;
+                        }
+                    }
+                        //Check if is Syncronouse response
                     if (bubblingObject.SyncronousFromEvent &&
-                        bubblingObject.SenderPointId == ConfigurationBag.Configuration.PointId)
+                    bubblingObject.SenderPointId == ConfigurationBag.Configuration.PointId)
                     {
                         //Yes it's a syncronous response from my request from this pointid
                         //Execute the delegate and exit
@@ -182,6 +194,39 @@ namespace GrabCaster.Framework.Engine.OnRamp
 
                 #region CONSOLE
 
+
+                // **************************** SYNC AREA *************************
+                //Receive a package folder to syncronize him self
+                if (bubblingObject.MessageType == "HA")
+                {
+                    long HATickFrom = long.Parse(UTF8Encoding.UTF8.GetString(bubblingObject.Data));
+                    DateTime dt;
+                    //If not exist then add
+                    if(!EventsEngine.HAPoints.TryGetValue(HATickFrom,out dt))
+                        EventsEngine.HAPoints.Add(HATickFrom,DateTime.Now);
+                    
+                    //Check if someone too much inactive
+                    foreach (var haPoint in EventsEngine.HAPoints)
+                    {
+                        var totalSecs = (DateTime.Now - haPoint.Value).TotalSeconds;
+                        if (totalSecs >= ConfigurationBag.Configuration.HASeconds)
+                            EventsEngine.HAPoints.Remove(haPoint.Key);
+                    }
+                    byte[] content = UTF8Encoding.UTF8.GetBytes(EventsEngine.HAPointTickId.ToString());
+
+                    BubblingObject bubblingObjectToSync = new BubblingObject(content);
+
+                    bubblingObject.MessageType = "HA";
+                    OffRampEngineSending.SendMessageOffRamp(bubblingObjectToSync,
+                                                            "HA",
+                                                            bubblingObject.SenderChannelId,
+                                                            bubblingObject.SenderPointId,
+                                                            string.Empty);
+
+
+
+
+                }
                 // **************************** SYNC AREA *************************
 
                 //******************* OPERATION CONF BAG- ALL THE CONF FILES AND DLLS ****************************************************************

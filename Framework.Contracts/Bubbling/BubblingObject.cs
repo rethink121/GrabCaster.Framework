@@ -73,6 +73,13 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         }
 
 
+
+
+        /// <summary>
+        /// High Availability Group .
+        /// </summary>
+        [DataMember]
+        public string HAGroup { get; set; }
         /// <summary>
         /// Gets or sets the version.
         /// </summary>

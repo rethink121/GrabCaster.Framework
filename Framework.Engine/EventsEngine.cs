@@ -68,6 +68,15 @@ namespace GrabCaster.Framework.Engine
     /// </summary>
     public static class EventsEngine
     {
+        //HA Scenarios
+        //If this is the mastr in gropu
+        public static bool HAMaster = false;
+        //If HA in enabled
+        public static bool HAEnabled = false;
+        //iD point (Tick)
+        public static long HAPointTickId = 0;
+        public static Dictionary<long,DateTime> HAPoints;
+
         //SyncAsync Scenarios
         public static Hashtable SyncAsyncEvents;
         public static SyncAsyncEventAction syncAsyncEventAction;
@@ -210,7 +219,12 @@ namespace GrabCaster.Framework.Engine
         /// </summary>
         public static void InitializeEventEngine(ActionEvent delegateEmbedded)
         {
+            //HA groupd settings
+            HAEnabled = ConfigurationBag.Configuration.HAGroup.Length > 0;
 
+            Thread.Sleep(1);
+            HAPointTickId = DateTime.Now.Ticks;
+            EventsEngine.HAPoints.Add(HAPointTickId, DateTime.Now);
 
             //initilize SyncAsync scenarions
             SyncAsyncEvents = new Hashtable();
@@ -252,6 +266,23 @@ namespace GrabCaster.Framework.Engine
 
                 delegateActionEvent = ActionEventReceived;
 
+            }
+        }
+
+        //Sort HA List
+        public static void HAPointsUpdate()
+        {
+            while (true)
+            {
+                byte[] content = UTF8Encoding.UTF8.GetBytes(HAPointTickId.ToString());
+                BubblingObject bubblingObject = new BubblingObject(content);
+                bubblingObject.MessageType = "HA";
+                OffRampEngineSending.SendMessageOffRamp(bubblingObject,
+                                                        "HA",
+                                                        ConfigurationBag.Configuration.ChannelId,
+                                                        ConfigurationBag.PointAll,
+                                                        string.Empty);
+                Thread.Sleep(ConfigurationBag.Configuration.HARefreshTime);
             }
         }
 

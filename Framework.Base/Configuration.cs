@@ -481,6 +481,20 @@ namespace GrabCaster.Framework.Base
         public string DirectoryOperativeRootExeName { get; set; }
 
         public string BaseDirectory { get; set; }
+
+        //HA Group
+        [DataMember]
+        public string HAGroup { get; set; }
+
+        //how many seconds for each check
+        [DataMember]
+        public int HARefreshTime { get; set; }
+
+        //how many seconds to be considered still active 
+        [DataMember]
+        public int HASeconds { get; set; }
+
+
         //Main Azure connection string
         [DataMember]
         public string AzureNameSpaceConnectionString { get; set; }

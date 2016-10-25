@@ -259,7 +259,7 @@ namespace GrabCaster.Framework.Engine.OffRamp
                 bubblingObject.SenderDescriprion= ConfigurationBag.Configuration.PointDescription;
                 bubblingObject.DestinationChannelId= channelId;
                 bubblingObject.DestinationPointId= pointId;
-                //
+                bubblingObject.HAGroup = ConfigurationBag.Configuration.HAGroup;
 
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
                     $"SendMessageOffRamp bubblingObject.SenderChannelId {bubblingObject.SenderChannelId } " +
