@@ -488,11 +488,11 @@ namespace GrabCaster.Framework.Base
 
         //how many seconds for each check
         [DataMember]
-        public int HARefreshTime { get; set; }
+        public int HACheckTime { get; set; }
 
         //how many seconds to be considered still active 
         [DataMember]
-        public int HASeconds { get; set; }
+        public int HAInactivity { get; set; }
 
 
         //Main Azure connection string

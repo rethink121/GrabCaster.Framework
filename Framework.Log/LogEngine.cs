@@ -168,7 +168,7 @@ namespace GrabCaster.Framework.Log
         Exception exception,
         int logLevel)
         {
-            if (!Enabled && logLevel <= ConfigurationBag.Configuration.LoggingLevel)
+            if (!Enabled || ConfigurationBag.Configuration.LoggingLevel <= logLevel)
                 return;
 
             Debug.WriteLine($"GrabCaster-{message}");

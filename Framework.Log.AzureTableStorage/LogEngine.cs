@@ -26,6 +26,7 @@
 //  </summary>
 // --------------------------------------------------------------------------------------------------
 
+using System.Diagnostics;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
@@ -36,15 +37,17 @@ namespace GrabCaster.Framework.Log.AzureTableStorage
     using GrabCaster.Framework.Contracts.Log;
     using System;
     using System.IO;
+
     /// <summary>
     /// The log engine, simple version.
     /// </summary>
     [LogContract("{CE541CB7-94CD-4421-B6C4-26FBC3088FF9}", "LogEngine", "Azure Table Storage Log System")]
     public class LogEngine : ILogEngine
     {
-        private CloudTableClient tableClien =null;
+        private CloudTableClient tableClien = null;
         private TableBatchOperation batchOperation = null;
         private CloudTable tableGlobal = null;
+
         /// <summary>
         /// Initialize log.
         /// </summary>
@@ -88,9 +91,17 @@ namespace GrabCaster.Framework.Log.AzureTableStorage
 
         public void Flush()
         {
-            // Execute the insert operation.
-            tableGlobal.ExecuteBatch(batchOperation);
-            batchOperation.Clear();
+            try
+            {
+                // Execute the insert operation.
+                tableGlobal.ExecuteBatch(batchOperation);
+                batchOperation.Clear();
+
+            }
+            catch (Exception ex)
+            {
+                GrabCaster.Framework.Log.LogEngine.DirectEventViewerLog($"Error in GrabCaster.Framework.Log.AzureTableStorage component - {ex.Message}",1);
+            }
         }
     }
 }

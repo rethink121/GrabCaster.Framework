@@ -221,10 +221,18 @@ namespace GrabCaster.Framework.Engine
         {
             //HA groupd settings
             HAEnabled = ConfigurationBag.Configuration.HAGroup.Length > 0;
+            if (HAEnabled)
+            {
+                Thread.Sleep(1);
+                HAPointTickId = DateTime.Now.Ticks;
+                EventsEngine.HAPoints = new Dictionary<long, DateTime>();
+                EventsEngine.HAPoints.Add(HAPointTickId, DateTime.Now);
+                Thread haCheck = new Thread(HAPointsUpdate);
+                haCheck.Start();
+                Thread haClean = new Thread(HAPointsClean);
+                haClean.Start();
 
-            Thread.Sleep(1);
-            HAPointTickId = DateTime.Now.Ticks;
-            EventsEngine.HAPoints.Add(HAPointTickId, DateTime.Now);
+            }
 
             //initilize SyncAsync scenarions
             SyncAsyncEvents = new Hashtable();
@@ -282,10 +290,35 @@ namespace GrabCaster.Framework.Engine
                                                         ConfigurationBag.Configuration.ChannelId,
                                                         ConfigurationBag.PointAll,
                                                         string.Empty);
-                Thread.Sleep(ConfigurationBag.Configuration.HARefreshTime);
+                Thread.Sleep(ConfigurationBag.Configuration.HACheckTime);
             }
         }
 
+        public static void HAPointsClean()
+        {
+            while (true)
+            {
+                lock (HAPoints)
+                {
+                    var arrPoints = EventsEngine.HAPoints.ToArray();
+                    for (int i = 0; i < arrPoints.Length; i++)
+                    {
+                        var totalSecs = (DateTime.Now - arrPoints[i].Value).TotalMilliseconds;
+                        if (totalSecs >= ConfigurationBag.Configuration.HAInactivity)
+                        {
+                            long a = EventsEngine.HAPointTickId;
+                            EventsEngine.HAPoints.Remove(arrPoints[i].Key);
+
+
+                        }
+                    }
+                }
+                Thread.Sleep(1000);
+            }
+
+
+            
+        }
         /// <summary>
         /// Return 
         /// </summary>

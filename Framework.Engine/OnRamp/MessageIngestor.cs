@@ -121,7 +121,7 @@ namespace GrabCaster.Framework.Engine.OnRamp
                                     Constant.LogLevelError,
                                     Constant.TaskCategoriesConsole,
                                     null,
-                                    Constant.LogLevelInformation);
+                                    Constant.LogLevelVerbose);
                 //Check if message is for this point
                 var receiverChannelId = bubblingObject.DestinationChannelId;
                 var receiverPointId = bubblingObject.DestinationPointId;
@@ -142,7 +142,55 @@ namespace GrabCaster.Framework.Engine.OnRamp
                 }
 
                 if (bubblingObject.SenderPointId == ConfigurationBag.Configuration.PointId)
-                    return;
+                {
+                    // **************************** HA AREA *************************
+
+
+                    if (bubblingObject.MessageType == "HA" && bubblingObject.HAGroup == ConfigurationBag.Configuration.HAGroup &&
+                            EventsEngine.HAEnabled)
+                    {
+
+                        //If HA group member and HA 
+
+                        EventsEngine.HAPoints[EventsEngine.HAPointTickId] = DateTime.Now;
+                        long haTickFrom = long.Parse(UTF8Encoding.UTF8.GetString(bubblingObject.Data));
+
+                        //if same tick then return because same point
+                        if (haTickFrom == EventsEngine.HAPointTickId)
+                            return;
+
+                        DateTime dt;
+                        lock (EventsEngine.HAPoints)
+                        {
+                            //If not exist then add
+                            if (!EventsEngine.HAPoints.TryGetValue(haTickFrom, out dt))
+                                EventsEngine.HAPoints.Add(haTickFrom, DateTime.Now);
+                            else
+                            {
+                                EventsEngine.HAPoints[haTickFrom] = DateTime.Now;
+                            }
+                        }
+
+                        byte[] content = UTF8Encoding.UTF8.GetBytes(EventsEngine.HAPointTickId.ToString());
+
+                        BubblingObject bubblingObjectToSync = new BubblingObject(content);
+
+                        bubblingObject.MessageType = "HA";
+                        OffRampEngineSending.SendMessageOffRamp(bubblingObjectToSync,
+                                                                "HA",
+                                                                bubblingObject.SenderChannelId,
+                                                                bubblingObject.SenderPointId,
+                                                                string.Empty);
+
+
+
+
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
                 // ****************************GET FROM STORAGE IF REQUIRED*************************
                 if (bubblingObject.Persisting)
                 {
@@ -155,8 +203,7 @@ namespace GrabCaster.Framework.Engine.OnRamp
                 if (bubblingObject.MessageType == "Event")
                 {
                     //If HA group member and HA 
-                    if (bubblingObject.HAGroup == ConfigurationBag.Configuration.HAGroup && 
-                        EventsEngine.HAEnabled)
+                    if (EventsEngine.HAEnabled)
                     {
                         //Check if is the first in list, if not then discard
                         EventsEngine.HAPoints.OrderBy(key => key.Key);
@@ -195,38 +242,7 @@ namespace GrabCaster.Framework.Engine.OnRamp
                 #region CONSOLE
 
 
-                // **************************** SYNC AREA *************************
-                //Receive a package folder to syncronize him self
-                if (bubblingObject.MessageType == "HA")
-                {
-                    long HATickFrom = long.Parse(UTF8Encoding.UTF8.GetString(bubblingObject.Data));
-                    DateTime dt;
-                    //If not exist then add
-                    if(!EventsEngine.HAPoints.TryGetValue(HATickFrom,out dt))
-                        EventsEngine.HAPoints.Add(HATickFrom,DateTime.Now);
-                    
-                    //Check if someone too much inactive
-                    foreach (var haPoint in EventsEngine.HAPoints)
-                    {
-                        var totalSecs = (DateTime.Now - haPoint.Value).TotalSeconds;
-                        if (totalSecs >= ConfigurationBag.Configuration.HASeconds)
-                            EventsEngine.HAPoints.Remove(haPoint.Key);
-                    }
-                    byte[] content = UTF8Encoding.UTF8.GetBytes(EventsEngine.HAPointTickId.ToString());
 
-                    BubblingObject bubblingObjectToSync = new BubblingObject(content);
-
-                    bubblingObject.MessageType = "HA";
-                    OffRampEngineSending.SendMessageOffRamp(bubblingObjectToSync,
-                                                            "HA",
-                                                            bubblingObject.SenderChannelId,
-                                                            bubblingObject.SenderPointId,
-                                                            string.Empty);
-
-
-
-
-                }
                 // **************************** SYNC AREA *************************
 
                 //******************* OPERATION CONF BAG- ALL THE CONF FILES AND DLLS ****************************************************************

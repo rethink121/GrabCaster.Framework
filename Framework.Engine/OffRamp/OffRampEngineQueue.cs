@@ -273,7 +273,7 @@ namespace GrabCaster.Framework.Engine.OffRamp
                     Constant.LogLevelError,
                     Constant.TaskCategoriesConsole,
                     null,
-                    Constant.LogLevelInformation);
+                    Constant.LogLevelVerbose);
 
                 OffRampEngineQueue.Enqueue(bubblingObject);
        
