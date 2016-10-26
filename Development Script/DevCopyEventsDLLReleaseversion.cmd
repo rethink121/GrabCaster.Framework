@@ -16,6 +16,6 @@ copy Events\TwilioEvent\bin\Release\GrabCaster.Framework.TwilioEvent.dll Framewo
 copy Events\ChatEvent\bin\Release\GrabCaster.Framework.ChatEvent.dll Framework\bin\Release\Root_GrabCaster\Events\* /y
 xcopy Events\EmbeddedEvent\bin\Release\GrabCaster.Framework.EmbeddedEvent.dll Framework\bin\Release\Root_GrabCaster\Events\* /y
 xcopy Events\HM.OMS.PageOneMessageEvent\bin\Release\HM.OMS.PageOneMessageEvent.dll Framework\bin\Release\Root_GrabCaster\Events\* /y
-xcopy Events\HM.OMS.PageOneMessageEvent\bin\Release\HM.OMS.PageOneMessageEvent.dll Framework\bin\Release\Root_GrabCaster\Events\* /y
+xcopy Events\HTTPSendContentEvent\bin\Release\GrabCaster.Framework.HTTPSendContentEvent.dll Framework\bin\Release\Root_GrabCaster\Events\* /y
 
 cd %~dp0

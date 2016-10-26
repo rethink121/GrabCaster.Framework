@@ -122,6 +122,18 @@ namespace GrabCaster.Framework.Engine.OnRamp
                                     Constant.TaskCategoriesConsole,
                                     null,
                                     Constant.LogLevelVerbose);
+                
+                //If local event then execute
+                if (bubblingObject.LocalEvent)
+                {
+                    EventsEngine.ExecuteEventsInTrigger(
+                       bubblingObject,
+                       bubblingObject.Events[0],
+                       false,
+                       bubblingObject.SenderPointId);
+                    return;
+                }
+
                 //Check if message is for this point
                 var receiverChannelId = bubblingObject.DestinationChannelId;
                 var receiverPointId = bubblingObject.DestinationPointId;

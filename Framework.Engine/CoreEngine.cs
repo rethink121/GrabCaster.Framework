@@ -24,6 +24,8 @@
 //  </summary>
 // --------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+
 namespace GrabCaster.Framework.Engine
 {
     using System;
@@ -145,6 +147,15 @@ namespace GrabCaster.Framework.Engine
                     Debug.WriteLine("Start External Event Engine Channel.");
                     //OnRamp start the OnRamp Engine
                     canStart = OffRampEngineSending.Init("MSP Device Component.dll (vNext)");
+
+                    if (EventsEngine.HAEnabled)
+                    {
+                        Thread haCheck = new Thread(EventsEngine.HAPointsUpdate);
+                        haCheck.Start();
+                        Thread haClean = new Thread(EventsEngine.HAPointsClean);
+                        haClean.Start();
+
+                    }
 
                     if (!canStart)
                     {

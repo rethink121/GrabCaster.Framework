@@ -197,6 +197,15 @@ namespace GrabCaster.Framework.Engine.OffRamp
         }
 
         /// <summary>
+        /// Queue the message directly into the spool queue
+        /// </summary>
+        /// <param name="bubblingObject"></param>
+        public static void QueueMessage(BubblingObject bubblingObject)
+        {
+            OffRampEngineQueue.Enqueue(bubblingObject);
+        }
+
+        /// <summary>
         /// TODO The send message on ramp.
         /// </summary>
         /// <param name="bubblingTriggerConfiguration">
@@ -367,9 +376,13 @@ namespace GrabCaster.Framework.Engine.OffRamp
             foreach (var bubblingObject in bubblingObjects)
             {
                 //todo optimization ho messo la ricezione per la ottimizzatione decommenta  // OffRampStream.SendMessage(bubblingObject);
-                //MessageIngestor.IngestMessagge(bubblingObject);
-                // Send message to message provider 
-                OffRampStream.SendMessage(bubblingObject);
+                if(bubblingObject.LocalEvent)
+                    MessageIngestor.IngestMessagge(bubblingObject);
+                else
+                {
+                    // Send message to message provider 
+                    OffRampStream.SendMessage(bubblingObject);
+                }
             }
         }
     }

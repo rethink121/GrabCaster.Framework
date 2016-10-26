@@ -141,6 +141,7 @@ namespace GrabCaster.Framework.Log
             }
             catch (Exception ex)
             {
+                LogEngine.DirectEventViewerLog($"Error in {MethodBase.GetCurrentMethod().Name} - {ex.Message}",1);
                 LogEngine.WriteLog(
                     ConfigurationBag.EngineName,
                     $"Error in {MethodBase.GetCurrentMethod().Name}",
@@ -148,14 +149,6 @@ namespace GrabCaster.Framework.Log
                     Constant.TaskCategoriesError,
                     ex,
                     Constant.LogLevelError);
-                LogEngine.WriteLog(
-                    ConfigurationBag.EngineName,
-                    $"Error in {MethodBase.GetCurrentMethod().Name}",
-                    Constant.LogLevelError,
-                    Constant.TaskCategoriesError,
-                    ex,
-                    Constant.LogLevelError);
-                Thread.Sleep(ConfigurationBag.Configuration.WaitTimeBeforeRestarting);
                 Environment.Exit(0);
             }
         }
@@ -206,10 +199,7 @@ namespace GrabCaster.Framework.Log
                 logMessage.Message =
                     $"-Level:{logLevel}|Source:{source}|Message:{message}|Severity:{eventId}|-TaskCategory:{taskCategory}{exceptionText}";
 
-                if (QueueAbstractMessage != null)
-                {
-                    QueueAbstractMessage.Enqueue(logMessage);
-                }
+                QueueAbstractMessage.Enqueue(logMessage);
             }
             catch (Exception ex)
             {

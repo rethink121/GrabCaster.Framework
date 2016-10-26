@@ -227,11 +227,6 @@ namespace GrabCaster.Framework.Engine
                 HAPointTickId = DateTime.Now.Ticks;
                 EventsEngine.HAPoints = new Dictionary<long, DateTime>();
                 EventsEngine.HAPoints.Add(HAPointTickId, DateTime.Now);
-                Thread haCheck = new Thread(HAPointsUpdate);
-                haCheck.Start();
-                Thread haClean = new Thread(HAPointsClean);
-                haClean.Start();
-
             }
 
             //initilize SyncAsync scenarions
@@ -468,12 +463,11 @@ namespace GrabCaster.Framework.Engine
                     context.BubblingObjectBag.SenderChannelId = ConfigurationBag.Configuration.ChannelId;
                     context.BubblingObjectBag.Syncronous = trigger.Syncronous;
 
-                    // if channel null then local event
-                    bool localEvent = eventToExecute.Channels == null;
-                    if (localEvent)
+                    // if channel null then direct into the queue
+                    if (eventToExecute.Channels == null)
                     {
                         context.BubblingObjectBag.LocalEvent = true;
-                        ExecuteEventsInTrigger(context.BubblingObjectBag, eventToExecute, true, ConfigurationBag.Configuration.PointId);
+                        OffRampEngineSending.QueueMessage(context.BubblingObjectBag);
                         return;
                     }
 
@@ -485,11 +479,12 @@ namespace GrabCaster.Framework.Engine
                         foreach (var point in channel.Points)
                         {
                             OffRampEngineSending.SendMessageOffRamp(context.BubblingObjectBag,
-                                                     "Event",
-                                                     channel.ChannelId,
-                                                     point.PointId,
-                                                     null);
+                                                        "Event",
+                                                        channel.ChannelId,
+                                                        point.PointId,
+                                                        null);
                         }
+
                     }
 
                     //todo optimization non credo serva piu, adesso uso l'embedded dall execute, va testato

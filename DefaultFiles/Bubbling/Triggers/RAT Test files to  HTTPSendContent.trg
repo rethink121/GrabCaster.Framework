@@ -11,7 +11,7 @@
 		},
 		{
 			"Name": "BatchFilesSize",
-			"Value": "30"
+			"Value": "50"
 		},
 		{
 			"Name": "RegexFilePattern",
@@ -27,7 +27,7 @@
 		},
 		{
 			"Name": "InputDirectory",
-			"Value": "C:\\Program Files (x86)\\GrabCaster\\Demo\\File2File\\In_Local"
+			"Value": "C:\\Users\\Ninoc\\Documents\\RAT Test\\In"
 		}]
 	},
   "Events": [
