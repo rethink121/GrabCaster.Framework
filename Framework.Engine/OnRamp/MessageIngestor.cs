@@ -1,29 +1,29 @@
-﻿// --------------------------------------------------------------------------------------------------
-// <copyright file = "MessageIngestor.cs" company="GrabCaster Ltd">
-//   Copyright (c) 2013 - 2016 GrabCaster Ltd All Rights Reserved.
-// </copyright>
-// <summary>
-//    Author: Nino Crudele
-//    Blog:   http://ninocrudele.me
+﻿// MessageIngestor.cs
 // 
-//    Unless explicitly acquired and licensed from Licensor under another
-//    license, the contents of this file are subject to the Reciprocal Public
-//    License ("RPL") Version 1.5, or subsequent versions as allowed by the RPL,
-//    and You may not copy or use this file in either source code or executable
-//    form, except in compliance with the terms and conditions of the RPL.
-//    
-//    All software distributed under the RPL is provided strictly on an "AS
-//    IS" basis, WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, AND
-//    LICENSOR HEREBY DISCLAIMS ALL SUCH WARRANTIES, INCLUDING WITHOUT
-//    LIMITATION, ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
-//    PURPOSE, QUIET ENJOYMENT, OR NON-INFRINGEMENT. See the RPL for specific
-//    language governing rights and limitations under the RPL. 
+// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// All rights reserved.
 // 
-//    Reciprocal Public License 1.5 (RPL1.5) license is described here: 
-//    http://www.opensource.org/licenses/rpl1.5.txt
-//  </summary>
-// --------------------------------------------------------------------------------------------------
-
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+// 
+//   - Redistributions of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//   - Redistributions in binary form must reproduce the above copyright
+//     notice, this list of conditions and the following disclaimer in the
+//     documentation and/or other materials provided with the distribution.
+//   
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+// POSSIBILITY OF SUCH DAMAGE.
 using System.Threading;
 using System.Threading.Tasks;
 using GrabCaster.Framework.Contracts.Storage;
