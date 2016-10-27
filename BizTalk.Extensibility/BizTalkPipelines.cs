@@ -25,8 +25,6 @@ namespace GrabCaster.BizTalk.Extensibility
             Type t = btAssembly.GetType(pipetype);
 
             //set pype type
-            int first = 0;
-            int sec = 0;
             string pipelinetype = GetPipeTypeRecOrSend(filename);
             Type tschema = null;
             List<string> values = null;

@@ -231,7 +231,6 @@ namespace GrabCaster.Framework.Library
         public static void EngineStartedAsync()
         {
             while (!engineLoaded) ;
-            string s = "";
         }
 
         /// <summary>

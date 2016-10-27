@@ -44,7 +44,6 @@ namespace GrabCaster.Framework.Log.AzureTableStorage
     [LogContract("{CE541CB7-94CD-4421-B6C4-26FBC3088FF9}", "LogEngine", "Azure Table Storage Log System")]
     public class LogEngine : ILogEngine
     {
-        private CloudTableClient tableClien = null;
         private TableBatchOperation batchOperation = null;
         private CloudTable tableGlobal = null;
 

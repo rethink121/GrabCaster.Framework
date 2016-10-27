@@ -219,6 +219,24 @@ namespace GrabCaster.Framework.Engine
         /// </summary>
         public static void InitializeEventEngine(ActionEvent delegateEmbedded)
         {
+            int minWorker, minIOC;
+            //Set ThreadPool
+            int processorCount = Environment.ProcessorCount;
+            ThreadPool.GetMinThreads(out minWorker, out minIOC);
+
+            int maxWorkerThreads = ConfigurationBag.Configuration.MaxWorkerThreads < processorCount? processorCount: ConfigurationBag.Configuration.MaxWorkerThreads;
+            int maxAsyncWorkerThreads = ConfigurationBag.Configuration.MaxAsyncWorkerThreads < processorCount ? processorCount : ConfigurationBag.Configuration.MaxAsyncWorkerThreads;
+            int minWorkerThreads = ConfigurationBag.Configuration.MinWorkerThreads < minWorker ? minWorker : ConfigurationBag.Configuration.MinWorkerThreads;
+            int minAsyncWorkerThreads = ConfigurationBag.Configuration.MinAsyncWorkerThreads < minIOC ? minIOC : ConfigurationBag.Configuration.MinAsyncWorkerThreads;
+
+            ThreadPool.SetMaxThreads(maxWorkerThreads, maxAsyncWorkerThreads);
+            ThreadPool.SetMinThreads(minWorkerThreads, minAsyncWorkerThreads);
+            string message = "Engine thread settings:\r" +
+                             $"MaxWorkerThreads = {maxWorkerThreads}\r" +
+                             $"MaxAsyncWorkerThreads = {maxAsyncWorkerThreads}\r" +
+                             $"MinWorkerThreads = {minWorkerThreads}\r" +
+                             $"MinAsyncWorkerThreads = {minAsyncWorkerThreads}";
+            LogEngine.DirectEventViewerLog(message,4);
             //HA groupd settings
             HAEnabled = ConfigurationBag.Configuration.HAGroup.Length > 0;
             if (HAEnabled)
@@ -661,9 +679,13 @@ namespace GrabCaster.Framework.Engine
                     {
                         // ReSharper disable once UseObjectOrCollectionInitializer
                         var contextLocal = new ActionContext(context.BubblingObjectBag);
-
-                        ExecuteEventsInTrigger(contextLocal.BubblingObjectBag, eventToExecute, true,
-                            ConfigurationBag.Configuration.ChannelId);
+                        new Task(() =>
+                        {
+                            ExecuteEventsInTrigger(contextLocal.BubblingObjectBag, eventToExecute, true,
+                                ConfigurationBag.Configuration.ChannelId);
+                        }).Start();
+                        //ExecuteEventsInTrigger(contextLocal.BubblingObjectBag, eventToExecute, true,
+                        //    ConfigurationBag.Configuration.ChannelId);
                     }
                     else
                     {
@@ -2050,13 +2072,20 @@ namespace GrabCaster.Framework.Engine
                     Debug.WriteLine(
                         $"Run single instances {bubblingTriggerConfiguration.Name}",
                         ConsoleColor.Green);
-                    Thread trigger = new Thread(() =>ExecuteTriggerConfiguration(bubblingTriggerConfiguration, null));
-                    trigger.Start();
+                    ExecuteTriggerConfiguration(bubblingTriggerConfiguration, null);
+                    
                     //ExecuteTriggerConfiguration(bubblingTriggerConfiguration, null);
 
 
                 }
             }
+        }
+
+        public static void ExecuteTriggerConfiguration(BubblingObject bubblingObject, byte[] embeddedContent)
+        {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(ExecuteTriggerConfigurationInPool),
+                     new object[] {bubblingObject,
+                        embeddedContent});
         }
 
         /// <summary>
@@ -2066,14 +2095,13 @@ namespace GrabCaster.Framework.Engine
         /// <param name="bubblingObject">
         /// The bubbling Trigger Configuration.
         /// </param>
-        public static void ExecuteTriggerConfiguration(BubblingObject bubblingObject, byte[] embeddedContent)
+        public static void ExecuteTriggerConfigurationInPool(object objectState)
         {
             try
             {
-                //if (triggerConfiguration == null)
-                //{
-                //    throw new ArgumentNullException(nameof(triggerConfiguration));
-                //}
+                object[] callBackParameters = objectState as object[];
+                BubblingObject bubblingObject = (BubblingObject)callBackParameters[0];
+                byte[] embeddedContent = (byte[])callBackParameters[1];
 
                 // Set master EventActionContext eccoloqua
                 var eventActionContext = new ActionContext(bubblingObject);
@@ -2249,6 +2277,7 @@ namespace GrabCaster.Framework.Engine
 
         }
 
+
         /// <summary>
         /// Execute a trigger and if the Execute method return != null then it set all return value in a action and excute the
         ///     action
@@ -2359,24 +2388,32 @@ namespace GrabCaster.Framework.Engine
             }
         }
 
-        /// <summary>
-        /// Execute all the action correlate to the trigger
-        ///     it send the trigger event
-        /// </summary>
-        /// <param name="bubblingObject">
-        /// </param>
-        /// <param name="eventInTrigger"></param>
-        /// <param name="internalCall">
-        /// if is an internal call or arrived from EH (Performances)
-        /// </param>
-        /// <param name="senderEndpointId">
-        /// </param>
-        public static void ExecuteEventsInTrigger(
-            BubblingObject bubblingObject, 
+        public static void ExecuteEventsInTrigger(BubblingObject bubblingObject,
             Event bubblingObjectEvent,
             bool internalCall,
             string senderEndpointId)
         {
+            ThreadPool.QueueUserWorkItem(new WaitCallback(ExecuteEventsInTriggerPool),
+                        new object[] {bubblingObject,
+                        bubblingObject.Events[0],
+                        false,
+                        bubblingObject.SenderPointId});
+        }
+
+        /// <summary>
+        /// Execute all the action correlate to the trigger
+        ///     it send the trigger event
+        /// </summary>
+        /// <param name="callBackParameters"></param>
+        public static void ExecuteEventsInTriggerPool(object objectState)
+        {
+
+            object[] callBackParameters = objectState as object[];
+            BubblingObject bubblingObject = (BubblingObject) callBackParameters[0];
+            Event bubblingObjectEvent = (Event)callBackParameters[1];
+            bool internalCall = Convert.ToBoolean(callBackParameters[2]);
+            string senderEndpointId = Convert.ToString(callBackParameters[3]);
+
 
             //Check if embedded trigger
             ITriggerAssembly TriggerAssembly;

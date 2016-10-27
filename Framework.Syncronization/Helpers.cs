@@ -71,7 +71,6 @@ namespace GrabCaster.Framework.Syncronization
         //Greater than zero t1 is later than t2.
         public static bool ToBeSyncronized(string sourceFolder, string restinationFolder, bool syncronize)
         {
-            int synTo = 0;
             try
             {
                 if (syncronize)

@@ -24,6 +24,8 @@
 //  </summary>
 // --------------------------------------------------------------------------------------------------
 
+using System.Threading;
+using System.Threading.Tasks;
 using GrabCaster.Framework.Contracts.Storage;
 
 namespace GrabCaster.Framework.Engine.OnRamp
@@ -126,6 +128,16 @@ namespace GrabCaster.Framework.Engine.OnRamp
                 //If local event then execute
                 if (bubblingObject.LocalEvent)
                 {
+
+                    //new Task(() =>
+                    //{
+                    //    EventsEngine.ExecuteEventsInTrigger(
+                    //    bubblingObject,
+                    //    bubblingObject.Events[0],
+                    //    false,
+                    //    bubblingObject.SenderPointId);
+
+                    //}).Start();
                     EventsEngine.ExecuteEventsInTrigger(
                        bubblingObject,
                        bubblingObject.Events[0],

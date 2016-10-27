@@ -481,7 +481,7 @@ namespace GrabCaster.Framework.Base
         public string DirectoryOperativeRootExeName { get; set; }
 
         public string BaseDirectory { get; set; }
-
+        
         //HA Group
         [DataMember]
         public string HAGroup { get; set; }
@@ -660,6 +660,14 @@ namespace GrabCaster.Framework.Base
 
         [DataMember]
         public int ThrottlingLsiLogIncomingRateSeconds { get; set; }
+        [DataMember]
+        public int MaxWorkerThreads { get; set; }
+        [DataMember]
+        public int MaxAsyncWorkerThreads { get; set; }
+        [DataMember]
+        public int MinWorkerThreads { get; set; }
+        [DataMember]
+        public int MinAsyncWorkerThreads { get; set; }
         [DataMember]
         public bool RunLocalOnly { get; set; }
         

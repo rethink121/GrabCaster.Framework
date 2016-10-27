@@ -135,7 +135,7 @@ namespace GrabCaster.Framework.FileTrigger
 
                     Thread.Sleep(this.PollingTime);
                 }
-                return null;
+                
             }
             catch (Exception ex)
             {

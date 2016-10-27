@@ -88,7 +88,6 @@ namespace BTSG.TestPipeline
     private void pictureBox2_Click(object sender, EventArgs e)
     {
       OpenFileDialog opd = new OpenFileDialog();
-      string inputinstance = "";
       
       DialogResult result = opd.ShowDialog(); // Show the dialog.
       

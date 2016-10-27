@@ -94,10 +94,6 @@ namespace GrabCaster.Framework.DynamicRESTTrigger
 
                 }
 
-
-                Thread.Sleep(Timeout.Infinite);
-                return null;
-
             }
             catch (Exception ex)
             {
