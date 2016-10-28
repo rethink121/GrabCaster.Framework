@@ -24,23 +24,14 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.ServiceModel;
-using System.ServiceModel.Description;
-using System.ServiceModel.Web;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
+
 using GrabCaster.Framework.Base;
 using GrabCaster.Framework.Contracts.Attributes;
 using GrabCaster.Framework.Contracts.Globals;
 using GrabCaster.Framework.Contracts.Triggers;
+using System;
+using System.Diagnostics;
+using System.Threading;
 
 namespace GrabCaster.Framework.DynamicRESTTrigger
 {
@@ -53,6 +44,7 @@ namespace GrabCaster.Framework.DynamicRESTTrigger
     {
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
+
         /// <summary>
         /// WebApiEndPoint used by the service
         /// </summary>
@@ -84,9 +76,9 @@ namespace GrabCaster.Framework.DynamicRESTTrigger
 
         //questo puoi metterlo in interfaccia
         public delegate byte[] SetGetDataTrigger(
-        ActionTrigger actionTrigger, ActionContext context);
+            ActionTrigger actionTrigger, ActionContext context);
 
-  
+
         /// <summary>
         /// The execute.
         /// </summary>
@@ -111,35 +103,28 @@ namespace GrabCaster.Framework.DynamicRESTTrigger
                 {
                     guid = Guid.NewGuid().ToString();
                     //context.EventBehaviour = eventBehaviour;
-                    Console.WriteLine($"TRGT {guid} - {(DateTime.UtcNow.Second + ":" + DateTime.UtcNow.Millisecond)}");
+                    Console.WriteLine($"TRGT {guid} - {DateTime.UtcNow.Second + ":" + DateTime.UtcNow.Millisecond}");
                     var stopwatch = new Stopwatch();
                     stopwatch.Start();
-                    this.DataContext = EncodingDecoding.EncodingString2Bytes(guid);
+                    DataContext = EncodingDecoding.EncodingString2Bytes(guid);
                     actionTrigger(this, context);
                     WaitHandle.WaitOne();
                     stopwatch.Stop();
-                    guidBack = EncodingDecoding.EncodingBytes2String(this.DataContext);
-                    Console.WriteLine($"EVTT {guidBack} - {(DateTime.UtcNow.Second + ":" + DateTime.UtcNow.Millisecond)}");
+                    guidBack = EncodingDecoding.EncodingBytes2String(DataContext);
+                    Console.WriteLine($"EVTT {guidBack} - {DateTime.UtcNow.Second + ":" + DateTime.UtcNow.Millisecond}");
 
                     long elapsed_time = stopwatch.ElapsedMilliseconds;
-                    Console.WriteLine(($"Response in {elapsed_time.ToString()}"));
-                    Console.WriteLine(($"0.5 second waitining..."));
-                    System.Threading.Thread.Sleep(500);
-
-
+                    Console.WriteLine($"Response in {elapsed_time}");
+                    Console.WriteLine($"0.5 second waitining...");
+                    Thread.Sleep(500);
                 }
-
-
-                Thread.Sleep(Timeout.Infinite);
-                return null;
-
             }
             catch (Exception ex)
             {
-                this.DataContext = EncodingDecoding.EncodingString2Bytes(ex.Message);
+                DataContext = EncodingDecoding.EncodingString2Bytes(ex.Message);
                 actionTrigger(this, context);
-                this.ActionTrigger = actionTrigger;
-                this.Context = context;
+                ActionTrigger = actionTrigger;
+                Context = context;
                 return EncodingDecoding.EncodingString2Bytes(ex.Message);
             }
         }
@@ -147,10 +132,9 @@ namespace GrabCaster.Framework.DynamicRESTTrigger
         public void SyncAsyncActionReceived(byte[] content)
         {
             string guidBack = EncodingDecoding.EncodingBytes2String(content);
-            Console.WriteLine($"EVTE {guidBack} - {(DateTime.UtcNow.Second + ":" + DateTime.UtcNow.Millisecond)}");
+            Console.WriteLine($"EVTE {guidBack} - {DateTime.UtcNow.Second + ":" + DateTime.UtcNow.Millisecond}");
 
             WaitHandle.Set();
-
         }
     }
 }

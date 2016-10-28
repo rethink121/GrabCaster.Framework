@@ -24,21 +24,16 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GrabCaster.Framework.CompressionLibrary
 {
-    using System.Diagnostics;
+    using Base;
+    using Log;
     using System.IO;
     using System.IO.Compression;
     using System.Reflection;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Log;
 
     public static class Helpers
     {
@@ -49,7 +44,7 @@ namespace GrabCaster.Framework.CompressionLibrary
         /// <returns>a byte array</returns>
         public static byte[] CreateFromDirectory(string directoryPath)
         {
-            string zipFolderFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid().ToString()}.zip");
+            string zipFolderFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.zip");
 
             try
             {
@@ -60,16 +55,13 @@ namespace GrabCaster.Framework.CompressionLibrary
             }
             catch (Exception ex)
             {
-
-
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                              $"Error in {MethodBase.GetCurrentMethod().Name}",
-                              Constant.LogLevelError,
-                              Constant.TaskCategoriesError,
-                              ex,
-                              Constant.LogLevelError);
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
+                    Constant.LogLevelError);
                 return null;
-
             }
         }
 
@@ -77,29 +69,25 @@ namespace GrabCaster.Framework.CompressionLibrary
         /// Decompress byte stream
         /// </summary>
         /// <param name="fileContent"></param>
-        public static void CreateFromBytearray(byte[] fileContent,string unzipFolder)
+        public static void CreateFromBytearray(byte[] fileContent, string unzipFolder)
         {
-            string unzipFolderFile = Path.Combine(Path.GetTempPath(),$"{Guid.NewGuid().ToString()}.zip");
-            
+            string unzipFolderFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.zip");
+
 
             try
             {
                 File.WriteAllBytes(unzipFolderFile, fileContent);
                 ZipFile.ExtractToDirectory(unzipFolderFile, unzipFolder);
                 File.Delete(unzipFolderFile);
-                
             }
             catch (Exception ex)
             {
-
-
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                              $"Error in {MethodBase.GetCurrentMethod().Name}",
-                              Constant.LogLevelError,
-                              Constant.TaskCategoriesError,
-                              ex,
-                              Constant.LogLevelError);
-
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
+                    Constant.LogLevelError);
             }
         }
     }

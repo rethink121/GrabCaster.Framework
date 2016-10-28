@@ -24,23 +24,14 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
+using GrabCaster.Framework.Base;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Xsl;
-using GrabCaster.BizTalk.Extensibility;
-using GrabCaster.Framework.Base;
-using Microsoft.BizTalk.Message.Interop;
-using Microsoft.XLANGs.BaseTypes;
 
 
 namespace GrabCaster.BizTalk.Extensibility.Laboratory
@@ -59,15 +50,17 @@ namespace GrabCaster.BizTalk.Extensibility.Laboratory
         }
 
 
-
         private void buttonTry_Click(object sender, EventArgs e)
         {
-            prpassemblyfile =@"C:\Users\Nino\Documents\GrabCaster\GrabCaster.Framework\BizTalk.Laoratory\PipelineLaboratory\PipelineLaboratory\bin\Debug\PipelineLaboratory.dll";
+            prpassemblyfile =
+                @"C:\Users\Nino\Documents\GrabCaster\GrabCaster.Framework\BizTalk.Laoratory\PipelineLaboratory\PipelineLaboratory\bin\Debug\PipelineLaboratory.dll";
             prppipetype = "PipelineLaboratory.ReceivePipelineFlat";
             prpinputinstance =
                 @"C:\Users\Nino\Documents\GrabCaster\GrabCaster.Framework\BizTalk.Laoratory\PipelineLaboratory\PipelineLaboratory\TestFile.txt";
-            prpfilename = @"C:\Users\Nino\Documents\GrabCaster\GrabCaster.Framework\BizTalk.Laoratory\PipelineLaboratory\PipelineLaboratory\ReceivePipelineFlat.btp";
-            byte[] content = BizTalkPipelines.ExecutePipeline(prpassemblyfile, prpassemblyfile, prppipetype, prpinputinstance, prpfilename);
+            prpfilename =
+                @"C:\Users\Nino\Documents\GrabCaster\GrabCaster.Framework\BizTalk.Laoratory\PipelineLaboratory\PipelineLaboratory\ReceivePipelineFlat.btp";
+            byte[] content = BizTalkPipelines.ExecutePipeline(prpassemblyfile, prpassemblyfile, prppipetype,
+                prpinputinstance, prpfilename);
             string s = EncodingDecoding.EncodingBytes2String(content);
             MessageBox.Show(s);
         }
@@ -89,17 +82,12 @@ namespace GrabCaster.BizTalk.Extensibility.Laboratory
                 @"C:\Users\Nino\Documents\GrabCaster\GrabCaster.Framework\BizTalk.Laoratory\PipelineLaboratory\PipelineLaboratory\bin\Debug\PipelineLaboratory.dll",
                 "PipelineLaboratory.Map1",
                 true);
-
         }
 
         private string LoadInternalArtifactData(string parentAssemblyName, string artypename, bool isasslocation)
         {
-
-
             try
             {
-
-
                 Assembly asm = Assembly.LoadFrom(parentAssemblyName);
 
                 Type t = asm.GetType(artypename);
@@ -108,7 +96,8 @@ namespace GrabCaster.BizTalk.Extensibility.Laboratory
                 object o = asm.CreateInstance(artypename);
 
 
-                PropertyInfo pi = o.GetType().GetProperty("XmlContent", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance);
+                PropertyInfo pi = o.GetType()
+                    .GetProperty("XmlContent", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance);
                 object viewData = pi.GetValue(o, null);
                 string tmpViewData = viewData != null ? viewData.ToString() : string.Empty;
                 string dataXslt = tmpViewData.Replace("utf-16", "utf-8");
@@ -145,11 +134,6 @@ namespace GrabCaster.BizTalk.Extensibility.Laboratory
                 MessageBox.Show(ex.Message);
                 return null;
             }
-
-
         }
-
-
-
     }
 }

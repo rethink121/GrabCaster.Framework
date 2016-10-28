@@ -24,30 +24,28 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GrabCaster.Framework.Engine
 {
+    using Base;
+    using Contracts.Bubbling;
+    using Contracts.Configuration;
     using System.Runtime.Serialization;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Contracts.Bubbling;
-    using GrabCaster.Framework.Contracts.Configuration;
 
     /// <summary>
     /// Contains the bubbling folder filse (trg, evn, and dlls)
     /// </summary>
-    [Serializable,DataContract]
+    [Serializable, DataContract]
     public class BubblingBagObjet
     {
         [DataMember]
         public List<TriggerConfiguration> TriggerConfigurationList { get; set; }
+
         [DataMember]
-        public Dictionary<string,EventConfiguration> EventConfigurationList { get; set; }
+        public Dictionary<string, EventConfiguration> EventConfigurationList { get; set; }
 
         [DataMember]
         public List<ChainConfiguration> ChainConfigurationList { get; set; }
@@ -57,10 +55,11 @@ namespace GrabCaster.Framework.Engine
 
         [DataMember]
         public List<BubblingObject> GlobalEventListBaseDll { get; set; }
+
         [DataMember]
         public Configuration Configuration { get; set; }
-
     }
+
     [Serializable]
     public class BubblingBag
     {

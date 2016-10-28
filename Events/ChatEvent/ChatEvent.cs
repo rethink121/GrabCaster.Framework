@@ -24,19 +24,18 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using GrabCaster.Framework.Base;
 
 namespace GrabCaster.Framework.ChatEvent
 {
+    using Contracts.Attributes;
+    using Contracts.Events;
+    using Contracts.Globals;
     using System;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
-    using System.Text;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
 
     /// <summary>
     /// The chat event.
@@ -47,25 +46,26 @@ namespace GrabCaster.Framework.ChatEvent
         /// <summary>
         /// The e m_ replacesel.
         /// </summary>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+             Justification = "Reviewed. Suppression is OK here.")] [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore",
+                                                                        Justification = "Reviewed. Suppression is OK here.")]
         // ReSharper disable once InconsistentNaming
         private const int EM_REPLACESEL = 0x00C2;
 
         /// <summary>
         /// The e m_ setsel.
         /// </summary>
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter", Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-        private readonly int EM_SETSEL = 0x00B1;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore",
+             Justification = "Reviewed. Suppression is OK here.")] [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1306:FieldNamesMustBeginWithLowerCaseLetter",
+                                                                        Justification = "Reviewed. Suppression is OK here.")] [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+                                                                                                                                   Justification = "Reviewed. Suppression is OK here.")] private readonly int EM_SETSEL = 0x00B1;
 
         /// <summary>
         /// The w m_ gettextlength.
         /// </summary>
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-        private readonly int WM_GETTEXTLENGTH = 0x000E;
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore",
+             Justification = "Reviewed. Suppression is OK here.")] [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+                                                                        Justification = "Reviewed. Suppression is OK here.")] private readonly int WM_GETTEXTLENGTH = 0x000E;
 
         /// <summary>
         /// The send message.
@@ -86,7 +86,8 @@ namespace GrabCaster.Framework.ChatEvent
         /// The <see cref="int"/>.
         /// </returns>
         [DllImport("User32.dll")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation",
+             Justification = "Reviewed. Suppression is OK here.")]
         public static extern int SendMessage(IntPtr hWnd, int uMsg, int wParam, int lParam);
 
         /// <summary>
@@ -108,8 +109,10 @@ namespace GrabCaster.Framework.ChatEvent
         /// The <see cref="IntPtr"/>.
         /// </returns>
         [DllImport("user32.dll", EntryPoint = "FindWindowEx")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:StaticElementsMustAppearBeforeInstanceElements", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+             Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:StaticElementsMustAppearBeforeInstanceElements",
+             Justification = "Reviewed. Suppression is OK here.")]
         public static extern IntPtr FindWindowEx(
             IntPtr hwndParent,
             IntPtr hwndChildAfter,
@@ -135,8 +138,10 @@ namespace GrabCaster.Framework.ChatEvent
         /// The <see cref="int"/>.
         /// </returns>
         [DllImport("User32.dll")]
-        [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:StaticElementsMustAppearBeforeInstanceElements", Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:StaticElementsMustAppearBeforeInstanceElements",
+             Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation",
+             Justification = "Reviewed. Suppression is OK here.")]
         public static extern int SendMessage(IntPtr hWnd, int uMsg, int wParam, string lParam);
 
         /// <summary>
@@ -167,7 +172,7 @@ namespace GrabCaster.Framework.ChatEvent
         [EventActionContract("{{3C670559-B77F-498F-9855-BC5C8E22C758}", "Main action", "Main action description")]
         public byte[] Execute(ActionEvent actionEvent, ActionContext context)
         {
-            var content = EncodingDecoding.EncodingBytes2String(this.DataContext);
+            var content = EncodingDecoding.EncodingBytes2String(DataContext);
             var notepads = Process.GetProcessesByName("notepad");
 
             if (notepads.Length == 0)
@@ -179,8 +184,8 @@ namespace GrabCaster.Framework.ChatEvent
             {
                 EmptyClipboard();
                 var child = FindWindowEx(notepads[0].MainWindowHandle, new IntPtr(0), "Edit", null);
-                var length = SendMessageGetTextLength(child, this.WM_GETTEXTLENGTH, IntPtr.Zero, IntPtr.Zero);
-                SendMessage(child, this.EM_SETSEL, length, length); // search end of file position
+                var length = SendMessageGetTextLength(child, WM_GETTEXTLENGTH, IntPtr.Zero, IntPtr.Zero);
+                SendMessage(child, EM_SETSEL, length, length); // search end of file position
                 content += "\r\n";
                 SendMessage(child, EM_REPLACESEL, 1, content); // append new line
             }
@@ -188,7 +193,8 @@ namespace GrabCaster.Framework.ChatEvent
         }
 
         [DllImport("User32.dll", EntryPoint = "SendMessage")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation",
+             Justification = "Reviewed. Suppression is OK here.")]
         private static extern int SendMessageGetTextLength(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
         [DllImport("user32.dll")]

@@ -24,28 +24,24 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using GrabCaster.Framework.Contracts.Storage;
 
 namespace GrabCaster.Framework.Engine.OffRamp
 {
+    using Base;
+    using Contracts.Attributes;
+    using Contracts.Bubbling;
+    using Contracts.Messaging;
+    using Log;
+    using OnRamp;
+    using Serialization.Object;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Text;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Bubbling;
-    using GrabCaster.Framework.Contracts.Messaging;
-    using GrabCaster.Framework.Engine.OnRamp;
-    using GrabCaster.Framework.Log;
-    using GrabCaster.Framework.Serialization.Object;
-    using Microsoft.ServiceBus.Messaging;
-
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Internal messaging Queue
@@ -63,9 +59,9 @@ namespace GrabCaster.Framework.Engine.OffRamp
         /// </param>
         public OffRampEngineQueue(int capLimit, int timeLimit)
         {
-            this.CapLimit = capLimit;
-            this.TimeLimit = timeLimit;
-            this.InitTimer();
+            CapLimit = capLimit;
+            TimeLimit = timeLimit;
+            InitTimer();
         }
     }
 
@@ -91,7 +87,7 @@ namespace GrabCaster.Framework.Engine.OffRamp
         private static bool secondaryPersistProviderEnabled;
 
         private static int secondaryPersistProviderByteSize;
-        
+
         /// <summary>
         /// Initialize the onramp engine the OffRampPatternComponent variable is for the next version
         /// </summary>
@@ -115,13 +111,12 @@ namespace GrabCaster.Framework.Engine.OffRamp
 
                 if (ConfigurationBag.Configuration.RunLocalOnly)
                 {
-
                     LogEngine.WriteLog(ConfigurationBag.EngineName,
-                                        $"OffRamp provider not started, this GrabCaster point is configured for local execution only.",
-                                        Constant.LogLevelError,
-                                        Constant.TaskCategoriesError,
-                                        null,
-                                        Constant.LogLevelWarning);
+                        $"OffRamp provider not started, this GrabCaster point is configured for local execution only.",
+                        Constant.LogLevelError,
+                        Constant.TaskCategoriesError,
+                        null,
+                        Constant.LogLevelWarning);
                     return false;
                 }
                 Debug.WriteLine("Initialize Abstract Event Up Stream Engine.");
@@ -133,48 +128,48 @@ namespace GrabCaster.Framework.Engine.OffRamp
 
                 // Create the reflection method cached 
                 var assembly = Assembly.LoadFrom(eventsUpStreamComponent);
-                
+
                 // Main class logging
                 var assemblyClass = (from t in assembly.GetTypes()
-                                     let attributes = t.GetCustomAttributes(typeof(EventsOffRampContract), true)
-                                     where t.IsClass && attributes != null && attributes.Length > 0
-                                     select t).First();
+                    let attributes = t.GetCustomAttributes(typeof(EventsOffRampContract), true)
+                    where t.IsClass && attributes != null && attributes.Length > 0
+                    select t).First();
 
                 OffRampStream = Activator.CreateInstance(assemblyClass) as IOffRampStream;
- 
+
                 OffRampEngineQueue = new OffRampEngineQueue(
-                    ConfigurationBag.Configuration.ThrottlingOffRampIncomingRateNumber, 
+                    ConfigurationBag.Configuration.ThrottlingOffRampIncomingRateNumber,
                     ConfigurationBag.Configuration.ThrottlingOffRampIncomingRateSeconds);
                 OffRampEngineQueue.OnPublish += OffRampEngineQueueOnPublish;
 
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    "Start Off Ramp Engine.", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    null, 
+                    ConfigurationBag.EngineName,
+                    "Start Off Ramp Engine.",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    null,
                     Constant.LogLevelInformation);
 
                 // Inizialize the Dpp
                 Debug.WriteLine("Initialize Abstract Storage Provider Engine.");
                 //todo optimization utilizzare linterfaccia
                 OffRampStream.CreateOffRampStream();
-                secondaryPersistProviderEnabled= ConfigurationBag.Configuration.SecondaryPersistProviderEnabled;
+                secondaryPersistProviderEnabled = ConfigurationBag.Configuration.SecondaryPersistProviderEnabled;
                 secondaryPersistProviderByteSize = ConfigurationBag.Configuration.SecondaryPersistProviderByteSize;
 
                 // Load the abrstracte persistent provider
                 var devicePersistentProviderComponent = Path.Combine(
-                                    ConfigurationBag.Configuration.DirectoryOperativeRootExeName,
-                                    ConfigurationBag.Configuration.PersistentProviderComponent);
+                    ConfigurationBag.Configuration.DirectoryOperativeRootExeName,
+                    ConfigurationBag.Configuration.PersistentProviderComponent);
 
                 // Create the reflection method cached 
                 var assemblyPersist = Assembly.LoadFrom(devicePersistentProviderComponent);
 
                 // Main class logging
                 var assemblyClassDpp = (from t in assemblyPersist.GetTypes()
-                                     let attributes = t.GetCustomAttributes(typeof(DevicePersistentProviderContract), true)
-                                     where t.IsClass && attributes != null && attributes.Length > 0
-                                     select t).First();
+                    let attributes = t.GetCustomAttributes(typeof(DevicePersistentProviderContract), true)
+                    where t.IsClass && attributes != null && attributes.Length > 0
+                    select t).First();
 
 
                 DevicePersistentProvider = Activator.CreateInstance(assemblyClassDpp) as IDevicePersistentProvider;
@@ -184,11 +179,11 @@ namespace GrabCaster.Framework.Engine.OffRamp
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
                 return false;
             }
@@ -222,18 +217,17 @@ namespace GrabCaster.Framework.Engine.OffRamp
         /// TODO The properties.
         /// </param>
         public static void SendMessageOffRamp(
-            BubblingObject bubblingObject, 
-            string messageType, 
-            string channelId, 
-            string pointId, 
+            BubblingObject bubblingObject,
+            string messageType,
+            string channelId,
+            string pointId,
             string pointIdOverrided)
         {
             try
             {
-
                 //Create message Id
                 bubblingObject.MessageId = Guid.NewGuid().ToString();
-                
+
                 //Create bubbling object message to send
                 byte[] serializedMessage = SerializationEngine.ObjectToByteArray(bubblingObject);
 
@@ -251,25 +245,25 @@ namespace GrabCaster.Framework.Engine.OffRamp
                 // Message context
                 bubblingObject.MessageType = messageType;
 
-                if(pointIdOverrided != null)
+                if (pointIdOverrided != null)
                     bubblingObject.SenderPointId = pointIdOverrided;
                 else
                     bubblingObject.SenderPointId = ConfigurationBag.Configuration.PointId;
 
                 bubblingObject.SenderName = ConfigurationBag.Configuration.PointName;
-                bubblingObject.SenderDescriprion= ConfigurationBag.Configuration.PointDescription;
+                bubblingObject.SenderDescriprion = ConfigurationBag.Configuration.PointDescription;
                 bubblingObject.SenderChannelId = ConfigurationBag.Configuration.ChannelId;
                 bubblingObject.SenderChannelName = ConfigurationBag.Configuration.ChannelName;
                 bubblingObject.SenderChannelDescription = ConfigurationBag.Configuration.ChannelDescription;
-                bubblingObject.SenderPointId= ConfigurationBag.Configuration.PointId;
-                bubblingObject.SenderName= ConfigurationBag.Configuration.PointName;
-                bubblingObject.SenderDescriprion= ConfigurationBag.Configuration.PointDescription;
-                bubblingObject.DestinationChannelId= channelId;
-                bubblingObject.DestinationPointId= pointId;
+                bubblingObject.SenderPointId = ConfigurationBag.Configuration.PointId;
+                bubblingObject.SenderName = ConfigurationBag.Configuration.PointName;
+                bubblingObject.SenderDescriprion = ConfigurationBag.Configuration.PointDescription;
+                bubblingObject.DestinationChannelId = channelId;
+                bubblingObject.DestinationPointId = pointId;
                 bubblingObject.HAGroup = ConfigurationBag.Configuration.HAGroup;
 
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                    $"SendMessageOffRamp bubblingObject.SenderChannelId {bubblingObject.SenderChannelId } " +
+                    $"SendMessageOffRamp bubblingObject.SenderChannelId {bubblingObject.SenderChannelId} " +
                     $"bubblingObject.SenderPointId {bubblingObject.SenderPointId} " +
                     $"bubblingObject.DestinationChannelId {bubblingObject.DestinationChannelId} " +
                     $" bubblingObject.DestinationPointId {bubblingObject.DestinationPointId} " +
@@ -283,31 +277,29 @@ namespace GrabCaster.Framework.Engine.OffRamp
                     Constant.LogLevelVerbose);
 
                 OffRampEngineQueue.Enqueue(bubblingObject);
-       
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesEventHubs, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesEventHubs,
+                    ex,
                     Constant.LogLevelError);
             }
         }
 
         public static void SendNullMessageOffRamp(
-            string messageType, 
-            string channelId, 
-            string pointId, 
-            string idComponent, 
+            string messageType,
+            string channelId,
+            string pointId,
+            string idComponent,
             string subscriberId,
             string pointIdOverrided)
         {
             try
             {
-
                 var bubblingObject = new BubblingObject(EncodingDecoding.EncodingString2Bytes(string.Empty));
                 bubblingObject.Persisting = false;
 
@@ -317,34 +309,34 @@ namespace GrabCaster.Framework.Engine.OffRamp
 
                 string senderid;
 
-                if(pointIdOverrided != null)
-                    senderid= pointIdOverrided;
+                if (pointIdOverrided != null)
+                    senderid = pointIdOverrided;
                 else
                     senderid = ConfigurationBag.Configuration.PointId;
 
                 bubblingObject.SenderPointId = senderid;
                 bubblingObject.SenderName = ConfigurationBag.Configuration.PointName;
                 bubblingObject.SenderDescriprion = ConfigurationBag.Configuration.PointDescription;
-                bubblingObject.SenderChannelId= ConfigurationBag.Configuration.ChannelId;
+                bubblingObject.SenderChannelId = ConfigurationBag.Configuration.ChannelId;
                 bubblingObject.SenderChannelName = ConfigurationBag.Configuration.ChannelName;
                 bubblingObject.SenderChannelDescription = ConfigurationBag.Configuration.ChannelDescription;
                 bubblingObject.DestinationChannelId = channelId;
-                bubblingObject.DestinationPointId= pointId;
-                bubblingObject.IdComponent= idComponent;
+                bubblingObject.DestinationPointId = pointId;
+                bubblingObject.IdComponent = idComponent;
 
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                            $"SendNullMessageOffRamp bubblingObject.SenderChannelId {bubblingObject.SenderChannelId } " +
-                            $"bubblingObject.SenderPointId {bubblingObject.SenderPointId} " +
-                            $"bubblingObject.DestinationChannelId {bubblingObject.DestinationChannelId} " +
-                            $" bubblingObject.DestinationPointId {bubblingObject.DestinationPointId} " +
-                            $"bubblingObject.MessageType {bubblingObject.MessageType}" +
-                            $"bubblingObject.Persisting {bubblingObject.Persisting} " +
-                            $"bubblingObject.MessageId {bubblingObject.MessageId} " +
-                            $"bubblingObject.Name {bubblingObject.Name}",
-                            Constant.LogLevelError,
-                            Constant.TaskCategoriesConsole,
-                            null,
-                            Constant.LogLevelInformation);
+                    $"SendNullMessageOffRamp bubblingObject.SenderChannelId {bubblingObject.SenderChannelId} " +
+                    $"bubblingObject.SenderPointId {bubblingObject.SenderPointId} " +
+                    $"bubblingObject.DestinationChannelId {bubblingObject.DestinationChannelId} " +
+                    $" bubblingObject.DestinationPointId {bubblingObject.DestinationPointId} " +
+                    $"bubblingObject.MessageType {bubblingObject.MessageType}" +
+                    $"bubblingObject.Persisting {bubblingObject.Persisting} " +
+                    $"bubblingObject.MessageId {bubblingObject.MessageId} " +
+                    $"bubblingObject.Name {bubblingObject.Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesConsole,
+                    null,
+                    Constant.LogLevelInformation);
 
                 // Queue the data
                 OffRampEngineQueue.Enqueue(bubblingObject);
@@ -355,11 +347,11 @@ namespace GrabCaster.Framework.Engine.OffRamp
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesEventHubs, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesEventHubs,
+                    ex,
                     Constant.LogLevelError);
             }
         }
@@ -374,7 +366,7 @@ namespace GrabCaster.Framework.Engine.OffRamp
             foreach (var bubblingObject in bubblingObjects)
             {
                 //todo optimization ho messo la ricezione per la ottimizzatione decommenta  // OffRampStream.SendMessage(bubblingObject);
-                if(bubblingObject.LocalEvent)
+                if (bubblingObject.LocalEvent)
                     MessageIngestor.IngestMessagge(bubblingObject);
                 else
                 {

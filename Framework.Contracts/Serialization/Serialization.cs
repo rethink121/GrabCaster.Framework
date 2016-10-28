@@ -24,17 +24,16 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using GrabCaster.Framework.Base;
 
 namespace GrabCaster.Framework.Contracts.Serialization
 {
-    using System;
     using System.Data;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.IO.Compression;
     using System.Runtime.Serialization.Formatters.Binary;
-    using System.Text;
 
     /// <summary>
     ///     Serialization engine class
@@ -75,7 +74,8 @@ namespace GrabCaster.Framework.Contracts.Serialization
         /// <returns>
         /// The <see cref="object"/>.
         /// </returns>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+             Justification = "Reviewed. Suppression is OK here.")]
         public static object ByteArrayToObjectold(byte[] bytesArray)
         {
             if (bytesArray == null)
@@ -115,7 +115,7 @@ namespace GrabCaster.Framework.Contracts.Serialization
 
             var objDeflated = new DeflateStream(objStream, CompressionMode.Compress);
 
-            objDeflated.Write(ms.GetBuffer(), 0, (int)ms.Length);
+            objDeflated.Write(ms.GetBuffer(), 0, (int) ms.Length);
             objDeflated.Flush();
             objDeflated.Close();
 
@@ -146,7 +146,7 @@ namespace GrabCaster.Framework.Contracts.Serialization
 
             var bf = new BinaryFormatter();
 
-            object outObject = (DataTable)bf.Deserialize(outMs, null);
+            object outObject = (DataTable) bf.Deserialize(outMs, null);
 
             return outObject;
         }
@@ -176,7 +176,7 @@ namespace GrabCaster.Framework.Contracts.Serialization
 
             var objDeflated = new DeflateStream(objStream, CompressionMode.Compress);
 
-            objDeflated.Write(ms.GetBuffer(), 0, (int)ms.Length);
+            objDeflated.Write(ms.GetBuffer(), 0, (int) ms.Length);
             objDeflated.Flush();
             objDeflated.Close();
 
@@ -209,7 +209,7 @@ namespace GrabCaster.Framework.Contracts.Serialization
             outDs.RemotingFormat = SerializationFormat.Binary;
             var bf = new BinaryFormatter();
 
-            outDs = (DataTable)bf.Deserialize(outMs, null);
+            outDs = (DataTable) bf.Deserialize(outMs, null);
 
             return outDs;
         }

@@ -24,17 +24,16 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Diagnostics;
+
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace GrabCaster.Framework.Log.AzureTableStorage
 {
     using Base;
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Log;
+    using Contracts.Attributes;
+    using Contracts.Log;
     using System;
-    using System.IO;
 
     /// <summary>
     /// The log engine, simple version.
@@ -42,8 +41,8 @@ namespace GrabCaster.Framework.Log.AzureTableStorage
     [LogContract("{CE541CB7-94CD-4421-B6C4-26FBC3088FF9}", "LogEngine", "Azure Table Storage Log System")]
     public class LogEngine : ILogEngine
     {
-        private TableBatchOperation batchOperation = null;
-        private CloudTable tableGlobal = null;
+        private TableBatchOperation batchOperation;
+        private CloudTable tableGlobal;
 
         /// <summary>
         /// Initialize log.
@@ -83,7 +82,6 @@ namespace GrabCaster.Framework.Log.AzureTableStorage
 
             batchOperation.Insert(logMessage);
             return true;
-
         }
 
         public void Flush()
@@ -93,11 +91,11 @@ namespace GrabCaster.Framework.Log.AzureTableStorage
                 // Execute the insert operation.
                 tableGlobal.ExecuteBatch(batchOperation);
                 batchOperation.Clear();
-
             }
             catch (Exception ex)
             {
-                GrabCaster.Framework.Log.LogEngine.DirectEventViewerLog($"Error in GrabCaster.Framework.Log.AzureTableStorage component - {ex.Message}",1);
+                Log.LogEngine.DirectEventViewerLog(
+                    $"Error in GrabCaster.Framework.Log.AzureTableStorage component - {ex.Message}", 1);
             }
         }
     }

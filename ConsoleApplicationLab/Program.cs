@@ -24,14 +24,11 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System;
-using System.Collections.Generic;
+
+using GrabCaster.Framework.Base;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using GrabCaster.Framework.Base;
 
 namespace ConsoleApplicationLab
 {
@@ -39,22 +36,23 @@ namespace ConsoleApplicationLab
     {
         static void Main(string[] args)
         {
-            string publishingFolder = Path.Combine(ConfigurationBag.DirectoryDeployment(), ConfigurationBag.DirectoryNamePublishing);
+            string publishingFolder = Path.Combine(ConfigurationBag.DirectoryDeployment(),
+                ConfigurationBag.DirectoryNamePublishing);
 
             var regTriggers = new Regex(ConfigurationBag.DeployExtensionLookFor);
             var deployFiles =
                 Directory.GetFiles(publishingFolder, "*.*", SearchOption.AllDirectories)
-                  .Where(path => Path.GetExtension(path) == ".trigger" || Path.GetExtension(path) == ".event" || Path.GetExtension(path) == ".component");
+                    .Where(
+                        path =>
+                            Path.GetExtension(path) == ".trigger" || Path.GetExtension(path) == ".event" ||
+                            Path.GetExtension(path) == ".component");
 
             foreach (var file in deployFiles)
             {
                 string projectName = Path.GetFileNameWithoutExtension(publishingFolder + file);
-                string projectType = Path.GetExtension(publishingFolder + file).Replace(".","");
-                GrabCaster.Framework.Deployment.Jit.CompilePublishing(projectType, projectName,"Release","AnyCpu");
+                string projectType = Path.GetExtension(publishingFolder + file).Replace(".", "");
+                GrabCaster.Framework.Deployment.Jit.CompilePublishing(projectType, projectName, "Release", "AnyCpu");
             }
-            
-
-          
         }
     }
 }

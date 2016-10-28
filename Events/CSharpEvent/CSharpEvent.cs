@@ -24,17 +24,16 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.CSharpEvent
 {
-    using System.Collections.Generic;
-    using System.IO;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
-
+    using Contracts.Attributes;
+    using Contracts.Events;
+    using Contracts.Globals;
     using Roslyn.Compilers;
     using Roslyn.Scripting.CSharp;
+    using System.Collections.Generic;
+    using System.IO;
 
     /// <summary>
     /// The c sharp event.
@@ -90,8 +89,8 @@ namespace GrabCaster.Framework.CSharpEvent
         {
             try
             {
-                this.Context = context;
-                this.ActionEvent = actionEvent;
+                Context = context;
+                ActionEvent = actionEvent;
                 var script = string.Empty;
                 var metaProvider = new MetadataFileProvider();
                 metaProvider.GetReference(context.GetType().Assembly.Location);
@@ -104,17 +103,17 @@ namespace GrabCaster.Framework.CSharpEvent
                     @"C:\Users\ninoc\Documents\Visual Studio 2015\Projects\HybridIntegrationServices\Framework\bin\Debug\Framework.exe");
                 session.AddReference(
                     @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Windows.Forms.dll");
-                
+
                 // TODO 1041
-                if (this.ScriptFile != null || this.ScriptFile != string.Empty)
+                if (ScriptFile != null || ScriptFile != string.Empty)
                 {
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    script = File.ReadAllText(this.ScriptFile);
+                    script = File.ReadAllText(ScriptFile);
                     session.ExecuteFile(script);
                 }
                 else
                 {
-                    session.Execute(this.Script);
+                    session.Execute(Script);
                 }
                 return null;
             }

@@ -24,13 +24,11 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HM.OMS.PageOneMessageConsole
 {
@@ -38,7 +36,7 @@ namespace HM.OMS.PageOneMessageConsole
     {
         public void Execute()
         {
-            string[] names = new string[] { "Huan", "Long", "Loc" };
+            string[] names = {"Huan", "Long", "Loc"};
             Expression<Func<Product, bool>> expr = p => p.Description == "test" && names.Contains(p.Name);
             string name = GetPropertyName(expr);
 
@@ -47,10 +45,10 @@ namespace HM.OMS.PageOneMessageConsole
 
         public string GetPropertyName(Expression<Func<Product, bool>> expr)
         {
-            var mexpr = (BinaryExpression)expr.Body;
+            var mexpr = (BinaryExpression) expr.Body;
 
-            var member = (MemberExpression)expr.Body;
-            var property = (PropertyInfo)member.Member;
+            var member = (MemberExpression) expr.Body;
+            var property = (PropertyInfo) member.Member;
             return property.Name;
         }
     }

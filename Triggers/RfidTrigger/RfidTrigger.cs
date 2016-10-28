@@ -24,31 +24,29 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using GrabCaster.Framework.Base;
 
 namespace GrabCaster.Framework.RfidTrigger
 {
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Triggers;
+    using Newtonsoft.Json;
+    using Phidgets;
+    using Phidgets.Events;
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
-    using System.Text;
     using System.Threading;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
-
-    using Newtonsoft.Json;
-
-    using Phidgets;
-    using Phidgets.Events;
 
     /// <summary>
     /// The RIFD trigger.
     /// </summary>
     [TriggerContract("{782B745E-1F6F-440A-A209-E250A1EA5013}", "RFID Trigger", "Read Rfid Tag from a Pidget device",
-        false, true, false)]
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+         false, true, false)]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+         Justification = "Reviewed. Suppression is OK here.")]
     public class RfidTrigger : ITriggerType
     {
         /// <summary>
@@ -91,17 +89,17 @@ namespace GrabCaster.Framework.RfidTrigger
         {
             try
             {
-                this.Context = context;
-                this.ActionTrigger = actionTrigger;
+                Context = context;
+                ActionTrigger = actionTrigger;
 
                 var rfid = new RFID(); // Declare an RFID object
 
                 // initialize our Phidgets RFID reader and hook the event handlers
                 rfid.Attach += RfidAttach;
                 rfid.Detach += RfidDetach;
-                rfid.Error += this.RfidError;
+                rfid.Error += RfidError;
 
-                rfid.Tag += this.RfidTag;
+                rfid.Tag += RfidTag;
                 rfid.TagLost += RfidTagLost;
                 rfid.open();
 
@@ -175,8 +173,8 @@ namespace GrabCaster.Framework.RfidTrigger
         /// </param>
         private void RfidError(object sender, ErrorEventArgs e)
         {
-            this.DataContext = EncodingDecoding.EncodingString2Bytes(e.Description);
-            this.ActionTrigger(this, this.Context);
+            DataContext = EncodingDecoding.EncodingString2Bytes(e.Description);
+            ActionTrigger(this, Context);
         }
 
         /// <summary>
@@ -190,12 +188,12 @@ namespace GrabCaster.Framework.RfidTrigger
         /// </param>
         private void RfidTag(object sender, TagEventArgs e)
         {
-            var rfidTag = new RfidTag { TagId = e.Tag, BankId = "4433EB52-240A-44CC-8A3B-B6673E1E0B31" };
+            var rfidTag = new RfidTag {TagId = e.Tag, BankId = "4433EB52-240A-44CC-8A3B-B6673E1E0B31"};
 
             var tagString = JsonConvert.SerializeObject(rfidTag);
 
-            this.DataContext = EncodingDecoding.EncodingString2Bytes(tagString);
-            this.ActionTrigger(this, this.Context);
+            DataContext = EncodingDecoding.EncodingString2Bytes(tagString);
+            ActionTrigger(this, Context);
         }
     }
 
@@ -203,7 +201,8 @@ namespace GrabCaster.Framework.RfidTrigger
     /// The rfid tag.
     /// </summary>
     [DataContract]
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+         Justification = "Reviewed. Suppression is OK here.")]
     public class RfidTag
     {
         /// <summary>

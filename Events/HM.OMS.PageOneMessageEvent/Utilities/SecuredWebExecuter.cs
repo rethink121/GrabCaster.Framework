@@ -24,14 +24,11 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HM.OMS.PageOneMessageConsole.Utilities
 {
@@ -45,7 +42,8 @@ namespace HM.OMS.PageOneMessageConsole.Utilities
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
 
                 // ignore any certificate complaints
-                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => { return true; };
+                ServicePointManager.ServerCertificateValidationCallback +=
+                    (sender, certificate, chain, sslPolicyErrors) => { return true; };
 
                 // create HTTP web request with proper content type
                 HttpWebRequest request = WebRequest.Create(url) as HttpWebRequest;
@@ -64,7 +62,7 @@ namespace HM.OMS.PageOneMessageConsole.Utilities
 
                 Stream responseStream = response.GetResponseStream();
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 // log and print out error
             }

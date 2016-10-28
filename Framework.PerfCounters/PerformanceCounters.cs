@@ -24,11 +24,10 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.PerfCounters
 {
     using System.Diagnostics;
-
-    using GrabCaster.Framework.Base;
 
     /// <summary>
     /// The performance counters.
@@ -54,25 +53,25 @@ namespace GrabCaster.Framework.PerfCounters
             var counters = new CounterCreationDataCollection();
             // Counter for counting totals: PerformanceCounterType.NumberOfItems32
             var totalTriggerCalls = new CounterCreationData
-                               {
-                                   CounterName = "# trigger executed", 
-                                   CounterHelp = "Total number of triggers executed per second", 
-                                   CounterType = PerformanceCounterType.RateOfCountsPerSecond64
-                               };
+            {
+                CounterName = "# trigger executed",
+                CounterHelp = "Total number of triggers executed per second",
+                CounterType = PerformanceCounterType.RateOfCountsPerSecond64
+            };
             counters.Add(totalTriggerCalls);
 
             // create new category with the counters above
 
-            PerformanceCounterCategory.Create("GrabCaster", "GrabCaster counters", counters);
+            //PerformanceCounterCategory.Create("GrabCaster", "GrabCaster counters", counters);
 
 
             // create counters to work with
-            this.counterTotalTriggerCalls = new PerformanceCounter();
-            this.counterTotalTriggerCalls.CategoryName = "GrabCaster";
-            this.counterTotalTriggerCalls.CounterName = "# trigger executed";
-            this.counterTotalTriggerCalls.MachineName = ".";
-            this.counterTotalTriggerCalls.ReadOnly = false;
-            this.counterTotalTriggerCalls.RawValue = 0;
+            counterTotalTriggerCalls = new PerformanceCounter();
+            counterTotalTriggerCalls.CategoryName = "GrabCaster";
+            counterTotalTriggerCalls.CounterName = "# trigger executed";
+            counterTotalTriggerCalls.MachineName = ".";
+            counterTotalTriggerCalls.ReadOnly = false;
+            counterTotalTriggerCalls.RawValue = 0;
         }
 
         /// <summary>
@@ -81,7 +80,7 @@ namespace GrabCaster.Framework.PerfCounters
         public void DoSomeProcessing()
         {
             // simply increment the counters
-            this.counterTotalTriggerCalls.Increment();
+            counterTotalTriggerCalls.Increment();
         }
     }
 }

@@ -24,12 +24,12 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.AzureQueueEvent
 {
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
-
+    using Contracts.Attributes;
+    using Contracts.Events;
+    using Contracts.Globals;
     using Microsoft.ServiceBus;
     using Microsoft.ServiceBus.Messaging;
 
@@ -37,7 +37,6 @@ namespace GrabCaster.Framework.AzureQueueEvent
     /// The azure queue event.
     /// </summary>
     [EventContract("{628CB14D-7F85-4D99-8EC6-489EBA25C38A}", "AzureQueueEvent", "Send message to Azure Queue", true)]
-
     public class AzureQueueEvent : IEventType
     {
         /// <summary>
@@ -82,18 +81,18 @@ namespace GrabCaster.Framework.AzureQueueEvent
         {
             try
             {
-                this.Context = context;
-                this.ActionEvent = actionEvent;
+                Context = context;
+                ActionEvent = actionEvent;
 
-                var namespaceManager = NamespaceManager.CreateFromConnectionString(this.ConnectionString);
+                var namespaceManager = NamespaceManager.CreateFromConnectionString(ConnectionString);
 
-                if (!namespaceManager.QueueExists(this.QueuePath))
+                if (!namespaceManager.QueueExists(QueuePath))
                 {
-                    namespaceManager.CreateQueue(this.QueuePath);
+                    namespaceManager.CreateQueue(QueuePath);
                 }
 
-                var client = QueueClient.CreateFromConnectionString(this.ConnectionString, this.QueuePath);
-                client.Send(new BrokeredMessage(this.DataContext));
+                var client = QueueClient.CreateFromConnectionString(ConnectionString, QueuePath);
+                client.Send(new BrokeredMessage(DataContext));
                 actionEvent(this, context);
                 return null;
             }

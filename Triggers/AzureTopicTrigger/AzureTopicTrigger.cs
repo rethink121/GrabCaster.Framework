@@ -24,24 +24,22 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Threading;
+
 
 namespace GrabCaster.Framework.AzureTopicTrigger
 {
-    using System;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
-
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Triggers;
     using Microsoft.ServiceBus;
     using Microsoft.ServiceBus.Messaging;
+    using System;
 
     /// <summary>
     /// The azure topic trigger.
     /// </summary>
     [TriggerContract("{D56A660E-2BBE-4705-BA2E-E89BBE0689DB}", "Azure Topic Trigger", "Azure Topic Trigger", false, true,
-        false)]
+         false)]
     public class AzureTopicTrigger : ITriggerType
     {
         /// <summary>
@@ -70,6 +68,7 @@ namespace GrabCaster.Framework.AzureTopicTrigger
 
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
+
         public string SupportBag { get; set; }
 
         /// <summary>
@@ -102,45 +101,45 @@ namespace GrabCaster.Framework.AzureTopicTrigger
         {
             try
             {
-                var namespaceManager = NamespaceManager.CreateFromConnectionString(this.ConnectionString);
+                var namespaceManager = NamespaceManager.CreateFromConnectionString(ConnectionString);
 
-                if (!namespaceManager.TopicExists(this.TopicPath))
+                if (!namespaceManager.TopicExists(TopicPath))
                 {
-                    namespaceManager.CreateTopic(this.TopicPath);
+                    namespaceManager.CreateTopic(TopicPath);
                 }
 
-                var sqlFilter = new SqlFilter(this.MessagesFilter);
+                var sqlFilter = new SqlFilter(MessagesFilter);
 
-                if (!namespaceManager.SubscriptionExists(this.TopicPath, this.SubscriptionName))
+                if (!namespaceManager.SubscriptionExists(TopicPath, SubscriptionName))
                 {
-                    namespaceManager.CreateSubscription(this.TopicPath, this.SubscriptionName, sqlFilter);
+                    namespaceManager.CreateSubscription(TopicPath, SubscriptionName, sqlFilter);
                 }
 
                 var subscriptionClientHigh = SubscriptionClient.CreateFromConnectionString(
-                    this.ConnectionString,
-                    this.TopicPath,
-                    this.SubscriptionName);
+                    ConnectionString,
+                    TopicPath,
+                    SubscriptionName);
 
                 // Configure the callback options
-                var options = new OnMessageOptions { AutoComplete = false, AutoRenewTimeout = TimeSpan.FromMinutes(1) };
+                var options = new OnMessageOptions {AutoComplete = false, AutoRenewTimeout = TimeSpan.FromMinutes(1)};
 
                 // Callback to handle received messages
                 subscriptionClientHigh.OnMessage(
                     message =>
+                    {
+                        try
                         {
-                            try
-                            {
-                                // Remove message from queue
-                                message.Complete();
-                                this.DataContext = message.GetBody<byte[]>();
-                                actionTrigger(this, context);
-                            }
-                            catch (Exception)
-                            {
-                                // Indicates a problem, unlock message in queue
-                                message.Abandon();
-                            }
-                        },
+                            // Remove message from queue
+                            message.Complete();
+                            DataContext = message.GetBody<byte[]>();
+                            actionTrigger(this, context);
+                        }
+                        catch (Exception)
+                        {
+                            // Indicates a problem, unlock message in queue
+                            message.Abandon();
+                        }
+                    },
                     options);
                 return null;
             }

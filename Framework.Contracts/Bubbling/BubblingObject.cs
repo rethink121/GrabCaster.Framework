@@ -24,15 +24,14 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using GrabCaster.Framework.Contracts.Triggers;
+
 
 namespace GrabCaster.Framework.Contracts.Bubbling
 {
+    using Configuration;
     using System;
     using System.Collections.Generic;
-    using System.Reflection;
     using System.Runtime.Serialization;
-    using GrabCaster.Framework.Contracts.Configuration;
 
     /// <summary>
     /// The bubbling event type.
@@ -43,6 +42,7 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         /// The trigger.
         /// </summary>
         Trigger,
+
         /// <summary>
         /// The event.
         /// </summary>
@@ -51,7 +51,7 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         /// <summary>
         /// The component.
         /// </summary>
-        Component,
+        Component
     }
 
     /// <summary>
@@ -61,18 +61,15 @@ namespace GrabCaster.Framework.Contracts.Bubbling
     [Serializable]
     public class BubblingObject : IBubblingObject
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BubblingObject"/> class.
         /// </summary>
         public BubblingObject(byte[] data)
         {
-            this.Events = new List<Event>();
-            this.Properties = new Dictionary<string, Property>();
-            this.Data = data;
+            Events = new List<Event>();
+            Properties = new Dictionary<string, Property>();
+            Data = data;
         }
-
-
 
 
         /// <summary>
@@ -80,6 +77,7 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         /// </summary>
         [DataMember]
         public string HAGroup { get; set; }
+
         /// <summary>
         /// Gets or sets the version.
         /// </summary>
@@ -164,7 +162,7 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         /// Gets or sets the properties.
         /// </summary>
         [DataMember]
-        public Dictionary<string,Property> PropertiesContextProperties { get; set; }
+        public Dictionary<string, Property> PropertiesContextProperties { get; set; }
 
         public IDictionary<string, string> PropertiesContext { get; set; }
 
@@ -180,23 +178,26 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         /// </summary>
         [DataMember]
         public byte[] DataContext { get; set; }
+
         //To manage the Sync Async behaviour
         /// <summary>
         /// Used to notify that the request/response is syncronous
         /// </summary>
         [DataMember]
         public bool Syncronous { get; set; }
+
         /// <summary>
         /// Define if the event is a local and not remotely, in that case the engine does not use the message provider
         /// </summary>
         [DataMember]
         public bool LocalEvent { get; set; }
-        
+
         /// <summary>
         /// Token used to identify the delegate to search and execute when back to the source
         /// </summary>
         [DataMember]
         public string SyncronousToken { get; set; }
+
         /// <summary>
         /// If it's a response syncronous from event
         /// </summary>
@@ -209,63 +210,93 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         public byte[] Data { get; set; }
 
         [DataMember]
-        public string SubscriberId {get; set;}
+        public string SubscriberId { get; set; }
+
         [DataMember]
-        public string ByteArray {get; set;}
+        public string ByteArray { get; set; }
+
         [DataMember]
-        public string DestinationChannelId {get; set;}
+        public string DestinationChannelId { get; set; }
+
         [DataMember]
-        public string DestinationPointId {get; set;}
+        public string DestinationPointId { get; set; }
+
         [DataMember]
-        public string SenderChannelId {get; set;}
+        public string SenderChannelId { get; set; }
+
         [DataMember]
-        public string SenderChannelName {get; set;}
+        public string SenderChannelName { get; set; }
+
         [DataMember]
-        public string SenderChannelDescription {get; set;}
+        public string SenderChannelDescription { get; set; }
+
         [DataMember]
         public string SenderPointId { get; set; }
+
         [DataMember]
-        public string SenderName {get; set;}
+        public string SenderName { get; set; }
+
         [DataMember]
-        public string SenderDescriprion {get; set;}
+        public string SenderDescriprion { get; set; }
+
         [DataMember]
-        public string Embedded {get; set;}
+        public string Embedded { get; set; }
+
         [DataMember]
-        public string MessageType {get; set;}
+        public string MessageType { get; set; }
+
         [DataMember]
-        public string MessageId {get; set;}
+        public string MessageId { get; set; }
+
         [DataMember]
-        public bool Persisting {get; set;}
+        public bool Persisting { get; set; }
+
         [DataMember]
-        public string Event {get; set;}
+        public string Event { get; set; }
+
         [DataMember]
-        public string Trigger {get; set;}
+        public string Trigger { get; set; }
+
         [DataMember]
-        public string SyncSendLocalDll {get; set;}
+        public string SyncSendLocalDll { get; set; }
+
         [DataMember]
-        public string SyncSendBubblingConfiguration {get; set;} //Send the bubbling configuration  {get; set;} the receiver will put in gcpoints
+        public string SyncSendBubblingConfiguration { get; set; }
+
+        //Send the bubbling configuration  {get; set;} the receiver will put in gcpoints
+
         [DataMember]
-        public string SyncSendRequestBubblingConfiguration {get; set;}
+        public string SyncSendRequestBubblingConfiguration { get; set; }
+
         [DataMember]
-        public string SyncSendFileBubblingConfiguration {get; set;}
+        public string SyncSendFileBubblingConfiguration { get; set; }
+
         [DataMember]
-        public string SyncSendRequestConfiguration {get; set;} //Send the request for all the configuration 
+        public string SyncSendRequestConfiguration { get; set; } //Send the request for all the configuration 
+
         [DataMember]
-        public string SyncSendConfiguration {get; set;} //Send the request for all the configuration 
+        public string SyncSendConfiguration { get; set; } //Send the request for all the configuration 
+
         [DataMember]
-        public string SyncSendRequestComponent {get; set;} //Send a request to receive a component to sync
+        public string SyncSendRequestComponent { get; set; } //Send a request to receive a component to sync
+
         [DataMember]
-        public string TriggerEventJson {get; set;}
+        public string TriggerEventJson { get; set; }
+
         [DataMember]
-        public string EventPropertyJson {get; set;}
+        public string EventPropertyJson { get; set; }
+
         [DataMember]
-        public string SyncRequestConfirmed {get; set;}
+        public string SyncRequestConfirmed { get; set; }
+
         [DataMember]
-        public string SyncAvailable {get; set;}
+        public string SyncAvailable { get; set; }
+
         [DataMember]
-        public string ConsoleRequestSendBubblingBag {get; set;}
+        public string ConsoleRequestSendBubblingBag { get; set; }
+
         [DataMember]
-        public string ConsoleBubblingBagToSyncronize {get; set;}
+        public string ConsoleBubblingBagToSyncronize { get; set; }
 
         /// <summary>
         /// The serialize message.
@@ -275,7 +306,7 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         /// </returns>
         public static byte[] SerializeMessage(BubblingObject bubblingObject)
         {
-            return GrabCaster.Framework.Serialization.Object.SerializationEngine.ObjectToByteArray(bubblingObject);
+            return Framework.Serialization.Object.SerializationEngine.ObjectToByteArray(bubblingObject);
         }
 
         /// <summary>
@@ -286,7 +317,7 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         /// </returns>
         public static BubblingObject DeserializeMessage(byte[] byteArray)
         {
-            return (BubblingObject)GrabCaster.Framework.Serialization.Object.SerializationEngine.ByteArrayToObject(byteArray);
+            return (BubblingObject) Framework.Serialization.Object.SerializationEngine.ByteArrayToObject(byteArray);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace BTSG.TestPipeline
 {
-  partial class mainform
+    partial class mainform
   {
     /// <summary>
     /// Required designer variable.

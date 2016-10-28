@@ -24,21 +24,15 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
+using GrabCaster.Framework.Contracts.Bubbling;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using GrabCaster.Framework.Contracts.Bubbling;
-using GrabCaster.Framework.Contracts.Events;
 
 namespace GrabCaster.Framework.Contracts.AssemblyFile
 {
     public interface IAssemblyfile
     {
-
-       
         string Id { get; set; }
 
         string Name { get; set; }
@@ -46,11 +40,13 @@ namespace GrabCaster.Framework.Contracts.AssemblyFile
         string Shared { get; set; }
         string PollingRequired { get; set; }
         string Nop { get; set; }
-        System.Version Version { get; set; }
+        Version Version { get; set; }
+
         /// <summary>
         /// Gets or sets the assembly content.
         /// </summary>
         byte[] AssemblyContent { get; set; }
+
         /// <summary>
         ///     Assembly object ready to invoke (performances)
         /// </summary>
@@ -60,6 +56,7 @@ namespace GrabCaster.Framework.Contracts.AssemblyFile
         ///     Internal class type to invoke
         /// </summary>
         Type AssemblyClassType { get; set; }
+
         /// <summary>
         /// Gets or sets the assembly file.
         /// </summary>
@@ -70,6 +67,6 @@ namespace GrabCaster.Framework.Contracts.AssemblyFile
         /// </summary>
         List<BaseAction> BaseActions { get; set; }
 
-        Dictionary<string,Property> Properties { get; set; }
+        Dictionary<string, Property> Properties { get; set; }
     }
 }

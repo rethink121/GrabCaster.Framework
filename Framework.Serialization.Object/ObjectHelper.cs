@@ -24,11 +24,9 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Serialization.Object
 {
-    using GrabCaster.Framework.Serialization;
-    using GrabCaster.Framework.Serialization.Object;
-
     /// <summary>
     /// The object helper.
     /// </summary>

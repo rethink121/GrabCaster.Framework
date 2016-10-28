@@ -24,8 +24,10 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Log
 {
+    using Base;
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
@@ -33,9 +35,6 @@ namespace GrabCaster.Framework.Log
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
-
-    using GrabCaster.Framework.Base;
-
     using Timer = System.Timers.Timer;
 
     public abstract class LockSlimQueueLog<T> : ConcurrentQueue<T>
@@ -75,7 +74,7 @@ namespace GrabCaster.Framework.Log
 
         protected LockSlimQueueLog(int capLimit, int timeLimit)
         {
-            this.Init(capLimit, timeLimit);
+            Init(capLimit, timeLimit);
         }
 
         public event Action<List<T>> OnPublish = delegate { };
@@ -83,32 +82,32 @@ namespace GrabCaster.Framework.Log
         public new virtual void Enqueue(T item)
         {
             base.Enqueue(item);
-            if (this.Count >= this.CapLimit)
+            if (Count >= CapLimit)
             {
-                Debug.WriteLine($"Log capture limit: {this.CapLimit} > Publish!");
-                this.Publish();
+                Debug.WriteLine($"Log capture limit: {CapLimit} > Publish!");
+                Publish();
             }
         }
 
         private void Init(int capLimit, int timeLimit)
         {
-            this.CapLimit = capLimit;
-            this.TimeLimit = timeLimit;
-            this.Locker = new ReaderWriterLockSlim();
-            this.InitTimer();
+            CapLimit = capLimit;
+            TimeLimit = timeLimit;
+            Locker = new ReaderWriterLockSlim();
+            InitTimer();
         }
 
         protected virtual void InitTimer()
         {
-            this.InternalTimer = new Timer();
-            this.InternalTimer.AutoReset = false;
-            this.InternalTimer.Interval = this.TimeLimit * 1000;
-            this.InternalTimer.Elapsed += (s, e) =>
-                {
-                    //Debug.WriteLine($"Log time limit: {this.TimeLimit} > Publish!");
-                    this.Publish();
-                };
-            this.InternalTimer.Start();
+            InternalTimer = new Timer();
+            InternalTimer.AutoReset = false;
+            InternalTimer.Interval = TimeLimit*1000;
+            InternalTimer.Elapsed += (s, e) =>
+            {
+                //Debug.WriteLine($"Log time limit: {this.TimeLimit} > Publish!");
+                Publish();
+            };
+            InternalTimer.Start();
         }
 
         /// <summary>
@@ -118,71 +117,71 @@ namespace GrabCaster.Framework.Log
         {
             var task = new Task(
                 () =>
+                {
+                    var itemsToLog = new List<T>();
+                    try
                     {
-                        var itemsToLog = new List<T>();
-                        try
+                        if (IsPublishing())
                         {
-                            if (this.IsPublishing())
-                            {
-                                return;
-                            }
+                            return;
+                        }
 
-                            this.StartPublishing();
-                            //Debug.WriteLine($"Log start dequeue {this.Count} items.");
-                            T item;
-                            while (this.TryDequeue(out item))
-                            {
-                                itemsToLog.Add(item);
-                            }
-                        }
-                        catch (ThreadAbortException tex)
+                        StartPublishing();
+                        //Debug.WriteLine($"Log start dequeue {this.Count} items.");
+                        T item;
+                        while (TryDequeue(out item))
                         {
-                            Debug.WriteLine($"Warning-Dequeue items failed > {tex.Message}");
+                            itemsToLog.Add(item);
+                        }
+                    }
+                    catch (ThreadAbortException tex)
+                    {
+                        Debug.WriteLine($"Warning-Dequeue items failed > {tex.Message}");
 
-                            LogEngine.WriteLog(
-                                ConfigurationBag.EngineName, 
-                                $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                                Constant.LogLevelError, 
-                                Constant.TaskCategoriesError, 
-                                tex, 
-                                Constant.LogLevelError);
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine($"Dequeue items failed > {ex.Message}");
+                        LogEngine.WriteLog(
+                            ConfigurationBag.EngineName,
+                            $"Error in {MethodBase.GetCurrentMethod().Name}",
+                            Constant.LogLevelError,
+                            Constant.TaskCategoriesError,
+                            tex,
+                            Constant.LogLevelError);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Dequeue items failed > {ex.Message}");
 
-                            LogEngine.WriteLog(
-                                ConfigurationBag.EngineName, 
-                                $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                                Constant.LogLevelError, 
-                                Constant.TaskCategoriesError, 
-                                ex, 
-                                Constant.LogLevelError);
-                        }
-                        finally
-                        {
-                            //Debug.WriteLine($"Log dequeued {itemsToLog.Count} items");
-                            this.OnPublish(itemsToLog);
-                            this.CompletePublishing();
-                        }
-                    });
+                        LogEngine.WriteLog(
+                            ConfigurationBag.EngineName,
+                            $"Error in {MethodBase.GetCurrentMethod().Name}",
+                            Constant.LogLevelError,
+                            Constant.TaskCategoriesError,
+                            ex,
+                            Constant.LogLevelError);
+                    }
+                    finally
+                    {
+                        //Debug.WriteLine($"Log dequeued {itemsToLog.Count} items");
+                        OnPublish(itemsToLog);
+                        CompletePublishing();
+                    }
+                });
             task.Start();
         }
 
         private bool IsPublishing()
         {
-            return Interlocked.CompareExchange(ref this.OnPublishExecuted, 1, 0) > 0;
+            return Interlocked.CompareExchange(ref OnPublishExecuted, 1, 0) > 0;
         }
 
         private void StartPublishing()
         {
-            this.InternalTimer.Stop();
+            InternalTimer.Stop();
         }
 
         private void CompletePublishing()
         {
-            this.InternalTimer.Start();
-            Interlocked.Decrement(ref this.OnPublishExecuted);
+            InternalTimer.Start();
+            Interlocked.Decrement(ref OnPublishExecuted);
         }
     }
 }

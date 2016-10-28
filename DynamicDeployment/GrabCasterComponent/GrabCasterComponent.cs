@@ -24,11 +24,13 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.BTSTransformComponent
 {
-    using GrabCaster.Framework.Contracts.Components;
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Base;
+    using Base;
+    using Contracts.Attributes;
+    using Contracts.Components;
+
     //<USING>
 
     [ComponentContract("{*ID*}", "*NAME*", "*DESCRIPTION*")]
@@ -44,13 +46,14 @@ namespace GrabCaster.Framework.BTSTransformComponent
         /// </value>
         [ComponentPropertyContract("DataContext", "Main data context")]
         public byte[] DataContext { get; set; }
+
         [ComponentActionContract("{*CONTRACTID*}", "Main action", "Main action executed by the component")]
         public byte[] Execute()
         {
             //<MAINCODE>
             return EncodingDecoding.EncodingString2Bytes("result");
-
         }
+
         //<FUNCTIONS>
     }
 }

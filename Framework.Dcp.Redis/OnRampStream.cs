@@ -24,44 +24,33 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using GrabCaster.Framework.Contracts.Bubbling;
+using System;
 
 namespace GrabCaster.Framework.Dcp.Redis
 {
-    using System.Diagnostics;
+    using Base;
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Messaging;
+    using Log;
+    using StackExchange.Redis;
     using System.Reflection;
     using System.Threading;
 
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Messaging;
-    using GrabCaster.Framework.Log;
-
-    using Microsoft.ServiceBus.Messaging;
-
-    using StackExchange.Redis;
-
     [EventsOnRampContract("{377B04BD-C80C-4AC5-BC70-C5CC571B2BDC}", "EventsDownStream", "Redis EventsDownStream")]
-    public class OnRampStream: IOnRampStream
+    public class OnRampStream : IOnRampStream
     {
         public void Run(SetEventOnRampMessageReceived setEventOnRampMessageReceived)
         {
-
             try
             {
-
-                var myNewThread = new Thread(() => this.StartRedisListener(setEventOnRampMessageReceived));
+                var myNewThread = new Thread(() => StartRedisListener(setEventOnRampMessageReceived));
                 myNewThread.Start();
             }
             catch (Exception ex)
             {
-
                 LogEngine.WriteLog(
                     ConfigurationBag.EngineName,
                     $"Error in {MethodBase.GetCurrentMethod().Name}",
@@ -74,15 +63,16 @@ namespace GrabCaster.Framework.Dcp.Redis
 
         public void StartRedisListener(SetEventOnRampMessageReceived setEventOnRampMessageReceived)
         {
-
             try
             {
-                ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(ConfigurationBag.Configuration.RedisConnectionString);
+                ConnectionMultiplexer redis =
+                    ConnectionMultiplexer.Connect(ConfigurationBag.Configuration.RedisConnectionString);
 
                 ISubscriber sub = redis.GetSubscriber();
 
-                sub.Subscribe("*", (channel, message) => {
-                    byte[] byteArray = (byte[])message;
+                sub.Subscribe("*", (channel, message) =>
+                {
+                    byte[] byteArray = message;
                     BubblingObject bubblingObject = BubblingObject.DeserializeMessage(byteArray);
                     setEventOnRampMessageReceived(bubblingObject);
                 });
@@ -90,7 +80,6 @@ namespace GrabCaster.Framework.Dcp.Redis
             }
             catch (Exception ex)
             {
-
                 LogEngine.WriteLog(
                     ConfigurationBag.EngineName,
                     $"Error in {MethodBase.GetCurrentMethod().Name}",

@@ -24,13 +24,12 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Contracts.Globals
 {
-    using GrabCaster.Framework.Contracts.Bubbling;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Messaging;
-    using GrabCaster.Framework.Contracts.Triggers;
-
+    using Bubbling;
+    using Events;
+    using Triggers;
 
 
     /// <summary>
@@ -91,7 +90,7 @@ namespace GrabCaster.Framework.Contracts.Globals
         /// </param>
         public ActionContext(BubblingObject bubblingObjectBag)
         {
-            this.BubblingObjectBag = bubblingObjectBag;
+            BubblingObjectBag = bubblingObjectBag;
         }
 
         /// <summary>
@@ -103,6 +102,5 @@ namespace GrabCaster.Framework.Contracts.Globals
         /// MessageId sent across the points
         /// </summary>
         public string MessageId { get; set; }
-
     }
 }

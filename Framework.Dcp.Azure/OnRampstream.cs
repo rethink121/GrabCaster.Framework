@@ -24,23 +24,22 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using GrabCaster.Framework.Contracts.Bubbling;
 
 namespace GrabCaster.Framework.Dcp.Azure
 {
+    using Base;
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Messaging;
+    using Log;
+    using Microsoft.ServiceBus;
+    using Microsoft.ServiceBus.Messaging;
     using System;
     using System.Diagnostics;
     using System.Reflection;
     using System.Threading;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Messaging;
-    using GrabCaster.Framework.Log;
-
-    using Microsoft.ServiceBus;
-    using Microsoft.ServiceBus.Messaging;
 
     /// <summary>
     ///     Main Downstream events receiving
@@ -56,7 +55,6 @@ namespace GrabCaster.Framework.Dcp.Azure
         {
             try
             {
-
                 // Assign the delegate 
                 SetEventOnRampMessageReceived = setEventOnRampMessageReceived;
                 // Load vars
@@ -72,10 +70,10 @@ namespace GrabCaster.Framework.Dcp.Azure
                     Constant.LogLevelInformation);
 
                 var builder = new ServiceBusConnectionStringBuilder(eventHubConnectionString)
-                                  {
-                                      TransportType =
-                                          TransportType.Amqp
-                                  };
+                {
+                    TransportType =
+                        TransportType.Amqp
+                };
 
                 //If not exit it create one, drop brachets because Azure rules
                 var eventHubConsumerGroup =
@@ -84,11 +82,9 @@ namespace GrabCaster.Framework.Dcp.Azure
                         .Replace("}", "")
                         .Replace("-", "");
                 var nsManager = NamespaceManager.CreateFromConnectionString(builder.ToString());
-                Debug.WriteLine(
-                    $"Initializing Group Name {eventHubConsumerGroup}",
-                    ConsoleColor.White);
+                Debug.WriteLine($"Initializing Group Name {eventHubConsumerGroup}");
 
-                Debug.WriteLine("Start DirectRegisterEventReceiving.", ConsoleColor.White);
+                Debug.WriteLine("Start DirectRegisterEventReceiving.");
 
                 // Create Event Hubs
                 var eventHubClient = EventHubClient.CreateFromConnectionString(builder.ToString(), eventHubName);
@@ -107,8 +103,7 @@ namespace GrabCaster.Framework.Dcp.Azure
                 }
 
                 Debug.WriteLine(
-                    "After DirectRegisterEventReceiving Downstream running.",
-                    ConsoleColor.White);
+                    "After DirectRegisterEventReceiving Downstream running.");
             }
             catch (Exception ex)
             {

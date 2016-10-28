@@ -24,21 +24,22 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Threading;
+
 
 namespace GrabCaster.Framework.NopTrigger
 {
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Triggers;
     using System.Diagnostics.CodeAnalysis;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
 
     /// <summary>
     /// The nop trigger.
     /// </summary>
-    [TriggerContract("{96860422-839B-40D0-8142-274EDF112F26}", "NOP Trigger", "No operation Trigger, used for test purpose.", false, true, false)]
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+    [TriggerContract("{96860422-839B-40D0-8142-274EDF112F26}", "NOP Trigger",
+         "No operation Trigger, used for test purpose.", false, true, false)]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+         Justification = "Reviewed. Suppression is OK here.")]
     public class NopTrigger : ITriggerType
     {
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]

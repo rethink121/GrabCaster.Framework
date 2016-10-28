@@ -24,26 +24,23 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using GrabCaster.Framework.Contracts.Bubbling;
 
 namespace GrabCaster.Framework.Library.Azure
 {
-    using System;
-    using System.Diagnostics;
-    using System.Reflection;
-    using System.Text;
-
-    using GrabCaster.Framework.Common;
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Messaging;
+    using Contracts.Attributes;
+    using Contracts.Messaging;
     using Microsoft.ServiceBus;
     using Microsoft.ServiceBus.Messaging;
+    using System;
+    using System.Reflection;
 
     /// <summary>
     ///     Send messages to EH
     /// </summary>
     [EventsOffRampContract("{6FAEA018-C21B-423E-B860-3F8BAC0BC637}", "EventUpStream", "Event Hubs EventUpStream")]
-    public class OffRampStream: IOffRampStream
+    public class OffRampStream : IOffRampStream
     {
         //EH variable
 
@@ -52,7 +49,7 @@ namespace GrabCaster.Framework.Library.Azure
         private static string eventHubName = "";
 
         private static EventHubClient eventHubClient;
-        
+
         public bool CreateOffRampStream()
         {
             try
@@ -61,13 +58,14 @@ namespace GrabCaster.Framework.Library.Azure
                 connectionString = ConfigurationLibrary.AzureNameSpaceConnectionString();
                 eventHubName = ConfigurationLibrary.GroupEventHubsName();
 
-                LogEngine.TraceInformation($"Start GrabCaster UpStream - Point Id {ConfigurationLibrary.PointId()} - Point name {ConfigurationLibrary.PointName()} - Channel Id {ConfigurationLibrary.ChannelId()} - Channel name {ConfigurationLibrary.ChannelName()} ");
+                LogEngine.TraceInformation(
+                    $"Start GrabCaster UpStream - Point Id {ConfigurationLibrary.PointId()} - Point name {ConfigurationLibrary.PointName()} - Channel Id {ConfigurationLibrary.ChannelId()} - Channel name {ConfigurationLibrary.ChannelName()} ");
 
                 var builder = new ServiceBusConnectionStringBuilder(connectionString)
-                                  {
-                                      TransportType =
-                                          TransportType.Amqp
-                                  };
+                {
+                    TransportType =
+                        TransportType.Amqp
+                };
 
                 eventHubClient = EventHubClient.CreateFromConnectionString(builder.ToString(), eventHubName);
 

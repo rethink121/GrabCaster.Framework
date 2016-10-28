@@ -24,34 +24,31 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using GrabCaster.Framework.Contracts.Bubbling;
 
 namespace GrabCaster.Framework.Dcp.Redis
 {
-    using System.Diagnostics;
-    using System.Reflection;
-    using System;
-    using System.IO;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Messaging;
-    using GrabCaster.Framework.Log;
-
-    using Microsoft.ServiceBus.Messaging;
-
+    using Base;
+    using Contracts.Attributes;
+    using Contracts.Messaging;
+    using Log;
     using StackExchange.Redis;
+    using System;
+    using System.Reflection;
 
     [EventsOffRampContract("{A51FA36B-7778-47A1-B6DF-5CEC4B8F36B1}", "EventUpStream", "Redis EventUpStream")]
     class OffRampStream : IOffRampStream
     {
         private ISubscriber subscriber;
+
         public bool CreateOffRampStream()
         {
             try
             {
-                ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(ConfigurationBag.Configuration.RedisConnectionString);
-                this.subscriber = redis.GetSubscriber();
+                ConnectionMultiplexer redis =
+                    ConnectionMultiplexer.Connect(ConfigurationBag.Configuration.RedisConnectionString);
+                subscriber = redis.GetSubscriber();
                 return true;
             }
             catch (Exception ex)
@@ -65,13 +62,12 @@ namespace GrabCaster.Framework.Dcp.Redis
                     Constant.LogLevelError);
                 return false;
             }
-
         }
 
         public void SendMessage(BubblingObject message)
         {
             byte[] byteArrayBytes = BubblingObject.SerializeMessage(message);
-            this.subscriber.Publish("*", byteArrayBytes);
+            subscriber.Publish("*", byteArrayBytes);
         }
     }
 }

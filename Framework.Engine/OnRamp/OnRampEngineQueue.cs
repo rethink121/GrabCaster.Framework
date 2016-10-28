@@ -24,22 +24,21 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using GrabCaster.Framework.Contracts.Bubbling;
 using GrabCaster.Framework.Contracts.Messaging;
 
 namespace GrabCaster.Framework.Engine.OnRamp
 {
+    using Base;
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Log;
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Reflection;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Log;
 
     /// <summary>
     /// The on ramp engine.
@@ -57,9 +56,9 @@ namespace GrabCaster.Framework.Engine.OnRamp
         /// </param>
         public OnRampEngineQueue(int capLimit, int timeLimit)
         {
-            this.CapLimit = capLimit;
-            this.TimeLimit = timeLimit;
-            this.InitTimer();
+            CapLimit = capLimit;
+            TimeLimit = timeLimit;
+            InitTimer();
         }
     }
 
@@ -71,7 +70,7 @@ namespace GrabCaster.Framework.Engine.OnRamp
         /// <summary>
         /// The parameters ret.
         /// </summary>
-        private static readonly object[] ParametersRet = { null };
+        private static readonly object[] ParametersRet = {null};
 
         /// <summary>
         /// Create the internal queue
@@ -79,6 +78,7 @@ namespace GrabCaster.Framework.Engine.OnRamp
         private readonly OnRampEngineQueue _onRampEngineQueue;
 
         private static IOnRampStream OnRampStream;
+
         /// <summary>
         /// Delegate used to fire the event to enqueue the message.
         /// </summary>
@@ -89,10 +89,10 @@ namespace GrabCaster.Framework.Engine.OnRamp
         /// </summary>
         public OnRampEngineReceiving()
         {
-            this._onRampEngineQueue = new OnRampEngineQueue(
-                ConfigurationBag.Configuration.ThrottlingOnRampIncomingRateNumber, 
+            _onRampEngineQueue = new OnRampEngineQueue(
+                ConfigurationBag.Configuration.ThrottlingOnRampIncomingRateNumber,
                 ConfigurationBag.Configuration.ThrottlingOnRampIncomingRateSeconds);
-            this._onRampEngineQueue.OnPublish += OnRampEngineQueueOnPublish;
+            _onRampEngineQueue.OnPublish += OnRampEngineQueueOnPublish;
         }
 
         /// <summary>
@@ -105,31 +105,30 @@ namespace GrabCaster.Framework.Engine.OnRamp
         {
             if (ConfigurationBag.Configuration.RunLocalOnly)
             {
-
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                                    $"OnRamp provider not started, this GrabCaster point is configured for local execution only.",
-                                    Constant.LogLevelError,
-                                    Constant.TaskCategoriesError,
-                                    null,
-                                    Constant.LogLevelWarning);
+                    $"OnRamp provider not started, this GrabCaster point is configured for local execution only.",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    null,
+                    Constant.LogLevelWarning);
                 return;
             }
             // Delegate event for ingestor where ReceiveMessageOnRamp is the event
-            this.receiveMessageOnRampDelegate = this.ReceiveMessageOnRamp;
+            receiveMessageOnRampDelegate = ReceiveMessageOnRamp;
 
             LogEngine.WriteLog(
-                ConfigurationBag.EngineName, 
-                "Start On Ramp engine.", 
-                Constant.LogLevelError, 
-                Constant.TaskCategoriesError, 
-                null, 
+                ConfigurationBag.EngineName,
+                "Start On Ramp engine.",
+                Constant.LogLevelError,
+                Constant.TaskCategoriesError,
+                null,
                 Constant.LogLevelInformation);
 
             // Inizialize the MSPC
 
             // Load event up stream external component
             var eventsUpStreamComponent = Path.Combine(
-                ConfigurationBag.Configuration.DirectoryOperativeRootExeName, 
+                ConfigurationBag.Configuration.DirectoryOperativeRootExeName,
                 ConfigurationBag.Configuration.EventsStreamComponent);
 
             // Create the reflection method cached 
@@ -137,14 +136,13 @@ namespace GrabCaster.Framework.Engine.OnRamp
 
             // Main class loggingCreateOnRamptream
             var assemblyClass = (from t in assembly.GetTypes()
-                                 let attributes = t.GetCustomAttributes(typeof(EventsOnRampContract), true)
-                                 where t.IsClass && attributes != null && attributes.Length > 0
-                                 select t).First();
+                let attributes = t.GetCustomAttributes(typeof(EventsOnRampContract), true)
+                where t.IsClass && attributes != null && attributes.Length > 0
+                select t).First();
 
 
             OnRampStream = Activator.CreateInstance(assemblyClass) as IOnRampStream;
-            OnRampStream.Run(this.receiveMessageOnRampDelegate);
-
+            OnRampStream.Run(receiveMessageOnRampDelegate);
         }
 
         /// <summary>
@@ -170,7 +168,7 @@ namespace GrabCaster.Framework.Engine.OnRamp
         /// </param>
         private void ReceiveMessageOnRamp(BubblingObject message)
         {
-            this._onRampEngineQueue.Enqueue(message);
+            _onRampEngineQueue.Enqueue(message);
         }
     }
 }

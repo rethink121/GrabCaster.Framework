@@ -24,12 +24,12 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -43,7 +43,7 @@ namespace HMVN.OMS.Common.Utils
 
         public static byte[] StreamToByteArray(Stream input)
         {
-            byte[] buffer = new byte[16 * 1024];
+            byte[] buffer = new byte[16*1024];
             using (MemoryStream ms = new MemoryStream())
             {
                 int read;
@@ -54,16 +54,18 @@ namespace HMVN.OMS.Common.Utils
                 return ms.ToArray();
             }
         }
+
         public static byte[] ReadAllBytes(string fileName)
         {
             byte[] buffer = null;
             using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
                 buffer = new byte[fs.Length];
-                fs.Read(buffer, 0, (int)fs.Length);
+                fs.Read(buffer, 0, (int) fs.Length);
             }
             return buffer;
         }
+
         public static string DictToString(Dictionary<string, object> dict)
         {
             StringBuilder builder = new StringBuilder();
@@ -117,11 +119,13 @@ namespace HMVN.OMS.Common.Utils
         }
 
         #region Logs
+
         public static void WriteLogError(Exception ex)
         {
             string message = CursiveExceptionMessage(ex);
             WriteLogError(message);
         }
+
         public static void WriteLogError(string message)
         {
             log.Error(message);
@@ -132,7 +136,8 @@ namespace HMVN.OMS.Common.Utils
             string message = ex.Message + " --------------------- " + ex.StackTrace;
             while (ex.InnerException != null)
             {
-                message += "\r\n\n" + ex.InnerException.Message + " --------------------- " + ex.InnerException.StackTrace;
+                message += "\r\n\n" + ex.InnerException.Message + " --------------------- " +
+                           ex.InnerException.StackTrace;
                 ex = ex.InnerException;
             }
             return message;
@@ -143,18 +148,19 @@ namespace HMVN.OMS.Common.Utils
             string message = ex.Message + " --------------------- " + ex.StackTrace;
             while (ex.InnerException != null)
             {
-                message += "\r\n\n" + ex.InnerException.Message + " --------------------- " + ex.InnerException.StackTrace;
+                message += "\r\n\n" + ex.InnerException.Message + " --------------------- " +
+                           ex.InnerException.StackTrace;
                 ex = ex.InnerException;
             }
             WriteLogMessage(message);
         }
+
         public static void WriteLogMessage(string message)
         {
             log.Info(message);
         }
-        
-        #endregion
 
+        #endregion
 
         public static string CatchWebRequestException(WebException wexc)
         {
@@ -162,8 +168,8 @@ namespace HMVN.OMS.Common.Utils
             if (wexc != null && wexc.Response != null)
                 using (WebResponse response = wexc.Response)
                 {
-                    HttpWebResponse httpResponse = (HttpWebResponse)response;
-                    log.Error(String.Format("Error code: {0}", httpResponse.StatusCode));
+                    HttpWebResponse httpResponse = (HttpWebResponse) response;
+                    log.Error("Error code: {0}", httpResponse.StatusCode);
                     using (Stream data = response.GetResponseStream())
                     using (var reader = new StreamReader(data))
                     {
@@ -183,11 +189,11 @@ namespace HMVN.OMS.Common.Utils
                 if (result.Length > 0)
                 {
                     var type = typeof(T);
-                    if (type == typeof(System.String))
+                    if (type == typeof(String))
                     {
                         if (result.StartsWith("\""))
                             result = result.Substring(1, result.Length - 2);
-                        return (T)Convert.ChangeType(result, type);
+                        return (T) Convert.ChangeType(result, type);
                     }
                 }
 
@@ -197,10 +203,10 @@ namespace HMVN.OMS.Common.Utils
             catch (Exception ex)
             {
                 string mes = result + " ----------- " + ex.Message + " -------------- " + ex.StackTrace;
-                HttpHelper.WriteLogError(result);
-                HttpHelper.WriteLogError(mes);
+                WriteLogError(result);
+                WriteLogError(mes);
                 return default(T);
             }
-        }        
+        }
     }
 }

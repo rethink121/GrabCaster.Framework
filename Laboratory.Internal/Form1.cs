@@ -24,16 +24,10 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GrabCaster.InternalLaboratory
@@ -76,19 +70,17 @@ namespace GrabCaster.InternalLaboratory
             // vector (IV).
             using (AesManaged myAes = new AesManaged())
             {
-
                 // Encrypt the string to an array of bytes.
-               
-        //        byte[] encrypted = AESEncryption.EncryptByteToBytes_Aes(contentFile, myAes.Key, myAes.IV);
-         //       File.WriteAllBytes("c:\\testCrypted.txt", encrypted);
+
+                //        byte[] encrypted = AESEncryption.EncryptByteToBytes_Aes(contentFile, myAes.Key, myAes.IV);
+                //       File.WriteAllBytes("c:\\testCrypted.txt", encrypted);
 
                 // Decrypt the bytes to a string.
-         //       byte[] decrypted = AESEncryption.DecryptByteFromBytes_Aes(encrypted, myAes.Key, myAes.IV);
-          //      File.WriteAllBytes("c:\\testdeCrypted.txt", decrypted);
+                //       byte[] decrypted = AESEncryption.DecryptByteFromBytes_Aes(encrypted, myAes.Key, myAes.IV);
+                //      File.WriteAllBytes("c:\\testdeCrypted.txt", decrypted);
 
                 //Display the original data and the decrypted data.
                 MessageBox.Show("done");
-
             }
         }
     }

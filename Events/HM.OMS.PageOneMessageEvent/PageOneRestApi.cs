@@ -24,17 +24,15 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using HMVN.OMS.Common;
+
 using HMVN.OMS.Common.Utils;
 using Nito.AspNetBackgroundTasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HM.OMS.PageOneMessageConsole
 {
@@ -44,13 +42,6 @@ namespace HM.OMS.PageOneMessageConsole
         readonly string API = "https://www.oventus.com/rest/v1/";
         readonly string Username = "HMOMSSMS";
         readonly string Password = "Fw6Hf3Ne6";
-
-        public PageOneRestApi()
-        {
-            //var headers = new WebHeaderCollection();
-            //headers.Add(HttpRequestHeader.Accept, "application/json");
-            //Executer = new WebClientExecuter(HttpHelper.UrlPathCombine(API, Username), headers, Method.GET);
-        }
 
         /// <summary>
         /// 
@@ -105,7 +96,7 @@ namespace HM.OMS.PageOneMessageConsole
         /// <returns>location object</returns>
         public string Locate(string deviceAddress)
         {
-            return ExecuteAPI(ApiObject.Locate, new { address = deviceAddress });
+            return ExecuteAPI(ApiObject.Locate, new {address = deviceAddress});
         }
 
         string ExecuteAPI(ApiObject apiObject, object data = null)
@@ -132,7 +123,7 @@ namespace HM.OMS.PageOneMessageConsole
                 using (WebClient client = new WebClient())
                 {
                     string url = apiPath;
-                    client.Encoding = System.Text.Encoding.UTF8;
+                    client.Encoding = Encoding.UTF8;
                     var values = PrepareExecute(client, ref url, data, method);
                     if (method == Method.GET)
                         response = client.DownloadString(url);
@@ -185,7 +176,7 @@ namespace HM.OMS.PageOneMessageConsole
                 if (p.PropertyType.IsArray || p.PropertyType.IsGenericType)
                 {
                     int counter = 0;
-                    foreach (var subItem in (IEnumerable)value)
+                    foreach (var subItem in (IEnumerable) value)
                     {
                         values[p.Name.ToLower()] = subItem.ToString();
                         counter++;
@@ -211,12 +202,12 @@ namespace HM.OMS.PageOneMessageConsole
 
         internal class ApiObject
         {
-            public static readonly ApiObject Authentication = new ApiObject { Path = "", Method = Method.GET };
-            public static readonly ApiObject SendMessage = new ApiObject { Path = "message", Method = Method.POST };
-            public static readonly ApiObject Credit = new ApiObject { Path = "credits", Method = Method.GET };
-            public static readonly ApiObject MSISDN = new ApiObject { Path = "msisdn", Method = Method.GET };
-            public static readonly ApiObject FindWithin = new ApiObject { Path = "findwithin", Method = Method.GET };
-            public static readonly ApiObject Locate = new ApiObject { Path = "locate", Method = Method.GET };
+            public static readonly ApiObject Authentication = new ApiObject {Path = "", Method = Method.GET};
+            public static readonly ApiObject SendMessage = new ApiObject {Path = "message", Method = Method.POST};
+            public static readonly ApiObject Credit = new ApiObject {Path = "credits", Method = Method.GET};
+            public static readonly ApiObject MSISDN = new ApiObject {Path = "msisdn", Method = Method.GET};
+            public static readonly ApiObject FindWithin = new ApiObject {Path = "findwithin", Method = Method.GET};
+            public static readonly ApiObject Locate = new ApiObject {Path = "locate", Method = Method.GET};
 
             internal string Path { get; set; }
             internal Method Method { get; set; }

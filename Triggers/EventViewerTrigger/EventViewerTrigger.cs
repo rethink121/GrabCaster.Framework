@@ -24,27 +24,24 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Threading;
+
 using GrabCaster.Framework.Base;
 
 namespace GrabCaster.Framework.EventViewerTrigger
 {
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Triggers;
+    using Newtonsoft.Json;
     using System;
     using System.Diagnostics;
     using System.Runtime.Serialization;
-    using System.Text;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
-
-    using Newtonsoft.Json;
 
     /// <summary>
     /// The event viewer trigger.
     /// </summary>
     [TriggerContract("{0E8D9421-E749-4B0D-ADCE-03D4A6568998}", "Event Viewer Trigger", "Intercept Event Viewer Message",
-        false, true, false)]
+         false, true, false)]
     public class EventViewerTrigger : ITriggerType
     {
         /// <summary>
@@ -94,12 +91,12 @@ namespace GrabCaster.Framework.EventViewerTrigger
         {
             try
             {
-                this.Context = context;
-                this.ActionTrigger = actionTrigger;
+                Context = context;
+                ActionTrigger = actionTrigger;
 
-                var myNewLog = new EventLog { Log = this.EventLog };
+                var myNewLog = new EventLog {Log = EventLog};
 
-                myNewLog.EntryWritten += this.MyOnEntryWritten;
+                myNewLog.EntryWritten += MyOnEntryWritten;
                 myNewLog.EnableRaisingEvents = true;
                 return null;
             }
@@ -123,17 +120,17 @@ namespace GrabCaster.Framework.EventViewerTrigger
         {
             if (e.Entry.Source != "DEMOEV") return;
             var eventViewerMessage = new EventViewerMessage
-                                         {
-                                             EntryType = e.Entry.EntryType,
-                                             MachineName = e.Entry.MachineName,
-                                             Message = e.Entry.Message,
-                                             Source = e.Entry.Source,
-                                             TimeWritten = e.Entry.TimeWritten
-                                         };
+            {
+                EntryType = e.Entry.EntryType,
+                MachineName = e.Entry.MachineName,
+                Message = e.Entry.Message,
+                Source = e.Entry.Source,
+                TimeWritten = e.Entry.TimeWritten
+            };
             var serializedMessage = JsonConvert.SerializeObject(eventViewerMessage);
-            
-            this.DataContext = EncodingDecoding.EncodingString2Bytes(serializedMessage);
-            this.ActionTrigger(this, this.Context);
+
+            DataContext = EncodingDecoding.EncodingString2Bytes(serializedMessage);
+            ActionTrigger(this, Context);
         }
     }
 

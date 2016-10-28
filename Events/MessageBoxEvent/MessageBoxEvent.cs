@@ -24,18 +24,17 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using GrabCaster.Framework.Base;
 
 namespace GrabCaster.Framework.MessageBoxEvent
 {
+    using Contracts.Attributes;
+    using Contracts.Events;
+    using Contracts.Globals;
     using System;
     using System.Diagnostics;
-    using System.Text;
     using System.Windows.Forms;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
 
     /// <summary>
     /// The message box event.
@@ -74,7 +73,7 @@ namespace GrabCaster.Framework.MessageBoxEvent
             try
             {
                 Debug.WriteLine("In MessageBoxEvent Event.");
-                var message = EncodingDecoding.EncodingBytes2String(this.DataContext);
+                var message = EncodingDecoding.EncodingBytes2String(DataContext);
                 MessageBox.Show(message);
                 actionEvent(this, context);
                 return null;

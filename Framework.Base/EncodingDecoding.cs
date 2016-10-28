@@ -24,25 +24,23 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using GrabCaster.Framework.Common;
 
 namespace GrabCaster.Framework.Base
 {
     public enum EncodingType
     {
-        UTF8,
-        ASCII,
+        Utf8,
+        Ascii,
         BigEndianUnicode,
         Default,
-        UTF32,
-        UTF7,
+        Utf32,
+        Utf7,
         Unicode
     }
+
     public static class EncodingDecoding
     {
         /// <summary>
@@ -53,17 +51,17 @@ namespace GrabCaster.Framework.Base
             EncodingType encodingType = ConfigurationBag.Configuration.EncodingType;
             switch (encodingType)
             {
-                case EncodingType.UTF8:
+                case EncodingType.Utf8:
                     return Encoding.UTF8.GetString(value);
-                case EncodingType.ASCII:
+                case EncodingType.Ascii:
                     return Encoding.ASCII.GetString(value);
                 case EncodingType.BigEndianUnicode:
                     return Encoding.BigEndianUnicode.GetString(value);
                 case EncodingType.Default:
                     return Encoding.Default.GetString(value);
-                case EncodingType.UTF32:
+                case EncodingType.Utf32:
                     return Encoding.UTF32.GetString(value);
-                case EncodingType.UTF7:
+                case EncodingType.Utf7:
                     return Encoding.UTF7.GetString(value);
                 case EncodingType.Unicode:
                     return Encoding.Unicode.GetString(value);
@@ -71,6 +69,7 @@ namespace GrabCaster.Framework.Base
                     throw new ArgumentOutOfRangeException(nameof(encodingType), encodingType, null);
             }
         }
+
         /// <summary>
         /// The last error point
         /// </summary>
@@ -79,17 +78,17 @@ namespace GrabCaster.Framework.Base
             EncodingType encodingType = ConfigurationBag.Configuration.EncodingType;
             switch (encodingType)
             {
-                case EncodingType.UTF8:
+                case EncodingType.Utf8:
                     return Encoding.UTF8.GetBytes(value);
-                case EncodingType.ASCII:
+                case EncodingType.Ascii:
                     return Encoding.ASCII.GetBytes(value);
                 case EncodingType.BigEndianUnicode:
                     return Encoding.BigEndianUnicode.GetBytes(value);
                 case EncodingType.Default:
                     return Encoding.Default.GetBytes(value);
-                case EncodingType.UTF32:
+                case EncodingType.Utf32:
                     return Encoding.UTF32.GetBytes(value);
-                case EncodingType.UTF7:
+                case EncodingType.Utf7:
                     return Encoding.UTF7.GetBytes(value);
                 case EncodingType.Unicode:
                     return Encoding.Unicode.GetBytes(value);

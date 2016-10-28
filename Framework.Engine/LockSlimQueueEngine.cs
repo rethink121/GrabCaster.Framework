@@ -24,11 +24,12 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using GrabCaster.Framework.Contracts.Bubbling;
-using GrabCaster.Framework.Contracts.Messaging;
+
 
 namespace GrabCaster.Framework.Engine
 {
+    using Base;
+    using Log;
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
@@ -36,10 +37,6 @@ namespace GrabCaster.Framework.Engine
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Log;
-
     using Timer = System.Timers.Timer;
 
     public abstract class LockSlimQueueEngine<BubblingObject> : ConcurrentQueue<BubblingObject>
@@ -88,7 +85,7 @@ namespace GrabCaster.Framework.Engine
         /// </param>
         protected LockSlimQueueEngine(int capLimit, int timeLimit)
         {
-            this.Init(capLimit, timeLimit);
+            Init(capLimit, timeLimit);
         }
 
         /// <summary>
@@ -105,10 +102,10 @@ namespace GrabCaster.Framework.Engine
         public new virtual void Enqueue(BubblingObject item)
         {
             base.Enqueue(item);
-            if (this.Count >= this.CapLimit)
+            if (Count >= CapLimit)
             {
-                Debug.WriteLine($"CapLimit!: {this.CapLimit} > Publish!");
-                this.Publish();
+                Debug.WriteLine($"CapLimit!: {CapLimit} > Publish!");
+                Publish();
             }
         }
 
@@ -123,10 +120,10 @@ namespace GrabCaster.Framework.Engine
         /// </param>
         private void Init(int capLimit, int timeLimit)
         {
-            this.CapLimit = capLimit;
-            this.TimeLimit = timeLimit;
-            this.Locker = new ReaderWriterLockSlim();
-            this.InitTimer();
+            CapLimit = capLimit;
+            TimeLimit = timeLimit;
+            Locker = new ReaderWriterLockSlim();
+            InitTimer();
         }
 
         /// <summary>
@@ -134,13 +131,13 @@ namespace GrabCaster.Framework.Engine
         /// </summary>
         protected virtual void InitTimer()
         {
-            this.InternalTimer = new Timer { AutoReset = false, Interval = this.TimeLimit * 1000 };
-            this.InternalTimer.Elapsed += (s, e) =>
-                {
-                    Debug.WriteLine($"TimeLimit!: {this.TimeLimit} > Publish!");
-                    this.Publish();
-                };
-            this.InternalTimer.Start();
+            InternalTimer = new Timer {AutoReset = false, Interval = TimeLimit*1000};
+            InternalTimer.Elapsed += (s, e) =>
+            {
+                Debug.WriteLine($"TimeLimit!: {TimeLimit} > Publish!");
+                Publish();
+            };
+            InternalTimer.Start();
         }
 
         /// <summary>
@@ -150,54 +147,54 @@ namespace GrabCaster.Framework.Engine
         {
             var task = new Task(
                 () =>
+                {
+                    var itemsToPublish = new List<BubblingObject>();
+                    try
                     {
-                        var itemsToPublish = new List<BubblingObject>();
-                        try
+                        if (IsPublishing())
                         {
-                            if (this.IsPublishing())
-                            {
-                                return;
-                            }
+                            return;
+                        }
 
-                            this.StartPublishing();
-                            //Debug.WriteLine($"Log start dequeue {this.Count} items!");
-                            BubblingObject item;
-                            while (this.TryDequeue(out item))
-                            {
-                                itemsToPublish.Add(item);
-                            }
-                        }
-                        catch (ThreadAbortException tex)
+                        StartPublishing();
+                        //Debug.WriteLine($"Log start dequeue {this.Count} items!");
+                        BubblingObject item;
+                        while (TryDequeue(out item))
                         {
-                            Debug.WriteLine($"Dequeue items failed > {tex.Message}");
+                            itemsToPublish.Add(item);
+                        }
+                    }
+                    catch (ThreadAbortException tex)
+                    {
+                        Debug.WriteLine($"Dequeue items failed > {tex.Message}");
 
-                            LogEngine.WriteLog(
-                                ConfigurationBag.EngineName, 
-                                $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                                Constant.LogLevelError, 
-                                Constant.TaskCategoriesError, 
-                                tex, 
-                                Constant.LogLevelError);
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.WriteLine($"Dequeue items failed > {ex.Message}");
+                        LogEngine.WriteLog(
+                            ConfigurationBag.EngineName,
+                            $"Error in {MethodBase.GetCurrentMethod().Name}",
+                            Constant.LogLevelError,
+                            Constant.TaskCategoriesError,
+                            tex,
+                            Constant.LogLevelError);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Dequeue items failed > {ex.Message}");
 
-                            LogEngine.WriteLog(
-                                ConfigurationBag.EngineName, 
-                                $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                                Constant.LogLevelError, 
-                                Constant.TaskCategoriesError, 
-                                ex, 
-                                Constant.LogLevelError);
-                        }
-                        finally
-                        {
-                            //Debug.WriteLine($"Log dequeued {itemsToLog.Count} items");
-                            this.OnPublish(itemsToPublish);
-                            this.CompletePublishing();
-                        }
-                    });
+                        LogEngine.WriteLog(
+                            ConfigurationBag.EngineName,
+                            $"Error in {MethodBase.GetCurrentMethod().Name}",
+                            Constant.LogLevelError,
+                            Constant.TaskCategoriesError,
+                            ex,
+                            Constant.LogLevelError);
+                    }
+                    finally
+                    {
+                        //Debug.WriteLine($"Log dequeued {itemsToLog.Count} items");
+                        OnPublish(itemsToPublish);
+                        CompletePublishing();
+                    }
+                });
             task.Start();
         }
 
@@ -209,7 +206,7 @@ namespace GrabCaster.Framework.Engine
         /// </returns>
         private bool IsPublishing()
         {
-            return Interlocked.CompareExchange(ref this.OnPublishExecuted, 1, 0) > 0;
+            return Interlocked.CompareExchange(ref OnPublishExecuted, 1, 0) > 0;
         }
 
         /// <summary>
@@ -217,7 +214,7 @@ namespace GrabCaster.Framework.Engine
         /// </summary>
         private void StartPublishing()
         {
-            this.InternalTimer.Stop();
+            InternalTimer.Stop();
         }
 
         /// <summary>
@@ -225,8 +222,8 @@ namespace GrabCaster.Framework.Engine
         /// </summary>
         private void CompletePublishing()
         {
-            this.InternalTimer.Start();
-            Interlocked.Decrement(ref this.OnPublishExecuted);
+            InternalTimer.Start();
+            Interlocked.Decrement(ref OnPublishExecuted);
         }
     }
 }

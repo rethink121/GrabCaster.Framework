@@ -24,16 +24,16 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace Core.Eventing.Interop
 {
+    using GrabCaster.Framework.ETW;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
-
-    using GrabCaster.Framework.ETW;
 
     internal sealed class TraceEventInfoWrapper : IDisposable
     {
@@ -59,44 +59,44 @@ namespace Core.Eventing.Interop
 
         internal TraceEventInfoWrapper(EventRecord eventRecord)
         {
-            this.Initialize(eventRecord);
+            Initialize(eventRecord);
         }
 
         internal string EventName { private set; get; }
 
         public void Dispose()
         {
-            this.ReleaseMemory();
+            ReleaseMemory();
             GC.SuppressFinalize(this);
         }
 
         ~TraceEventInfoWrapper()
         {
-            this.ReleaseMemory();
+            ReleaseMemory();
         }
 
         internal PropertyBag GetProperties(EventRecord eventRecord)
         {
             // We only support top level properties and simple types
-            var properties = new PropertyBag(this._traceEventInfo.TopLevelPropertyCount);
+            var properties = new PropertyBag(_traceEventInfo.TopLevelPropertyCount);
 
-            if (this._hasProperties)
+            if (_hasProperties)
             {
                 var offset = 0;
 
-                for (var i = 0; i < this._traceEventInfo.TopLevelPropertyCount; i++)
+                for (var i = 0; i < _traceEventInfo.TopLevelPropertyCount; i++)
                 {
-                    var info = this._eventPropertyInfoArray[i];
+                    var info = _eventPropertyInfoArray[i];
 
                     // Read the current property name
-                    var propertyName = Marshal.PtrToStringUni(new IntPtr(this._address.ToInt64() + info.NameOffset));
+                    var propertyName = Marshal.PtrToStringUni(new IntPtr(_address.ToInt64() + info.NameOffset));
 
                     object value;
                     string mapName;
                     int length;
                     var dataPtr = new IntPtr(eventRecord.UserData.ToInt64() + offset);
 
-                    value = this.ReadPropertyValue(info, dataPtr, out mapName, out length);
+                    value = ReadPropertyValue(info, dataPtr, out mapName, out length);
 
                     // If we have a map name, return both map name and map value as a pair.
                     if (!string.IsNullOrEmpty(mapName))
@@ -146,10 +146,10 @@ namespace Core.Eventing.Interop
             if (error == ErrorlementNotFound)
             {
                 // Nothing else to do here.
-                this._hasProperties = false;
+                _hasProperties = false;
                 return;
             }
-            this._hasProperties = true;
+            _hasProperties = true;
 
             if (error != BufferTooSmall)
             {
@@ -157,38 +157,38 @@ namespace Core.Eventing.Interop
             }
 
             // Get the event information (schema)
-            this._address = Marshal.AllocHGlobal(size);
-            error = NativeMethods.TdhGetEventInformation(ref eventRecord, 0, IntPtr.Zero, this._address, ref size);
+            _address = Marshal.AllocHGlobal(size);
+            error = NativeMethods.TdhGetEventInformation(ref eventRecord, 0, IntPtr.Zero, _address, ref size);
             if (error != 0)
             {
                 throw new Win32Exception(error);
             }
 
             // Marshal the first part of the trace event information.
-            this._traceEventInfo = (TraceEventInfo)Marshal.PtrToStructure(this._address, typeof(TraceEventInfo));
+            _traceEventInfo = (TraceEventInfo) Marshal.PtrToStructure(_address, typeof(TraceEventInfo));
 
             // Marshal the second part of the trace event information, the array of property info.
-            var actualSize = Marshal.SizeOf(this._traceEventInfo);
+            var actualSize = Marshal.SizeOf(_traceEventInfo);
             if (size != actualSize)
             {
                 var structSize = Marshal.SizeOf(typeof(EventPropertyInfo));
-                var itemsLeft = (size - actualSize) / structSize;
+                var itemsLeft = (size - actualSize)/structSize;
 
-                this._eventPropertyInfoArray = new EventPropertyInfo[itemsLeft];
-                var baseAddress = this._address.ToInt64() + actualSize;
+                _eventPropertyInfoArray = new EventPropertyInfo[itemsLeft];
+                var baseAddress = _address.ToInt64() + actualSize;
                 for (var i = 0; i < itemsLeft; i++)
                 {
-                    var structPtr = new IntPtr(baseAddress + (i * structSize));
-                    var info = (EventPropertyInfo)Marshal.PtrToStructure(structPtr, typeof(EventPropertyInfo));
-                    this._eventPropertyInfoArray[i] = info;
+                    var structPtr = new IntPtr(baseAddress + i*structSize);
+                    var info = (EventPropertyInfo) Marshal.PtrToStructure(structPtr, typeof(EventPropertyInfo));
+                    _eventPropertyInfoArray[i] = info;
                 }
             }
 
             // Get the opcode name
-            if (this._traceEventInfo.OpcodeNameOffset > 0)
+            if (_traceEventInfo.OpcodeNameOffset > 0)
             {
-                this.EventName =
-                    Marshal.PtrToStringUni(new IntPtr(this._address.ToInt64() + this._traceEventInfo.OpcodeNameOffset));
+                EventName =
+                    Marshal.PtrToStringUni(new IntPtr(_address.ToInt64() + _traceEventInfo.OpcodeNameOffset));
             }
         }
 
@@ -199,7 +199,7 @@ namespace Core.Eventing.Interop
             if (info.NonStructTypeValue.MapNameOffset != 0)
             {
                 mapName =
-                    Marshal.PtrToStringUni(new IntPtr(this._address.ToInt64() + info.NonStructTypeValue.MapNameOffset));
+                    Marshal.PtrToStringUni(new IntPtr(_address.ToInt64() + info.NonStructTypeValue.MapNameOffset));
             }
             else
             {
@@ -211,33 +211,33 @@ namespace Core.Eventing.Interop
                 case TdhInType.Null:
                     break;
                 case TdhInType.UnicodeString:
-                    {
-                        var str = Marshal.PtrToStringUni(dataPtr);
-                        length = (str.Length + 1) * sizeof(char);
-                        return str;
-                    }
+                {
+                    var str = Marshal.PtrToStringUni(dataPtr);
+                    length = (str.Length + 1)*sizeof(char);
+                    return str;
+                }
                 case TdhInType.AnsiString:
-                    {
-                        var str = Marshal.PtrToStringAnsi(dataPtr);
-                        length = (str.Length + 1);
-                        return str;
-                    }
+                {
+                    var str = Marshal.PtrToStringAnsi(dataPtr);
+                    length = str.Length + 1;
+                    return str;
+                }
                 case TdhInType.Int8:
-                    return (sbyte)Marshal.ReadByte(dataPtr);
+                    return (sbyte) Marshal.ReadByte(dataPtr);
                 case TdhInType.UInt8:
                     return Marshal.ReadByte(dataPtr);
                 case TdhInType.Int16:
                     return Marshal.ReadInt16(dataPtr);
                 case TdhInType.UInt16:
-                    return (uint)Marshal.ReadInt16(dataPtr);
+                    return (uint) Marshal.ReadInt16(dataPtr);
                 case TdhInType.Int32:
                     return Marshal.ReadInt32(dataPtr);
                 case TdhInType.UInt32:
-                    return (uint)Marshal.ReadInt32(dataPtr);
+                    return (uint) Marshal.ReadInt32(dataPtr);
                 case TdhInType.Int64:
                     return Marshal.ReadInt64(dataPtr);
                 case TdhInType.UInt64:
-                    return (ulong)Marshal.ReadInt64(dataPtr);
+                    return (ulong) Marshal.ReadInt64(dataPtr);
                 case TdhInType.Float:
                     break;
                 case TdhInType.Double:
@@ -304,10 +304,10 @@ namespace Core.Eventing.Interop
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         private void ReleaseMemory()
         {
-            if (this._address != IntPtr.Zero)
+            if (_address != IntPtr.Zero)
             {
-                Marshal.FreeHGlobal(this._address);
-                this._address = IntPtr.Zero;
+                Marshal.FreeHGlobal(_address);
+                _address = IntPtr.Zero;
             }
         }
     }

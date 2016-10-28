@@ -24,14 +24,28 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Collections;
-using System.Threading.Tasks;
+
 using GrabCaster.Framework.Contracts;
 using GrabCaster.Framework.Contracts.Components;
 using GrabCaster.Framework.Serialization.Object;
+using System.Collections;
+using System.Threading.Tasks;
 
 namespace GrabCaster.Framework.Engine
 {
+    using Base;
+    using Contracts.Attributes;
+    using Contracts.Bubbling;
+    using Contracts.Configuration;
+    using Contracts.Events;
+    using Contracts.Globals;
+    using Contracts.Triggers;
+    using Log;
+    using Microsoft.ServiceBus;
+    using Microsoft.ServiceBus.Messaging;
+    using Newtonsoft.Json;
+    using OffRamp;
+    using Roslyn.Scripting.CSharp;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -45,24 +59,6 @@ namespace GrabCaster.Framework.Engine
     using System.Text.RegularExpressions;
     using System.Threading;
 
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Common;
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Bubbling;
-    using GrabCaster.Framework.Contracts.Configuration;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
-    using GrabCaster.Framework.Engine.OffRamp;
-    using GrabCaster.Framework.Log;
-
-    using Microsoft.ServiceBus;
-    using Microsoft.ServiceBus.Messaging;
-
-    using Newtonsoft.Json;
-
-    using Roslyn.Scripting.CSharp;
-
     /// <summary>
     ///     This is engine class containing the most important methods
     /// </summary>
@@ -72,10 +68,10 @@ namespace GrabCaster.Framework.Engine
         //If this is the mastr in gropu
         public static bool HAMaster = false;
         //If HA in enabled
-        public static bool HAEnabled = false;
+        public static bool HAEnabled;
         //iD point (Tick)
-        public static long HAPointTickId = 0;
-        public static Dictionary<long,DateTime> HAPoints;
+        public static long HAPointTickId;
+        public static Dictionary<long, DateTime> HAPoints;
 
         //SyncAsync Scenarios
         public static Hashtable SyncAsyncEvents;
@@ -151,7 +147,7 @@ namespace GrabCaster.Framework.Engine
         /// <summary>
         /// The event configuration list.
         /// </summary>
-        public static Dictionary<string,EventConfiguration> ConfigurationJsonEventFileList;
+        public static Dictionary<string, EventConfiguration> ConfigurationJsonEventFileList;
 
         /// <summary>
         /// The component configuration list.
@@ -200,7 +196,6 @@ namespace GrabCaster.Framework.Engine
         /// </summary>
         public static void InitializeTriggerEngine()
         {
-
             delegateActionTrigger = ActionTriggerReceived;
         }
 
@@ -211,7 +206,6 @@ namespace GrabCaster.Framework.Engine
         public static void InitializeEmbeddedEvent(ActionEvent delegateEmbedded)
         {
             delegateActionEvent = delegateEmbedded;
-
         }
 
         /// <summary>
@@ -224,10 +218,18 @@ namespace GrabCaster.Framework.Engine
             int processorCount = Environment.ProcessorCount;
             ThreadPool.GetMinThreads(out minWorker, out minIOC);
 
-            int maxWorkerThreads = ConfigurationBag.Configuration.MaxWorkerThreads < processorCount? processorCount: ConfigurationBag.Configuration.MaxWorkerThreads;
-            int maxAsyncWorkerThreads = ConfigurationBag.Configuration.MaxAsyncWorkerThreads < processorCount ? processorCount : ConfigurationBag.Configuration.MaxAsyncWorkerThreads;
-            int minWorkerThreads = ConfigurationBag.Configuration.MinWorkerThreads < minWorker ? minWorker : ConfigurationBag.Configuration.MinWorkerThreads;
-            int minAsyncWorkerThreads = ConfigurationBag.Configuration.MinAsyncWorkerThreads < minIOC ? minIOC : ConfigurationBag.Configuration.MinAsyncWorkerThreads;
+            int maxWorkerThreads = ConfigurationBag.Configuration.MaxWorkerThreads < processorCount
+                ? processorCount
+                : ConfigurationBag.Configuration.MaxWorkerThreads;
+            int maxAsyncWorkerThreads = ConfigurationBag.Configuration.MaxAsyncWorkerThreads < processorCount
+                ? processorCount
+                : ConfigurationBag.Configuration.MaxAsyncWorkerThreads;
+            int minWorkerThreads = ConfigurationBag.Configuration.MinWorkerThreads < minWorker
+                ? minWorker
+                : ConfigurationBag.Configuration.MinWorkerThreads;
+            int minAsyncWorkerThreads = ConfigurationBag.Configuration.MinAsyncWorkerThreads < minIOC
+                ? minIOC
+                : ConfigurationBag.Configuration.MinAsyncWorkerThreads;
 
             ThreadPool.SetMaxThreads(maxWorkerThreads, maxAsyncWorkerThreads);
             ThreadPool.SetMinThreads(minWorkerThreads, minAsyncWorkerThreads);
@@ -236,15 +238,15 @@ namespace GrabCaster.Framework.Engine
                              $"MaxAsyncWorkerThreads = {maxAsyncWorkerThreads}\r" +
                              $"MinWorkerThreads = {minWorkerThreads}\r" +
                              $"MinAsyncWorkerThreads = {minAsyncWorkerThreads}";
-            LogEngine.DirectEventViewerLog(message,4);
+            LogEngine.DirectEventViewerLog(message, 4);
             //HA groupd settings
             HAEnabled = ConfigurationBag.Configuration.HAGroup.Length > 0;
             if (HAEnabled)
             {
                 Thread.Sleep(1);
                 HAPointTickId = DateTime.Now.Ticks;
-                EventsEngine.HAPoints = new Dictionary<long, DateTime>();
-                EventsEngine.HAPoints.Add(HAPointTickId, DateTime.Now);
+                HAPoints = new Dictionary<long, DateTime>();
+                HAPoints.Add(HAPointTickId, DateTime.Now);
             }
 
             //initilize SyncAsync scenarions
@@ -259,8 +261,10 @@ namespace GrabCaster.Framework.Engine
                 Debug.WriteLine(
                     $"Start the Hub Web API Interface at {ConfigurationBag.Configuration.WebApiEndPoint}",
                     ConsoleColor.Yellow);
-                engineHost = new WebServiceHost(typeof(RestEventsEngine), new Uri(ConfigurationBag.Configuration.WebApiEndPoint));
-                engineHost.AddServiceEndpoint(typeof(IRestEventsEngine), new WebHttpBinding(), ConfigurationBag.EngineName);
+                engineHost = new WebServiceHost(typeof(RestEventsEngine),
+                    new Uri(ConfigurationBag.Configuration.WebApiEndPoint));
+                engineHost.AddServiceEndpoint(typeof(IRestEventsEngine), new WebHttpBinding(),
+                    ConfigurationBag.EngineName);
                 var stp = engineHost.Description.Behaviors.Find<ServiceDebugBehavior>();
                 stp.HttpHelpPageEnabled = false;
                 engineHost.Open();
@@ -280,13 +284,10 @@ namespace GrabCaster.Framework.Engine
             {
                 //
                 delegateActionEvent = delegateEmbedded;
-
             }
             else
             {
-
                 delegateActionEvent = ActionEventReceived;
-
             }
         }
 
@@ -299,10 +300,10 @@ namespace GrabCaster.Framework.Engine
                 BubblingObject bubblingObject = new BubblingObject(content);
                 bubblingObject.MessageType = "HA";
                 OffRampEngineSending.SendMessageOffRamp(bubblingObject,
-                                                        "HA",
-                                                        ConfigurationBag.Configuration.ChannelId,
-                                                        ConfigurationBag.PointAll,
-                                                        string.Empty);
+                    "HA",
+                    ConfigurationBag.Configuration.ChannelId,
+                    ConfigurationBag.PointAll,
+                    string.Empty);
                 Thread.Sleep(ConfigurationBag.Configuration.HACheckTime);
             }
         }
@@ -313,25 +314,21 @@ namespace GrabCaster.Framework.Engine
             {
                 lock (HAPoints)
                 {
-                    var arrPoints = EventsEngine.HAPoints.ToArray();
+                    var arrPoints = HAPoints.ToArray();
                     for (int i = 0; i < arrPoints.Length; i++)
                     {
                         var totalSecs = (DateTime.Now - arrPoints[i].Value).TotalMilliseconds;
                         if (totalSecs >= ConfigurationBag.Configuration.HAInactivity)
                         {
-                            long a = EventsEngine.HAPointTickId;
-                            EventsEngine.HAPoints.Remove(arrPoints[i].Key);
-
-
+                            long a = HAPointTickId;
+                            HAPoints.Remove(arrPoints[i].Key);
                         }
                     }
                 }
                 Thread.Sleep(1000);
             }
-
-
-            
         }
+
         /// <summary>
         /// Return 
         /// </summary>
@@ -351,8 +348,6 @@ namespace GrabCaster.Framework.Engine
             }
             catch (Exception ex)
             {
-
-
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
                     $"Error in {MethodBase.GetCurrentMethod().Name}",
                     Constant.LogLevelError,
@@ -360,7 +355,6 @@ namespace GrabCaster.Framework.Engine
                     ex,
                     Constant.LogLevelError);
                 return false;
-
             }
         }
 
@@ -377,8 +371,6 @@ namespace GrabCaster.Framework.Engine
             }
             catch (Exception ex)
             {
-
-
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
                     $"Error in {MethodBase.GetCurrentMethod().Name}",
                     Constant.LogLevelError,
@@ -386,7 +378,6 @@ namespace GrabCaster.Framework.Engine
                     ex,
                     Constant.LogLevelError);
                 return false;
-
             }
         }
 
@@ -406,8 +397,6 @@ namespace GrabCaster.Framework.Engine
             }
             catch (Exception ex)
             {
-
-
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
                     $"Error in {MethodBase.GetCurrentMethod().Name}",
                     Constant.LogLevelError,
@@ -415,13 +404,11 @@ namespace GrabCaster.Framework.Engine
                     ex,
                     Constant.LogLevelError);
                 return false;
-
             }
         }
 
         public static void ExecuteSyncAsyncEventAction(byte[] DataContext)
         {
-
         }
 
         /// <summary>
@@ -440,7 +427,7 @@ namespace GrabCaster.Framework.Engine
             try
             {
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                    $"ActionTriggerReceived bubblingObject.SenderChannelId {context.BubblingObjectBag.SenderChannelId } " +
+                    $"ActionTriggerReceived bubblingObject.SenderChannelId {context.BubblingObjectBag.SenderChannelId} " +
                     $"bubblingObject.SenderPointId {context.BubblingObjectBag.SenderPointId} " +
                     $"bubblingObject.DestinationChannelId {context.BubblingObjectBag.DestinationChannelId} " +
                     $" bubblingObject.DestinationPointId {context.BubblingObjectBag.DestinationPointId} " +
@@ -497,12 +484,11 @@ namespace GrabCaster.Framework.Engine
                         foreach (var point in channel.Points)
                         {
                             OffRampEngineSending.SendMessageOffRamp(context.BubblingObjectBag,
-                                                        "Event",
-                                                        channel.ChannelId,
-                                                        point.PointId,
-                                                        null);
+                                "Event",
+                                channel.ChannelId,
+                                point.PointId,
+                                null);
                         }
-
                     }
 
                     //todo optimization non credo serva piu, adesso uso l'embedded dall execute, va testato
@@ -542,22 +528,17 @@ namespace GrabCaster.Framework.Engine
                     //        string.Empty,
                     //        null);
                     //}
-                        
                 }
-
             }
             catch (Exception ex)
             {
-
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                              $"Error in {MethodBase.GetCurrentMethod().Name}",
-                              Constant.LogLevelError,
-                              Constant.TaskCategoriesError,
-                              ex,
-                              Constant.LogLevelError);
-
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
+                    Constant.LogLevelError);
             }
-
         }
 
         /// <summary>
@@ -570,24 +551,23 @@ namespace GrabCaster.Framework.Engine
         /// </param>
         public static void ActionEventReceived(IEventType eventType, ActionContext context)
         {
-
             try
             {
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                                    $"ActionEventReceived bubblingObject.SenderChannelId {context.BubblingObjectBag.SenderChannelId } " +
-                                    $"bubblingObject.SenderPointId {context.BubblingObjectBag.SenderPointId} " +
-                                    $"bubblingObject.DestinationChannelId {context.BubblingObjectBag.DestinationChannelId} " +
-                                    $" bubblingObject.DestinationPointId {context.BubblingObjectBag.DestinationPointId} " +
-                                    $"bubblingObject.MessageType {context.BubblingObjectBag.MessageType}" +
-                                    $"bubblingObject.Persisting {context.BubblingObjectBag.Persisting} " +
-                                    $"bubblingObject.MessageId {context.BubblingObjectBag.MessageId} " +
-                                    $"bubblingObject.Name {context.BubblingObjectBag.Name}" +
-                                    $"bubblingObject.IdConfiguration {context.BubblingObjectBag.IdConfiguration}" +
-                                    $"bubblingObject.IdComponent {context.BubblingObjectBag.IdComponent}",
-                                    Constant.LogLevelError,
-                                    Constant.TaskCategoriesConsole,
-                                    null,
-                                    Constant.LogLevelInformation);
+                    $"ActionEventReceived bubblingObject.SenderChannelId {context.BubblingObjectBag.SenderChannelId} " +
+                    $"bubblingObject.SenderPointId {context.BubblingObjectBag.SenderPointId} " +
+                    $"bubblingObject.DestinationChannelId {context.BubblingObjectBag.DestinationChannelId} " +
+                    $" bubblingObject.DestinationPointId {context.BubblingObjectBag.DestinationPointId} " +
+                    $"bubblingObject.MessageType {context.BubblingObjectBag.MessageType}" +
+                    $"bubblingObject.Persisting {context.BubblingObjectBag.Persisting} " +
+                    $"bubblingObject.MessageId {context.BubblingObjectBag.MessageId} " +
+                    $"bubblingObject.Name {context.BubblingObjectBag.Name}" +
+                    $"bubblingObject.IdConfiguration {context.BubblingObjectBag.IdConfiguration}" +
+                    $"bubblingObject.IdComponent {context.BubblingObjectBag.IdComponent}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesConsole,
+                    null,
+                    Constant.LogLevelInformation);
                 //if SyncAsync == true 
                 //then send the event and keep going to exe
                 if (context.BubblingObjectBag.Syncronous)
@@ -599,27 +579,24 @@ namespace GrabCaster.Framework.Engine
                     //If the event is just locel the engine doesn't send the message to the message provider
                     if (context.BubblingObjectBag.LocalEvent)
                     {
-                        EventsEngine.SyncAsyncEventsExecuteDelegate(context.BubblingObjectBag.SyncronousToken, eventType.DataContext);
+                        SyncAsyncEventsExecuteDelegate(context.BubblingObjectBag.SyncronousToken, eventType.DataContext);
                         context.BubblingObjectBag.SenderPointId = "";
                         context.BubblingObjectBag.SenderChannelId = "";
                         context.BubblingObjectBag.SyncronousToken = String.Empty;
                         return;
                     }
-                    else
-                    {
-                        OffRampEngineSending.SendMessageOffRamp(context.BubblingObjectBag,
-                                        "Event",
-                                        context.BubblingObjectBag.SenderChannelId,
-                                        context.BubblingObjectBag.SenderPointId,
-                                        null);
-                        return;
-                    }
+                    OffRampEngineSending.SendMessageOffRamp(context.BubblingObjectBag,
+                        "Event",
+                        context.BubblingObjectBag.SenderChannelId,
+                        context.BubblingObjectBag.SenderPointId,
+                        null);
+                    return;
                 }
 
                 //todo optimization sarebbe carino includere sotto eventi ed eseguirlli qui
                 // esempio:
                 //se esistion sotto eventi, per ogni canale e punto del canale invia il sotto evento
-          
+
 
                 //todo optimization controlla la correlazione qua sotto
                 // if exist correlation then execute
@@ -664,7 +641,14 @@ namespace GrabCaster.Framework.Engine
 
                 // keep easy and discard the correlation, I don't need more
                 context.BubblingObjectBag.Correlation = null;
-                IEnumerable<PropertyInfo> propertyInfos = eventType.GetType().GetProperties().ToList().Where(p => p.GetCustomAttributes(typeof(EventPropertyContract), true).Length > 0 && p.Name != "DataContext");
+                IEnumerable<PropertyInfo> propertyInfos =
+                    eventType.GetType()
+                        .GetProperties()
+                        .ToList()
+                        .Where(
+                            p =>
+                                p.GetCustomAttributes(typeof(EventPropertyContract), true).Length > 0 &&
+                                p.Name != "DataContext");
 
                 foreach (var propertyInfo in propertyInfos)
                 {
@@ -692,7 +676,6 @@ namespace GrabCaster.Framework.Engine
                         // Send to MSP
                         if (!ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
                         {
-
                             var remoteContext = new ActionContext(context.BubblingObjectBag);
                             remoteContext.BubblingObjectBag.Events.Clear();
                             remoteContext.BubblingObjectBag.Events.Add(eventToExecute);
@@ -705,9 +688,6 @@ namespace GrabCaster.Framework.Engine
                         }
                     }
                 }
-
-
-
             }
             catch (Exception ex)
             {
@@ -721,7 +701,6 @@ namespace GrabCaster.Framework.Engine
                     ex,
                     Constant.LogLevelError);
             }
-            
         }
 
         /// <summary>
@@ -784,41 +763,32 @@ namespace GrabCaster.Framework.Engine
         {
             try
             {
-
-
                 string currentSyncFolder = ConfigurationBag.SyncDirectorySyncIn();
 
                 if (!Directory.Exists(currentSyncFolder))
                 {
-                    LogEngine.DirectEventViewerLog("Nothing to sync.",  4);
+                    LogEngine.DirectEventViewerLog("Nothing to sync.", 4);
                     return true;
                 }
-                else
-                {
-                    LogEngine.DirectEventViewerLog("Package to sync.", 2);
-
-                }
+                LogEngine.DirectEventViewerLog("Package to sync.", 2);
                 //Get the internal root folder because could be different from the default value
                 string internalRootFolderTemp = Directory.EnumerateDirectories(currentSyncFolder).First();
-                String internalRootFolder = internalRootFolderTemp.Substring(internalRootFolderTemp.LastIndexOf("\\") + 1);
+                String internalRootFolder =
+                    internalRootFolderTemp.Substring(internalRootFolderTemp.LastIndexOf("\\") + 1);
 
-                if(GrabCaster.Framework.Syncronization.Helpers.ToBeSyncronized(Path.Combine(currentSyncFolder, internalRootFolder),
+                if (Syncronization.Helpers.ToBeSyncronized(Path.Combine(currentSyncFolder, internalRootFolder),
                     ConfigurationBag.Configuration.DirectoryOperativeRootExeName, true))
                 {
                     //Clean sync folder
-                    string backupFolder = currentSyncFolder.Replace("\\Sync\\In", $"\\Sync\\{DateTime.Now.ToString("yyyyMMdd_HHmmss")}");
+                    string backupFolder = currentSyncFolder.Replace("\\Sync\\In",
+                        $"\\Sync\\{DateTime.Now.ToString("yyyyMMdd_HHmmss")}");
                     Directory.Move(currentSyncFolder, backupFolder);
                     RefreshBubblingSetting();
                     return true;
                 }
-                else
-                {
-                    LogEngine.DirectEventViewerLog("Point syncronization failed with errors, check the event viewer and the log.", 1);
-                    return false;
-                }
-                
-
-                
+                LogEngine.DirectEventViewerLog(
+                    "Point syncronization failed with errors, check the event viewer and the log.", 1);
+                return false;
             }
             catch (Exception ex)
             {
@@ -840,19 +810,17 @@ namespace GrabCaster.Framework.Engine
         /// <param name="numOfTriggers"></param>
         /// <param name="assemblyFile"></param>
         /// <returns></returns>
-        public static BubblingObject CreateBubblingObject( Type assemblyClass, Assembly assembly, string assemblyFile)
+        public static BubblingObject CreateBubblingObject(Type assemblyClass, Assembly assembly, string assemblyFile)
         {
             try
             {
-
                 var bubblingObject = new BubblingObject(null);
                 var classAttributes = assemblyClass.GetCustomAttributes(typeof(TriggerContract), true);
                 if (classAttributes.Length > 0)
                 {
-
                     var trigger = (TriggerContract) classAttributes[0];
 
-                    
+
                     ITriggerType triggerType = Activator.CreateInstance(assemblyClass) as ITriggerType;
 
 
@@ -900,7 +868,6 @@ namespace GrabCaster.Framework.Engine
 
                 // Add the bubbling event
                 return bubblingObject;
-
             }
             catch (Exception ex)
             {
@@ -924,12 +891,11 @@ namespace GrabCaster.Framework.Engine
         /// <param name="assembly"></param>
         /// <param name="assemblyFile"></param>
         /// <returns></returns>
-        public static BubblingObject CreateBubblingObjectEvent(Type assemblyClass, Assembly assembly, string assemblyFile)
+        public static BubblingObject CreateBubblingObjectEvent(Type assemblyClass, Assembly assembly,
+            string assemblyFile)
         {
             try
             {
-
-
                 var bubblingEvent = new BubblingObject(null);
                 var classAttributes = assemblyClass.GetCustomAttributes(typeof(EventContract), true);
                 if (classAttributes.Length > 0)
@@ -1002,12 +968,11 @@ namespace GrabCaster.Framework.Engine
         /// <param name="assembly"></param>
         /// <param name="assemblyFile"></param>
         /// <returns></returns>
-        public static BubblingObject CreateBubblingObjectComponent(Type assemblyClass, Assembly assembly, string assemblyFile)
+        public static BubblingObject CreateBubblingObjectComponent(Type assemblyClass, Assembly assembly,
+            string assemblyFile)
         {
             try
             {
-
-
                 var bubblingEvent = new BubblingObject(null);
                 var classAttributes = assemblyClass.GetCustomAttributes(typeof(ComponentContract), true);
                 if (classAttributes.Length > 0)
@@ -1094,14 +1059,12 @@ namespace GrabCaster.Framework.Engine
             CacheEngineComponents = new Dictionary<string, Assembly>();
 
 
-
             numOfTriggers = 0;
             numOfEvents = 0;
             numOfComponents = 0;
 
 
             var lastAssemblyFileLoaded = string.Empty;
-
 
 
             // Load triggers bubbling path
@@ -1200,7 +1163,7 @@ namespace GrabCaster.Framework.Engine
                                         propertyInfo.GetCustomAttributes(typeof(TriggerPropertyContract), true);
                                     if (propertyAttributes.Length > 0)
                                     {
-                                        var propertyAttribute = (TriggerPropertyContract)propertyAttributes[0];
+                                        var propertyAttribute = (TriggerPropertyContract) propertyAttributes[0];
 
                                         // TODO 1004
                                         if (propertyInfo.Name != propertyAttribute.Name)
@@ -1218,7 +1181,6 @@ namespace GrabCaster.Framework.Engine
                                     }
                                 }
                                 CacheTriggerComponents.Add(trigger.Id, triggerAssembly);
-
                             }
                         }
                     }
@@ -1233,8 +1195,6 @@ namespace GrabCaster.Framework.Engine
                             Constant.LogLevelError);
                         return false;
                     }
-
-
                 }
 
                 // ****************************************************
@@ -1279,7 +1239,7 @@ namespace GrabCaster.Framework.Engine
                             var classAttributes = assemblyClass.GetCustomAttributes(typeof(EventContract), true);
                             if (classAttributes.Length > 0)
                             {
-                                var eventContract = (EventContract)classAttributes[0];
+                                var eventContract = (EventContract) classAttributes[0];
                                 IEventAssembly eventAssembly = new EventAssembly();
                                 eventAssembly.EventType = Activator.CreateInstance(assemblyClass) as IEventType;
                                 ;
@@ -1297,7 +1257,7 @@ namespace GrabCaster.Framework.Engine
                                         propertyInfo.GetCustomAttributes(typeof(EventPropertyContract), true);
                                     if (propertyAttributes.Length > 0)
                                     {
-                                        var propertyAttribute = (EventPropertyContract)propertyAttributes[0];
+                                        var propertyAttribute = (EventPropertyContract) propertyAttributes[0];
 
                                         // TODO 1004
                                         if (propertyInfo.Name != propertyAttribute.Name)
@@ -1315,7 +1275,6 @@ namespace GrabCaster.Framework.Engine
                                     }
                                 }
                                 CacheEventComponents.Add(eventContract.Id, eventAssembly);
-
                             }
                         }
                     }
@@ -1331,7 +1290,6 @@ namespace GrabCaster.Framework.Engine
                         return false;
                     }
                 }
-
 
 
                 // ****************************************************
@@ -1377,9 +1335,10 @@ namespace GrabCaster.Framework.Engine
                             var classAttributes = assemblyClass.GetCustomAttributes(typeof(ComponentContract), true);
                             if (classAttributes.Length > 0)
                             {
-                                var trigger = (ComponentContract)classAttributes[0];
+                                var trigger = (ComponentContract) classAttributes[0];
                                 IChainComponentAssembly chainComponentAssembly = new ChainComponentAssembly();
-                                chainComponentAssembly.ChainComponentType = Activator.CreateInstance(assemblyClass) as IChainComponentType;
+                                chainComponentAssembly.ChainComponentType =
+                                    Activator.CreateInstance(assemblyClass) as IChainComponentType;
                                 chainComponentAssembly.AssemblyClassType = assemblyClass;
                                 chainComponentAssembly.AssemblyContent = File.ReadAllBytes(assemblyFile);
                                 chainComponentAssembly.AssemblyFile = assemblyFile;
@@ -1394,7 +1353,7 @@ namespace GrabCaster.Framework.Engine
                                         propertyInfo.GetCustomAttributes(typeof(ComponentPropertyContract), true);
                                     if (propertyAttributes.Length > 0)
                                     {
-                                        var propertyAttribute = (ComponentPropertyContract)propertyAttributes[0];
+                                        var propertyAttribute = (ComponentPropertyContract) propertyAttributes[0];
 
                                         // TODO 1004
                                         if (propertyInfo.Name != propertyAttribute.Name)
@@ -1412,7 +1371,6 @@ namespace GrabCaster.Framework.Engine
                                     }
                                 }
                                 CacheChainComponents.Add(trigger.Id, chainComponentAssembly);
-
                             }
                         }
                     }
@@ -1450,7 +1408,6 @@ namespace GrabCaster.Framework.Engine
         /// </summary>
         public static void RefreshBubblingSetting()
         {
-
             //Instantiate vars
             try
             {
@@ -1489,10 +1446,10 @@ namespace GrabCaster.Framework.Engine
                     {
                         try
                         {
-
                             // TODO 10001
                             triggerConfiguration =
-                                JsonConvert.DeserializeObject<TriggerConfiguration>(File.ReadAllText(triggerConfigurationsFile));
+                                JsonConvert.DeserializeObject<TriggerConfiguration>(
+                                    File.ReadAllText(triggerConfigurationsFile));
                             fileLocked = false;
 
 
@@ -1512,22 +1469,20 @@ namespace GrabCaster.Framework.Engine
                                         var pointIdToCheck = point.PointId;
 
                                         var toDo = (channelIdToCheck == ConfigurationBag.Configuration.ChannelId
-                                                                && pointIdToCheck == ConfigurationBag.Configuration.PointId)
-                                                               || (channelIdToCheck == ConfigurationBag.ChannelAll
-                                                                   && pointIdToCheck == ConfigurationBag.Configuration.PointId)
-                                                               || (channelIdToCheck == ConfigurationBag.Configuration.ChannelId
-                                                                   && pointIdToCheck == ConfigurationBag.PointAll)
-                                                               || (channelIdToCheck == ConfigurationBag.ChannelAll
-                                                                   && pointIdToCheck == ConfigurationBag.PointAll);
+                                                    && pointIdToCheck == ConfigurationBag.Configuration.PointId)
+                                                   || (channelIdToCheck == ConfigurationBag.ChannelAll
+                                                       && pointIdToCheck == ConfigurationBag.Configuration.PointId)
+                                                   || (channelIdToCheck == ConfigurationBag.Configuration.ChannelId
+                                                       && pointIdToCheck == ConfigurationBag.PointAll)
+                                                   || (channelIdToCheck == ConfigurationBag.ChannelAll
+                                                       && pointIdToCheck == ConfigurationBag.PointAll);
                                         if (toDo)
                                         {
                                             configurationToUse = true;
                                             break;
                                         }
-
                                     }
                                 }
-
                             }
                             else
                             {
@@ -1570,14 +1525,16 @@ namespace GrabCaster.Framework.Engine
                     // Assembly founded
                     if (triggerAssembly != null)
                     {
-
                         //Serialize clone to be abstracted in memory
                         //BubblingObject bubblingTriggerClone = (BubblingObject) ObjectHelper.CloneObject(bubblingTrigger);
                         //set the the 
                         BubblingObject bubblingOTriggerClone = new BubblingObject(null);
                         bubblingOTriggerClone.IsActive = true;
 
-                        bubblingOTriggerClone.Syncronous = bool.Parse(triggerConfiguration.Trigger.TriggerProperties.Find(p => p.Name == "Syncronous").Value.ToString());
+                        bubblingOTriggerClone.Syncronous =
+                            bool.Parse(
+                                triggerConfiguration.Trigger.TriggerProperties.Find(p => p.Name == "Syncronous")
+                                    .Value.ToString());
                         bubblingOTriggerClone.IdComponent = triggerConfiguration.Trigger.IdComponent;
                         bubblingOTriggerClone.IdConfiguration = triggerConfiguration.Trigger.IdConfiguration;
                         bubblingOTriggerClone.Chains = triggerConfiguration.Trigger.Chains;
@@ -1585,11 +1542,11 @@ namespace GrabCaster.Framework.Engine
                         bubblingOTriggerClone.BubblingEventType = BubblingEventType.Trigger;
 
                         //Set contract attributes
-                        var classAttributes = triggerAssembly.TriggerType.GetType().GetCustomAttributes(typeof(TriggerContract), true);
+                        var classAttributes =
+                            triggerAssembly.TriggerType.GetType().GetCustomAttributes(typeof(TriggerContract), true);
                         if (classAttributes.Length > 0)
                         {
-
-                            var trigger = (TriggerContract)classAttributes[0];
+                            var trigger = (TriggerContract) classAttributes[0];
                             // Create event bubbling
                             bubblingOTriggerClone.Description = trigger.Description;
                             bubblingOTriggerClone.IdComponent = trigger.Id;
@@ -1601,7 +1558,14 @@ namespace GrabCaster.Framework.Engine
                         }
 
                         // Copy all the properties from configuration to assembly
-                        IEnumerable<PropertyInfo> propertyInfos = triggerAssembly.TriggerType.GetType().GetProperties().ToList().Where(p => p.GetCustomAttributes(typeof(TriggerPropertyContract), true).Length > 0 && p.Name != "DataContext");
+                        IEnumerable<PropertyInfo> propertyInfos =
+                            triggerAssembly.TriggerType.GetType()
+                                .GetProperties()
+                                .ToList()
+                                .Where(
+                                    p =>
+                                        p.GetCustomAttributes(typeof(TriggerPropertyContract), true).Length > 0 &&
+                                        p.Name != "DataContext");
                         foreach (var propertyInfo in propertyInfos)
                         {
                             TriggerProperty triggerProperty =
@@ -1609,11 +1573,16 @@ namespace GrabCaster.Framework.Engine
                             //propertyInfo.SetValue(triggerAssembly.TriggerType,
                             //    Convert.ChangeType(triggerProperty.Value, propertyInfo.PropertyType),
                             //    null);
-                            bubblingOTriggerClone.Properties.Add(triggerProperty.Name,new Property(triggerProperty.Name, triggerProperty.Name,propertyInfo,propertyInfo.PropertyType, triggerProperty.Value));
+                            bubblingOTriggerClone.Properties.Add(triggerProperty.Name,
+                                new Property(triggerProperty.Name, triggerProperty.Name, propertyInfo,
+                                    propertyInfo.PropertyType, triggerProperty.Value));
                         }
 
-                        PropertyInfo propertyInfosDataContext = triggerAssembly.TriggerType.GetType().GetProperties().First(p => p.Name == "DataContext");
-                        bubblingOTriggerClone.Properties.Add(propertyInfosDataContext.Name, new Property(propertyInfosDataContext.Name, propertyInfosDataContext.Name, propertyInfosDataContext, propertyInfosDataContext.PropertyType, null));
+                        PropertyInfo propertyInfosDataContext =
+                            triggerAssembly.TriggerType.GetType().GetProperties().First(p => p.Name == "DataContext");
+                        bubblingOTriggerClone.Properties.Add(propertyInfosDataContext.Name,
+                            new Property(propertyInfosDataContext.Name, propertyInfosDataContext.Name,
+                                propertyInfosDataContext, propertyInfosDataContext.PropertyType, null));
 
 
                         // Add in the list
@@ -1676,11 +1645,10 @@ namespace GrabCaster.Framework.Engine
                             {
                                 foreach (var property in eventPropertyBag.Event.EventProperties)
                                 {
-                                    eventPropertyBag.Event.CacheEventProperties.Add(property.Name, (EventProperty)property);
+                                    eventPropertyBag.Event.CacheEventProperties.Add(property.Name, property);
                                 }
-
                             }
-                            ConfigurationJsonEventFileList.Add(key,eventPropertyBag);
+                            ConfigurationJsonEventFileList.Add(key, eventPropertyBag);
                         }
                         catch (IOException ioex)
                         {
@@ -1718,23 +1686,36 @@ namespace GrabCaster.Framework.Engine
                         bubblingObjectEvent.IdConfiguration = eventPropertyBag.Event.IdConfiguration;
                         bubblingObjectEvent.Chains = eventPropertyBag.Event.Chains;
                         bubblingObjectEvent.IsActive = true;
-                        bubblingObjectEvent.Events = null; //todo optimization per quale ragione qui alvavo gli eventi dal bubbling? quando l'evento non ha sotto eventi?
+                        bubblingObjectEvent.Events = null;
+                            //todo optimization per quale ragione qui alvavo gli eventi dal bubbling? quando l'evento non ha sotto eventi?
                         bubblingObjectEvent.BubblingEventType = BubblingEventType.Event;
                         // Yes, so set all the properties
 
-                        IEnumerable<PropertyInfo> propertyInfos = eventAssembly.EventType.GetType().GetProperties().ToList().Where(p => p.GetCustomAttributes(typeof(EventPropertyContract), true).Length > 0 && p.Name != "DataContext");
+                        IEnumerable<PropertyInfo> propertyInfos =
+                            eventAssembly.EventType.GetType()
+                                .GetProperties()
+                                .ToList()
+                                .Where(
+                                    p =>
+                                        p.GetCustomAttributes(typeof(EventPropertyContract), true).Length > 0 &&
+                                        p.Name != "DataContext");
                         foreach (var propertyInfo in propertyInfos)
                         {
-                            EventProperty eventProperty = eventPropertyBag.Event.EventProperties.First(p => p.Name == propertyInfo.Name);
+                            EventProperty eventProperty =
+                                eventPropertyBag.Event.EventProperties.First(p => p.Name == propertyInfo.Name);
                             propertyInfo.SetValue(eventAssembly.EventType,
                                 Convert.ChangeType(eventProperty.Value, propertyInfo.PropertyType),
                                 null);
-                            bubblingObjectEvent.Properties.Add(eventProperty.Name, new Property(eventProperty.Name, eventProperty.Name, propertyInfo, propertyInfo.PropertyType, eventProperty.Value));
-
+                            bubblingObjectEvent.Properties.Add(eventProperty.Name,
+                                new Property(eventProperty.Name, eventProperty.Name, propertyInfo,
+                                    propertyInfo.PropertyType, eventProperty.Value));
                         }
 
-                        PropertyInfo propertyInfosDataContext = eventAssembly.EventType.GetType().GetProperties().First(p => p.Name == "DataContext");
-                        bubblingObjectEvent.Properties.Add(propertyInfosDataContext.Name, new Property(propertyInfosDataContext.Name, propertyInfosDataContext.Name, propertyInfosDataContext, propertyInfosDataContext.PropertyType, null));
+                        PropertyInfo propertyInfosDataContext =
+                            eventAssembly.EventType.GetType().GetProperties().First(p => p.Name == "DataContext");
+                        bubblingObjectEvent.Properties.Add(propertyInfosDataContext.Name,
+                            new Property(propertyInfosDataContext.Name, propertyInfosDataContext.Name,
+                                propertyInfosDataContext, propertyInfosDataContext.PropertyType, null));
 
                         // Add in the list
                         BubblingTriggersEventsActive.Add(bubblingObjectEvent);
@@ -1828,7 +1809,6 @@ namespace GrabCaster.Framework.Engine
                             fileLocked = false;
                             componentPropertyBag =
                                 JsonConvert.DeserializeObject<ComponentConfiguration>(
-
                                     EncodingDecoding.EncodingBytes2String(propertyComponentsByteContent));
 
                             // Add to the global list
@@ -1859,29 +1839,44 @@ namespace GrabCaster.Framework.Engine
                     //        property => property.IdComponent == componentPropertyBag.Component.IdComponent);
 
                     IChainComponentAssembly chainComponentAssembly;
-                    CacheChainComponents.TryGetValue(componentPropertyBag.Component.IdComponent, out chainComponentAssembly);
+                    CacheChainComponents.TryGetValue(componentPropertyBag.Component.IdComponent,
+                        out chainComponentAssembly);
 
                     // Dll founded
                     if (chainComponentAssembly != null)
                     {
-
                         //var bubblingEventClone = (BubblingEvent)ObjectHelper.CloneObject(bubblingEvent);
                         BubblingObject bubblingObjectComponent = new BubblingObject(null);
                         bubblingObjectComponent.IdComponent = componentPropertyBag.Component.IdComponent;
 
-                        IEnumerable<PropertyInfo> propertyInfos = chainComponentAssembly.ChainComponentType.GetType().GetProperties().ToList().Where(p => p.GetCustomAttributes(typeof(ComponentPropertyContract), true).Length > 0 && p.Name != "DataContext");
+                        IEnumerable<PropertyInfo> propertyInfos =
+                            chainComponentAssembly.ChainComponentType.GetType()
+                                .GetProperties()
+                                .ToList()
+                                .Where(
+                                    p =>
+                                        p.GetCustomAttributes(typeof(ComponentPropertyContract), true).Length > 0 &&
+                                        p.Name != "DataContext");
                         foreach (var propertyInfo in propertyInfos)
                         {
-                            ComponentProperty componentProperty = componentPropertyBag.Component.ComponentProperties.First(p => p.Name == propertyInfo.Name);
+                            ComponentProperty componentProperty =
+                                componentPropertyBag.Component.ComponentProperties.First(
+                                    p => p.Name == propertyInfo.Name);
                             propertyInfo.SetValue(chainComponentAssembly.ChainComponentType,
                                 Convert.ChangeType(componentProperty.Value, propertyInfo.PropertyType),
                                 null);
-                            bubblingObjectComponent.Properties.Add(componentProperty.Name, new Property(componentProperty.Name, componentProperty.Name, propertyInfo, propertyInfo.PropertyType, componentProperty.Value));
-
+                            bubblingObjectComponent.Properties.Add(componentProperty.Name,
+                                new Property(componentProperty.Name, componentProperty.Name, propertyInfo,
+                                    propertyInfo.PropertyType, componentProperty.Value));
                         }
 
-                        PropertyInfo propertyInfosDataContext = chainComponentAssembly.ChainComponentType.GetType().GetProperties().First(p => p.Name == "DataContext");
-                        bubblingObjectComponent.Properties.Add(propertyInfosDataContext.Name, new Property(propertyInfosDataContext.Name, propertyInfosDataContext.Name, propertyInfosDataContext, propertyInfosDataContext.PropertyType, null));
+                        PropertyInfo propertyInfosDataContext =
+                            chainComponentAssembly.ChainComponentType.GetType()
+                                .GetProperties()
+                                .First(p => p.Name == "DataContext");
+                        bubblingObjectComponent.Properties.Add(propertyInfosDataContext.Name,
+                            new Property(propertyInfosDataContext.Name, propertyInfosDataContext.Name,
+                                propertyInfosDataContext, propertyInfosDataContext.PropertyType, null));
 
 
                         Debug.WriteLine(
@@ -1918,23 +1913,19 @@ namespace GrabCaster.Framework.Engine
                 bubblingBag = new BubblingBag();
                 string gcRootConfiguration = ConfigurationBag.Configuration.DirectoryOperativeRootExeName;
                 bubblingBag.contentBubblingFolder =
-                    GrabCaster.Framework.CompressionLibrary.Helpers.CreateFromDirectory(gcRootConfiguration);
+                    CompressionLibrary.Helpers.CreateFromDirectory(gcRootConfiguration);
                 Debug.WriteLine($"Bubbling Data Syncronization Bag prepared.", ConsoleColor.Green);
                 LogEngine.DirectEventViewerLog("Point settings updated.", 4);
-
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                        $"Error in {MethodBase.GetCurrentMethod().Name}",
-                        Constant.LogLevelError,
-                        Constant.TaskCategoriesError,
-                        ex,
-                        Constant.LogLevelWarning);
-
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
+                    Constant.LogLevelWarning);
             }
-           
-    
         }
 
         /// <summary>
@@ -2073,19 +2064,20 @@ namespace GrabCaster.Framework.Engine
                         $"Run single instances {bubblingTriggerConfiguration.Name}",
                         ConsoleColor.Green);
                     ExecuteTriggerConfiguration(bubblingTriggerConfiguration, null);
-                    
+
                     //ExecuteTriggerConfiguration(bubblingTriggerConfiguration, null);
-
-
                 }
             }
         }
 
         public static void ExecuteTriggerConfiguration(BubblingObject bubblingObject, byte[] embeddedContent)
         {
-            ThreadPool.QueueUserWorkItem(new WaitCallback(ExecuteTriggerConfigurationInPool),
-                     new object[] {bubblingObject,
-                        embeddedContent});
+            ThreadPool.QueueUserWorkItem(ExecuteTriggerConfigurationInPool,
+                new object[]
+                {
+                    bubblingObject,
+                    embeddedContent
+                });
         }
 
         /// <summary>
@@ -2100,8 +2092,8 @@ namespace GrabCaster.Framework.Engine
             try
             {
                 object[] callBackParameters = objectState as object[];
-                BubblingObject bubblingObject = (BubblingObject)callBackParameters[0];
-                byte[] embeddedContent = (byte[])callBackParameters[1];
+                BubblingObject bubblingObject = (BubblingObject) callBackParameters[0];
+                byte[] embeddedContent = (byte[]) callBackParameters[1];
 
                 // Set master EventActionContext eccoloqua
                 var eventActionContext = new ActionContext(bubblingObject);
@@ -2110,8 +2102,9 @@ namespace GrabCaster.Framework.Engine
 
                 // In the first execute the main Execute method
                 ITriggerAssembly triggerAssemblyTemp;
-                CacheTriggerComponents.TryGetValue(bubblingObject.IdComponent,out triggerAssemblyTemp);
-                ITriggerType triggerType = Activator.CreateInstance(triggerAssemblyTemp.AssemblyClassType) as ITriggerType;
+                CacheTriggerComponents.TryGetValue(bubblingObject.IdComponent, out triggerAssemblyTemp);
+                ITriggerType triggerType =
+                    Activator.CreateInstance(triggerAssemblyTemp.AssemblyClassType) as ITriggerType;
 
                 triggerType.DataContext = embeddedContent;
                 //todo optimization ma le proprieta' sono gia settate nel refreshbubbling
@@ -2120,7 +2113,14 @@ namespace GrabCaster.Framework.Engine
                 //triggerConfiguration.Properties["DataContext"].Value = embeddedContent;
 
                 //Set assembly properties values
-                IEnumerable<PropertyInfo> propertyInfos = triggerType.GetType().GetProperties().ToList().Where(p => p.GetCustomAttributes(typeof(TriggerPropertyContract), true).Length > 0 && p.Name != "DataContext");
+                IEnumerable<PropertyInfo> propertyInfos =
+                    triggerType.GetType()
+                        .GetProperties()
+                        .ToList()
+                        .Where(
+                            p =>
+                                p.GetCustomAttributes(typeof(TriggerPropertyContract), true).Length > 0 &&
+                                p.Name != "DataContext");
                 foreach (var propertyInfo in propertyInfos)
                 {
                     propertyInfo.SetValue(triggerType,
@@ -2142,7 +2142,6 @@ namespace GrabCaster.Framework.Engine
                         ex,
                         Constant.LogLevelError);
                 }
-               
             }
             catch (Exception ex)
             {
@@ -2166,7 +2165,7 @@ namespace GrabCaster.Framework.Engine
         public static TriggerEmbeddedBag InitializeEmbeddedTrigger(string configurationId, string componeId)
         {
             //todo optimiztion usare un dictionary? metti confid +idcomponent per identificare la chiave
-            var triggerConfiguration = (from trigger in EventsEngine.BubblingTriggerConfigurationsSingleInstance
+            var triggerConfiguration = (from trigger in BubblingTriggerConfigurationsSingleInstance
                 where trigger.IdComponent == componeId && trigger.IdConfiguration == configurationId
                 select trigger).First();
 
@@ -2183,17 +2182,27 @@ namespace GrabCaster.Framework.Engine
 
                 ITriggerAssembly triggerAssemblyTemp;
                 CacheTriggerComponents.TryGetValue(triggerConfiguration.IdComponent, out triggerAssemblyTemp);
-                ITriggerType triggerType = Activator.CreateInstance(triggerAssemblyTemp.AssemblyClassType) as ITriggerType;
+                ITriggerType triggerType =
+                    Activator.CreateInstance(triggerAssemblyTemp.AssemblyClassType) as ITriggerType;
 
                 // Create the object instance
 
-                IEnumerable<PropertyInfo> propertyInfos = triggerType.GetType().GetProperties().ToList().Where(p => p.GetCustomAttributes(typeof(TriggerPropertyContract), true).Length > 0 && p.Name != "DataContext");
+                IEnumerable<PropertyInfo> propertyInfos =
+                    triggerType.GetType()
+                        .GetProperties()
+                        .ToList()
+                        .Where(
+                            p =>
+                                p.GetCustomAttributes(typeof(TriggerPropertyContract), true).Length > 0 &&
+                                p.Name != "DataContext");
                 // Assign all propertyies value trigger to class instance and execute
                 foreach (var propertyInfo in propertyInfos)
                 {
-                    propertyInfo.SetValue(triggerType, Convert.ChangeType(triggerConfiguration.Properties[propertyInfo.Name].Value, propertyInfo.PropertyType),null);
+                    propertyInfo.SetValue(triggerType,
+                        Convert.ChangeType(triggerConfiguration.Properties[propertyInfo.Name].Value,
+                            propertyInfo.PropertyType), null);
                 }
-              
+
                 object[] parameters = {delegateActionTrigger, eventActionContext};
 
                 TriggerEmbeddedBag triggerEmbeddedBag = new TriggerEmbeddedBag();
@@ -2207,9 +2216,6 @@ namespace GrabCaster.Framework.Engine
                 triggerEmbeddedBag.ActionContext = eventActionContext;
 
                 return triggerEmbeddedBag;
-
-
-                
             }
             catch (Exception ex)
             {
@@ -2239,11 +2245,13 @@ namespace GrabCaster.Framework.Engine
                 try
                 {
                     //invoke trigger
-       
-                    triggerEmbeddedBag.ITriggerTypeInstance.DataContext = Serialization.Object.SerializationEngine.ObjectToByteArray(triggerEmbeddedBag.Properties);
 
-                    byte[] ret = triggerEmbeddedBag.ITriggerTypeInstance.Execute(triggerEmbeddedBag.DelegateActionTrigger,
-                        triggerEmbeddedBag.ActionContext);
+                    triggerEmbeddedBag.ITriggerTypeInstance.DataContext =
+                        SerializationEngine.ObjectToByteArray(triggerEmbeddedBag.Properties);
+
+                    byte[] ret =
+                        triggerEmbeddedBag.ITriggerTypeInstance.Execute(triggerEmbeddedBag.DelegateActionTrigger,
+                            triggerEmbeddedBag.ActionContext);
                     return ret;
                 }
                 catch (TargetInvocationException ex)
@@ -2257,7 +2265,6 @@ namespace GrabCaster.Framework.Engine
                         Constant.LogLevelError);
                     return null;
                 }
-
             }
             catch (Exception ex)
             {
@@ -2274,7 +2281,6 @@ namespace GrabCaster.Framework.Engine
 
         public static void SyncAsyncActionReceived(byte[] content)
         {
-
         }
 
 
@@ -2291,7 +2297,8 @@ namespace GrabCaster.Framework.Engine
             {
                 IChainComponentAssembly ChainComponentAssemblyTemp;
                 CacheChainComponents.TryGetValue(IdComponent, out ChainComponentAssemblyTemp);
-                IChainComponentType chainComponentType = Activator.CreateInstance(ChainComponentAssemblyTemp.AssemblyClassType) as IChainComponentType;
+                IChainComponentType chainComponentType =
+                    Activator.CreateInstance(ChainComponentAssemblyTemp.AssemblyClassType) as IChainComponentType;
 
                 var componentConfiguration =
                     ConfigurationJsonComponentList.Find(comp => comp.Component.IdComponent == IdComponent);
@@ -2299,16 +2306,23 @@ namespace GrabCaster.Framework.Engine
                 // Create the object instance
 
 
-                IEnumerable<PropertyInfo> propertyInfos = chainComponentType.GetType().GetProperties().ToList().Where(p => p.GetCustomAttributes(typeof(ComponentPropertyContract), true).Length > 0 && p.Name != "DataContext");
+                IEnumerable<PropertyInfo> propertyInfos =
+                    chainComponentType.GetType()
+                        .GetProperties()
+                        .ToList()
+                        .Where(
+                            p =>
+                                p.GetCustomAttributes(typeof(ComponentPropertyContract), true).Length > 0 &&
+                                p.Name != "DataContext");
                 // Assign all propertyies value trigger to class instance and execute
                 foreach (var propertyInfo in propertyInfos)
                 {
                     var propertyComponent =
                         componentConfiguration.Component.ComponentProperties.First(p => p.Name == propertyInfo.Name);
                     propertyInfo.SetValue(chainComponentType, propertyComponent.Value,
-                                            null);
+                        null);
                 }
-                
+
                 try
                 {
                     return chainComponentType.Execute();
@@ -2361,22 +2375,17 @@ namespace GrabCaster.Framework.Engine
                         return null;
                     }
 
-                    ChainConfiguration chainConfiguration = (ChainConfiguration) bubblingComponentConfiguration;
+                    ChainConfiguration chainConfiguration = bubblingComponentConfiguration;
                     foreach (var component in chainConfiguration.Chain.Components)
                     {
-
                         object newContent = ExecuteComponentConfiguration(component.idComponent, chainContent);
                         chainContent = (byte[]) newContent;
-
-
                     }
                 }
                 return chainContent;
             }
             catch (Exception ex)
             {
-
-
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
                     $"Error in {MethodBase.GetCurrentMethod().Name}",
                     Constant.LogLevelError,
@@ -2384,7 +2393,6 @@ namespace GrabCaster.Framework.Engine
                     ex,
                     Constant.LogLevelError);
                 return null;
-
             }
         }
 
@@ -2393,11 +2401,14 @@ namespace GrabCaster.Framework.Engine
             bool internalCall,
             string senderEndpointId)
         {
-            ThreadPool.QueueUserWorkItem(new WaitCallback(ExecuteEventsInTriggerPool),
-                        new object[] {bubblingObject,
-                        bubblingObject.Events[0],
-                        false,
-                        bubblingObject.SenderPointId});
+            ThreadPool.QueueUserWorkItem(ExecuteEventsInTriggerPool,
+                new object[]
+                {
+                    bubblingObject,
+                    bubblingObject.Events[0],
+                    false,
+                    bubblingObject.SenderPointId
+                });
         }
 
         /// <summary>
@@ -2407,10 +2418,9 @@ namespace GrabCaster.Framework.Engine
         /// <param name="objectState"></param>
         public static void ExecuteEventsInTriggerPool(object objectState)
         {
-
             object[] callBackParameters = objectState as object[];
             BubblingObject bubblingObject = (BubblingObject) callBackParameters[0];
-            Event bubblingObjectEvent = (Event)callBackParameters[1];
+            Event bubblingObjectEvent = (Event) callBackParameters[1];
             bool internalCall = Convert.ToBoolean(callBackParameters[2]);
             string senderEndpointId = Convert.ToString(callBackParameters[3]);
 
@@ -2425,9 +2435,8 @@ namespace GrabCaster.Framework.Engine
 
             try
             {
-
                 // Set master EventActionContext 
-  
+
                 Debug.WriteLine("-!ACTIONS HAS TO BE EXECUTED!-", ConsoleColor.Green);
 
 
@@ -2446,18 +2455,17 @@ namespace GrabCaster.Framework.Engine
                     "BubblingTriggersEventsActive.Count > " + BubblingTriggersEventsActive.Count);
 
 
-
                 Debug.WriteLine("BubblingEvent loop on > " + BubblingTriggersEventsActive.Count);
 
                 // Event
                 Debug.WriteLine("BubblingEvent > " + bubblingObjectEvent.Name);
 
                 IEventAssembly eventAssembly;
-                CacheEventComponents.TryGetValue(bubblingObjectEvent.IdComponent,out eventAssembly);
+                CacheEventComponents.TryGetValue(bubblingObjectEvent.IdComponent, out eventAssembly);
 
                 IEventType eventType = Activator.CreateInstance(eventAssembly.AssemblyClassType) as IEventType;
 
- 
+
                 var eventExecuted = true;
 
                 //If embedded trigger and exist proberties in the dataconext then the properties event will be overrided
@@ -2467,34 +2475,31 @@ namespace GrabCaster.Framework.Engine
 
                     List<Property> properties =
                         (List<Property>)
-                        Serialization.Object.SerializationEngine.ByteArrayToObject(bubblingObject.DataContext);
+                        SerializationEngine.ByteArrayToObject(bubblingObject.DataContext);
                     foreach (var property in properties)
                     {
                         try
                         {
                             var propertyInfoAssembly = eventType.GetType().GetProperty(property.Name);
-                            propertyInfoAssembly.SetValue(eventType, Convert.ChangeType(property.Value, propertyInfoAssembly.PropertyType), null);
-
+                            propertyInfoAssembly.SetValue(eventType,
+                                Convert.ChangeType(property.Value, propertyInfoAssembly.PropertyType), null);
                         }
                         catch (Exception ex)
                         {
-
                             LogEngine.WriteLog(
                                 ConfigurationBag.EngineName,
                                 $"Warning! in {MethodBase.GetCurrentMethod().Name} - Error mapping property {property.Name} with Id Component {bubblingObjectEvent.IdComponent}",
                                 Constant.LogLevelError,
                                 Constant.TaskCategoriesError,
-                                null,
+                                ex,
                                 Constant.LogLevelWarning);
                         }
-
                     }
-
                 }
                 else
                 {
                     eventType.DataContext = bubblingObject.DataContext;
-                    
+
                     //Map the event property
                     //Get configuration file
                     var eventConfiguration =
@@ -2503,34 +2508,47 @@ namespace GrabCaster.Framework.Engine
 
                     if (eventConfiguration.Event.EventProperties != null)
                     {
-                        IEnumerable<PropertyInfo> propertyInfos = eventType.GetType().GetProperties().ToList().Where(p => p.GetCustomAttributes(typeof(EventPropertyContract), true).Length > 0 && p.Name != "DataContext");
+                        IEnumerable<PropertyInfo> propertyInfos =
+                            eventType.GetType()
+                                .GetProperties()
+                                .ToList()
+                                .Where(
+                                    p =>
+                                        p.GetCustomAttributes(typeof(EventPropertyContract), true).Length > 0 &&
+                                        p.Name != "DataContext");
                         //todo optimization vedi se riesci a ottimizzarlo.
                         //problema e' che il dictionary non e' serializzabile, un array?
                         foreach (var propertyInfo in propertyInfos)
                         {
                             propertyInfo.SetValue(eventType,
-                                                Convert.ChangeType(eventConfiguration.Event.CacheEventProperties[propertyInfo.Name].Value, propertyInfo.PropertyType),
-                                                null);
+                                Convert.ChangeType(
+                                    eventConfiguration.Event.CacheEventProperties[propertyInfo.Name].Value,
+                                    propertyInfo.PropertyType),
+                                null);
                         }
-
                     }
                     // Overriding properties?
                     if (bubblingObjectEvent.EventProperties != null)
                     {
-
-                        IEnumerable<PropertyInfo> propertyInfos = eventType.GetType().GetProperties().ToList().Where(p => p.GetCustomAttributes(typeof(EventPropertyContract), true).Length > 0 && p.Name != "DataContext");
+                        IEnumerable<PropertyInfo> propertyInfos =
+                            eventType.GetType()
+                                .GetProperties()
+                                .ToList()
+                                .Where(
+                                    p =>
+                                        p.GetCustomAttributes(typeof(EventPropertyContract), true).Length > 0 &&
+                                        p.Name != "DataContext");
                         //todo optimization vedi se riesci a ottimizzarlo.
                         //problema e' che il dictionary non e' serializzabile, un array?
                         foreach (var propertyInfo in propertyInfos)
                         {
-                            EventProperty eventProperty = bubblingObjectEvent.EventProperties.First(p => p.Name == propertyInfo.Name);
+                            EventProperty eventProperty =
+                                bubblingObjectEvent.EventProperties.First(p => p.Name == propertyInfo.Name);
                             propertyInfo.SetValue(eventType,
-                                                Convert.ChangeType(eventProperty.Value, propertyInfo.PropertyType),
-                                                null);
+                                Convert.ChangeType(eventProperty.Value, propertyInfo.PropertyType),
+                                null);
                         }
-
                     }
-
                 }
                 // Pass Data property to Execute
                 Debug.WriteLine("Invoking > " + eventType);
@@ -2538,9 +2556,6 @@ namespace GrabCaster.Framework.Engine
                 var eventActionContext = new ActionContext(bubblingObject);
                 eventType.Execute(delegateActionEvent, eventActionContext);
 
-                        
-                        
-                
 
                 if (eventExecuted)
                 {
@@ -2556,7 +2571,6 @@ namespace GrabCaster.Framework.Engine
                         null,
                         Constant.LogLevelWarning);
                 }
-                
             }
             catch (Exception ex)
             {
@@ -2587,18 +2601,18 @@ namespace GrabCaster.Framework.Engine
                 eventHubName = ConfigurationBag.Configuration.GroupEventHubsName;
 
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Creating event up stream.", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    null, 
+                    ConfigurationBag.EngineName,
+                    $"Creating event up stream.",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    null,
                     Constant.LogLevelInformation);
 
                 var builder = new ServiceBusConnectionStringBuilder(connectionString)
-                                  {
-                                      TransportType =
-                                          TransportType.Amqp
-                                  };
+                {
+                    TransportType =
+                        TransportType.Amqp
+                };
 
                 HubClient = EventHubClient.CreateFromConnectionString(builder.ToString(), eventHubName);
                 return true;
@@ -2606,11 +2620,11 @@ namespace GrabCaster.Framework.Engine
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
                 return false;
             }
@@ -2642,11 +2656,11 @@ namespace GrabCaster.Framework.Engine
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
             }
         }
@@ -2665,8 +2679,8 @@ namespace GrabCaster.Framework.Engine
             if (Regex.IsMatch(
 
                 // ReSharper disable once AssignNullToNotNullAttribute
-                Path.GetExtension(e.FullPath), 
-                ConfigurationBag.GcEventsFilesExtensions, 
+                Path.GetExtension(e.FullPath),
+                ConfigurationBag.GcEventsFilesExtensions,
                 RegexOptions.IgnoreCase))
             {
                 try

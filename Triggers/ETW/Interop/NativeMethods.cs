@@ -24,6 +24,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace Core.Eventing.Interop
 {
     using System;
@@ -36,14 +37,14 @@ namespace Core.Eventing.Interop
     internal static class NativeMethods
     {
         [DllImport("advapi32.dll", ExactSpelling = true, EntryPoint = "StartTraceW", SetLastError = false,
-            CharSet = CharSet.Unicode)]
+             CharSet = CharSet.Unicode)]
         internal static extern int StartTrace(
             [Out] out ulong sessionHandle,
             [In] [MarshalAs(UnmanagedType.LPWStr)] string sessionName,
             [In] [Out] ref EventTraceProperties eventTraceProperties);
 
         [DllImport("advapi32.dll", ExactSpelling = true, EntryPoint = "QueryTraceW", SetLastError = false,
-            CharSet = CharSet.Unicode)]
+             CharSet = CharSet.Unicode)]
         internal static extern int QueryTrace(
             [In] ulong sessionHandle,
             [In] [MarshalAs(UnmanagedType.LPWStr)] string sessionName,
@@ -79,7 +80,7 @@ namespace Core.Eventing.Interop
             [Out] out EventTraceProperties eventTraceProperties);
 
         [DllImport("advapi32.dll", ExactSpelling = true, EntryPoint = "OpenTraceW", SetLastError = true,
-            CharSet = CharSet.Unicode)]
+             CharSet = CharSet.Unicode)]
         internal static extern ulong /*session handle*/ OpenTrace([In] [Out] ref EventTraceLogfile logfile);
 
         [DllImport("advapi32.dll", ExactSpelling = true, EntryPoint = "ProcessTrace", SetLastError = false)]
@@ -96,7 +97,7 @@ namespace Core.Eventing.Interop
         internal static extern int TdhGetEventInformation(
             [In] ref EventRecord Event,
             [In] uint TdhContextCount,
-            [In] IntPtr TdhContext,
+            [In] IntPtr tdhContext,
             [Out] IntPtr eventInfoPtr,
             [In] [Out] ref int BufferSize);
     }
@@ -134,15 +135,13 @@ namespace Core.Eventing.Interop
     {
         internal int Bias;
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-        internal char[] StandardName;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)] internal char[] StandardName;
 
         internal SystemTime StandardDate;
 
         internal int StandardBias;
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-        internal char[] DaylightName;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)] internal char[] DaylightName;
 
         internal SystemTime DaylightDate;
 
@@ -292,7 +291,7 @@ namespace Core.Eventing.Interop
         HexDump,
 
         WbemSID
-    };
+    }
 
     internal enum TdhOutType : ushort
     {
@@ -364,11 +363,9 @@ namespace Core.Eventing.Interop
     [StructLayout(LayoutKind.Explicit)]
     internal struct WNodeHeader
     {
-        [FieldOffset(0)]
-        internal int BufferSize;
+        [FieldOffset(0)] internal int BufferSize;
 
-        [FieldOffset(4)]
-        internal uint ProviderId;
+        [FieldOffset(4)] internal uint ProviderId;
 
         [StructLayout(LayoutKind.Sequential)]
         internal struct VersionLinkageType
@@ -378,26 +375,19 @@ namespace Core.Eventing.Interop
             internal uint Linkage;
         }
 
-        [FieldOffset(8)]
-        internal ulong HistoricalContext;
+        [FieldOffset(8)] internal ulong HistoricalContext;
 
-        [FieldOffset(8)]
-        internal VersionLinkageType VersionLinkage;
+        [FieldOffset(8)] internal VersionLinkageType VersionLinkage;
 
-        [FieldOffset(16)]
-        internal IntPtr KernelHandle;
+        [FieldOffset(16)] internal IntPtr KernelHandle;
 
-        [FieldOffset(16)]
-        internal long TimeStamp;
+        [FieldOffset(16)] internal long TimeStamp;
 
-        [FieldOffset(24)]
-        internal Guid Guid;
+        [FieldOffset(24)] internal Guid Guid;
 
-        [FieldOffset(40)]
-        internal uint ClientContext;
+        [FieldOffset(40)] internal uint ClientContext;
 
-        [FieldOffset(44)]
-        internal uint Flags;
+        [FieldOffset(44)] internal uint Flags;
     }
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -408,22 +398,22 @@ namespace Core.Eventing.Interop
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         internal EventTraceProperties(bool initialize)
         {
-            this.Internal = new EventTracePropertiesInternal();
-            this.LogFileNameBuffer = null;
-            this.LoggerNameBuffer = null;
+            Internal = new EventTracePropertiesInternal();
+            LogFileNameBuffer = null;
+            LoggerNameBuffer = null;
 
             if (initialize)
             {
                 const uint WNODE_FLAG_TRACED_GUID = 0x00020000;
 
-                this.Internal.Wnode.BufferSize = Marshal.SizeOf(typeof(EventTracePropertiesInternal))
-                                                 + MaxPath * 2 /*unicode*/* 2 /*fields*/;
-                Debug.Assert(this.Internal.Wnode.BufferSize == 1160);
-                this.Internal.Wnode.Flags = WNODE_FLAG_TRACED_GUID;
+                Internal.Wnode.BufferSize = Marshal.SizeOf(typeof(EventTracePropertiesInternal))
+                                            + MaxPath*2 /*unicode*/*2 /*fields*/;
+                Debug.Assert(Internal.Wnode.BufferSize == 1160);
+                Internal.Wnode.Flags = WNODE_FLAG_TRACED_GUID;
 
-                this.Internal.LogFileNameOffset = Marshal.SizeOf(typeof(EventTracePropertiesInternal));
-                Debug.Assert(this.Internal.LogFileNameOffset == 120);
-                this.Internal.LoggerNameOffset = this.Internal.LogFileNameOffset + MaxPath * 2 /*unicode*/;
+                Internal.LogFileNameOffset = Marshal.SizeOf(typeof(EventTracePropertiesInternal));
+                Debug.Assert(Internal.LogFileNameOffset == 120);
+                Internal.LoggerNameOffset = Internal.LogFileNameOffset + MaxPath*2 /*unicode*/;
             }
         }
 
@@ -434,15 +424,15 @@ namespace Core.Eventing.Interop
             uint maxBuffers,
             uint flushTimerSeconds)
         {
-            this.Internal.LogFileMode = logFileMode;
+            Internal.LogFileMode = logFileMode;
 
             // Set the buffer size. BufferSize is in KB.
-            this.Internal.BufferSize = bufferSize;
-            this.Internal.MinimumBuffers = minBuffers;
-            this.Internal.MaximumBuffers = maxBuffers;
+            Internal.BufferSize = bufferSize;
+            Internal.MinimumBuffers = minBuffers;
+            Internal.MaximumBuffers = maxBuffers;
 
             // Number of seconds before timer is flushed.
-            this.Internal.FlushTimer = flushTimerSeconds;
+            Internal.FlushTimer = flushTimerSeconds;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -488,21 +478,17 @@ namespace Core.Eventing.Interop
         private EventTracePropertiesInternal Internal;
 
         // User-defined fields.
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxPath)]
-        private readonly char[] LogFileNameBuffer;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxPath)] private readonly char[] LogFileNameBuffer;
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxPath)]
-        private readonly char[] LoggerNameBuffer;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = MaxPath)] private readonly char[] LoggerNameBuffer;
     }
 
     [StructLayout(LayoutKind.Explicit)]
     internal struct EventPropertyInfo
     {
-        [FieldOffset(0)]
-        internal PropertyFlags Flags;
+        [FieldOffset(0)] internal PropertyFlags Flags;
 
-        [FieldOffset(4)]
-        internal uint NameOffset;
+        [FieldOffset(4)] internal uint NameOffset;
 
         [StructLayout(LayoutKind.Sequential)]
         internal struct NonStructType
@@ -524,20 +510,15 @@ namespace Core.Eventing.Interop
             private readonly uint _Padding;
         }
 
-        [FieldOffset(8)]
-        internal NonStructType NonStructTypeValue;
+        [FieldOffset(8)] internal NonStructType NonStructTypeValue;
 
-        [FieldOffset(8)]
-        internal StructType StructTypeValue;
+        [FieldOffset(8)] internal StructType StructTypeValue;
 
-        [FieldOffset(16)]
-        internal ushort CountPropertyIndex;
+        [FieldOffset(16)] internal ushort CountPropertyIndex;
 
-        [FieldOffset(18)]
-        internal ushort LengthPropertyIndex;
+        [FieldOffset(18)] internal ushort LengthPropertyIndex;
 
-        [FieldOffset(20)]
-        private readonly uint _Reserved;
+        [FieldOffset(20)] private readonly uint _Reserved;
     }
 
     internal enum TemplateFlags
@@ -641,11 +622,9 @@ namespace Core.Eventing.Interop
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     internal struct EventTraceLogfile
     {
-        [MarshalAs(UnmanagedType.LPWStr)]
-        internal string LogFileName;
+        [MarshalAs(UnmanagedType.LPWStr)] internal string LogFileName;
 
-        [MarshalAs(UnmanagedType.LPWStr)]
-        internal string LoggerName;
+        [MarshalAs(UnmanagedType.LPWStr)] internal string LoggerName;
 
         internal long CurrentTime;
 
@@ -665,8 +644,7 @@ namespace Core.Eventing.Interop
 
         internal uint EventsLost;
 
-        [MarshalAs(UnmanagedType.FunctionPtr)]
-        internal EventRecordCallback EventRecordCallback;
+        [MarshalAs(UnmanagedType.FunctionPtr)] internal EventRecordCallback EventRecordCallback;
 
         internal uint IsKernelTrace;
 

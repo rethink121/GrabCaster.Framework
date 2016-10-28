@@ -24,6 +24,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Contracts.Attributes
 {
     using System;
@@ -34,7 +35,6 @@ namespace GrabCaster.Framework.Contracts.Attributes
     /// </summary>
     [DataContract]
     [Serializable]
-
     [AttributeUsage(AttributeTargets.Class)] // Multiuse attribute.
     public class TriggerContract : Attribute
     {
@@ -61,12 +61,12 @@ namespace GrabCaster.Framework.Contracts.Attributes
         /// </param>
         public TriggerContract(string id, string name, string description, bool pollingRequired, bool shared, bool nop)
         {
-            this.Id = id;
-            this.Name = name;
-            this.Description = description;
-            this.Shared = shared;
-            this.PollingRequired = pollingRequired;
-            this.Nop = nop;
+            Id = id;
+            Name = name;
+            Description = description;
+            Shared = shared;
+            PollingRequired = pollingRequired;
+            Nop = nop;
         }
 
         /// <summary>
@@ -125,8 +125,8 @@ namespace GrabCaster.Framework.Contracts.Attributes
         /// </param>
         public TriggerPropertyContract(string name, string description)
         {
-            this.Name = name;
-            this.Description = description;
+            Name = name;
+            Description = description;
         }
 
         /// <summary>
@@ -164,9 +164,9 @@ namespace GrabCaster.Framework.Contracts.Attributes
         /// </param>
         public TriggerActionContract(string id, string name, string description)
         {
-            this.Id = id;
-            this.Name = name;
-            this.Description = description;
+            Id = id;
+            Name = name;
+            Description = description;
         }
 
         /// <summary>

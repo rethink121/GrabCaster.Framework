@@ -24,26 +24,25 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Threading;
+
 using GrabCaster.Framework.Base;
 
 namespace GrabCaster.Framework.PowerShellTrigger
 {
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Triggers;
     using System;
     using System.Diagnostics;
     using System.IO;
     using System.Management.Automation;
     using System.Text;
 
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
-
     /// <summary>
     /// TODO The power shell trigger.
     /// </summary>
-    [TriggerContract("{18BB5E65-23A2-4743-8773-32F039AA3D16}", "PowerShell Trigger", 
-        "Execute a trigger write in Powerhell script", true, true, false)]
+    [TriggerContract("{18BB5E65-23A2-4743-8773-32F039AA3D16}", "PowerShell Trigger",
+         "Execute a trigger write in Powerhell script", true, true, false)]
     public class PowerShellTrigger : ITriggerType
     {
         /// <summary>
@@ -100,7 +99,7 @@ namespace GrabCaster.Framework.PowerShellTrigger
         public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)
         {
             var script = string.Empty;
-            script = this.ScriptFile != string.Empty ? File.ReadAllText(this.ScriptFile) : this.Script;
+            script = ScriptFile != string.Empty ? File.ReadAllText(ScriptFile) : Script;
 
             var powerShellScript = PowerShell.Create();
             powerShellScript.AddScript(script);
@@ -109,7 +108,7 @@ namespace GrabCaster.Framework.PowerShellTrigger
             // {
             // powerShellScript.AddParameter(prop.Key, prop.Value);
             // }
-            powerShellScript.AddParameter("DataContext", this.DataContext);
+            powerShellScript.AddParameter("DataContext", DataContext);
             powerShellScript.Invoke();
             if (powerShellScript.HadErrors)
             {
@@ -127,19 +126,19 @@ namespace GrabCaster.Framework.PowerShellTrigger
             {
                 try
                 {
-                    var po = (PSObject)outVar;
+                    var po = (PSObject) outVar;
                     var logEntry = po.BaseObject as EventLogEntry;
                     if (logEntry != null)
                     {
                         var ev = logEntry;
-                        this.DataContext = EncodingDecoding.EncodingString2Bytes(ev.Message);
+                        DataContext = EncodingDecoding.EncodingString2Bytes(ev.Message);
                     }
                     else
                     {
-                        this.DataContext = EncodingDecoding.EncodingString2Bytes(outVar.ToString());
+                        DataContext = EncodingDecoding.EncodingString2Bytes(outVar.ToString());
                     }
 
-                    if (this.DataContext.Length != 0)
+                    if (DataContext.Length != 0)
                     {
                         actionTrigger(this, context);
                     }
@@ -148,22 +147,22 @@ namespace GrabCaster.Framework.PowerShellTrigger
                 catch
                 {
                     // if multiple pso
-                    var results = (object[])outVar;
+                    var results = (object[]) outVar;
                     foreach (var pos in results)
                     {
-                        var po = (PSObject)pos;
+                        var po = (PSObject) pos;
                         var logEntry = po.BaseObject as EventLogEntry;
                         if (logEntry != null)
                         {
                             var ev = logEntry;
-                            this.DataContext = EncodingDecoding.EncodingString2Bytes(ev.Message);
+                            DataContext = EncodingDecoding.EncodingString2Bytes(ev.Message);
                         }
                         else
                         {
-                            this.DataContext = EncodingDecoding.EncodingString2Bytes(outVar.ToString());
+                            DataContext = EncodingDecoding.EncodingString2Bytes(outVar.ToString());
                         }
 
-                        if (this.DataContext.Length != 0)
+                        if (DataContext.Length != 0)
                         {
                             actionTrigger(this, context);
                         }

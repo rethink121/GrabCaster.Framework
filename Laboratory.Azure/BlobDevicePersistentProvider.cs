@@ -24,28 +24,24 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Library.Azure
 {
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Reflection;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Storage;
+    using Contracts.Attributes;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Blob;
-
-    using Newtonsoft.Json;
+    using System;
+    using System.Reflection;
 
     /// <summary>
     /// Main persistent provider.
     /// </summary>
-    [DevicePersistentProviderContract("{53158DA4-EAEA-4D8A-90C8-81A66F7A0F74}", "DevicePersistentProvider", "Device Persistent Provider for Azure")]
+    [DevicePersistentProviderContract("{53158DA4-EAEA-4D8A-90C8-81A66F7A0F74}", "DevicePersistentProvider",
+         "Device Persistent Provider for Azure")]
     public class BlobDevicePersistentProvider
     {
-        public void PersistEventToStorage(byte[] messageBody, string messageId,string groupEventHubsStorageAccountName,string groupEventHubsStorageAccountKey)
+        public void PersistEventToStorage(byte[] messageBody, string messageId, string groupEventHubsStorageAccountName,
+            string groupEventHubsStorageAccountKey)
         {
             try
             {
@@ -62,7 +58,7 @@ namespace GrabCaster.Framework.Library.Azure
                 // Create the container if it doesn't already exist.
                 container.CreateIfNotExists();
                 container.SetPermissions(
-                    new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
+                    new BlobContainerPermissions {PublicAccess = BlobContainerPublicAccessType.Blob});
 
                 // Create the messageid reference
                 var blockBlob = container.GetBlockBlobReference(messageId);
@@ -75,7 +71,8 @@ namespace GrabCaster.Framework.Library.Azure
             }
         }
 
-        public byte[] PersistEventFromStorage(string messageId, string groupEventHubsStorageAccountName, string groupEventHubsStorageAccountKey)
+        public byte[] PersistEventFromStorage(string messageId, string groupEventHubsStorageAccountName,
+            string groupEventHubsStorageAccountKey)
         {
             try
             {
@@ -92,7 +89,7 @@ namespace GrabCaster.Framework.Library.Azure
                 // Create the container if it doesn't already exist.
                 container.CreateIfNotExists();
                 container.SetPermissions(
-                    new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
+                    new BlobContainerPermissions {PublicAccess = BlobContainerPublicAccessType.Blob});
 
                 // Create the messageid reference
                 var blockBlob = container.GetBlockBlobReference(messageId);

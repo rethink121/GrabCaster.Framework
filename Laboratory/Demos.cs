@@ -24,7 +24,6 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using GrabCaster.Framework.Base;
 
 namespace Laboratory
 {
@@ -43,7 +42,7 @@ namespace Laboratory
         /// </summary>
         public Demos()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         /// <summary>
@@ -57,22 +56,22 @@ namespace Laboratory
         /// </param>
         private void ButtonPowerJsonClick(object sender, EventArgs e)
         {
-            this.labellastrun.Text = string.Empty;
-            var numof = int.Parse(this.textBoxNum.Text);
+            labellastrun.Text = string.Empty;
+            var numof = int.Parse(textBoxNum.Text);
             for (var i = 0; i < numof; i++)
             {
-                if (!EventLog.SourceExists(this.comboBoxsource.Text))
+                if (!EventLog.SourceExists(comboBoxsource.Text))
                 {
-                    EventLog.CreateEventSource(this.comboBoxsource.Text, "Application");
+                    EventLog.CreateEventSource(comboBoxsource.Text, "Application");
                 }
-                string message = $"{Environment.MachineName}: {textBoxMessage.Text} {DateTime.Now.ToString()}";
+                string message = $"{Environment.MachineName}: {textBoxMessage.Text} {DateTime.Now}";
                 EventLog.WriteEntry(
-                    this.comboBoxsource.Text,
+                    comboBoxsource.Text,
                     // ReSharper disable once SpecifyACultureInStringConversionExplicitly
                     message, EventLogEntryType.Error);
             }
 
-            this.labellastrun.Text = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+            labellastrun.Text = DateTime.Now.ToString(CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -86,7 +85,7 @@ namespace Laboratory
         /// </param>
         private void DemosLoad(object sender, EventArgs e)
         {
-            this.comboBoxsource.SelectedIndex = 0;
+            comboBoxsource.SelectedIndex = 0;
         }
 
         /// <summary>

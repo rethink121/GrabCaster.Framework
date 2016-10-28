@@ -24,20 +24,14 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+
 using GrabCaster.Framework.Base;
 using GrabCaster.Framework.Log;
+using System;
+using System.Reflection;
 
 namespace GrabCaster.Framework.Syncronization
 {
-    using System.IO;
-
     using Microsoft.Synchronization;
     using Microsoft.Synchronization.Files;
 
@@ -49,8 +43,6 @@ namespace GrabCaster.Framework.Syncronization
         public static string syncFile = "SyncronizationStatus.gc";
 
 
-
-    
         /// <summary>
         /// Syncronize 2 folders
         /// </summary>
@@ -65,7 +57,7 @@ namespace GrabCaster.Framework.Syncronization
             syncOrchestrator.RemoteProvider = new FileSyncProvider(DestinationFolder);
             syncOrchestrator.Synchronize();
         }
-        
+
 
         //Less than zero t1 is earlier than t2.
         //Zero t1 is the same as t2.
@@ -78,22 +70,19 @@ namespace GrabCaster.Framework.Syncronization
                 {
                     SyncFolders(sourceFolder, restinationFolder);
                 }
-                LogEngine.DirectEventViewerLog("Point syncronization done without errors.",4);
+                LogEngine.DirectEventViewerLog("Point syncronization done without errors.", 4);
                 return true;
             }
             catch (Exception ex)
             {
-
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                              $"Error in {MethodBase.GetCurrentMethod().Name}",
-                              Constant.LogLevelError,
-                              Constant.TaskCategoriesError,
-                              ex,
-                              Constant.LogLevelError);
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
+                    Constant.LogLevelError);
                 return false;
-
             }
-            
         }
     }
 }

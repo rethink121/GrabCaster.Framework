@@ -24,6 +24,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Contracts.Points
 {
     using System;
@@ -50,9 +51,9 @@ namespace GrabCaster.Framework.Contracts.Points
         /// </param>
         public Point(string pointId, string name, string description)
         {
-            this.PointId = pointId;
-            this.Name = name;
-            this.Description = description;
+            PointId = pointId;
+            Name = name;
+            Description = description;
         }
 
         /// <summary>

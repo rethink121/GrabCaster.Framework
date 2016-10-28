@@ -24,6 +24,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Contracts.Attributes
 {
     using System;
@@ -34,16 +35,14 @@ namespace GrabCaster.Framework.Contracts.Attributes
     /// </summary>
     [DataContract]
     [Serializable]
-
     [AttributeUsage(AttributeTargets.Class)] // Multiuse attribute.
     public class ComponentContract : Attribute
     {
-
         public ComponentContract(string id, string name, string description)
         {
-            this.Id = id;
-            this.Name = name;
-            this.Description = description;
+            Id = id;
+            Name = name;
+            Description = description;
         }
 
         /// <summary>
@@ -84,8 +83,8 @@ namespace GrabCaster.Framework.Contracts.Attributes
         /// </param>
         public ComponentPropertyContract(string name, string description)
         {
-            this.Name = name;
-            this.Description = description;
+            Name = name;
+            Description = description;
         }
 
         /// <summary>
@@ -121,9 +120,9 @@ namespace GrabCaster.Framework.Contracts.Attributes
         /// </param>
         public ComponentActionContract(string id, string name, string description)
         {
-            this.Id = id;
-            this.Name = name;
-            this.Description = description;
+            Id = id;
+            Name = name;
+            Description = description;
         }
 
         /// <summary>

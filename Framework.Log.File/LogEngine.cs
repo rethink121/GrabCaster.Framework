@@ -24,13 +24,15 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Log.File
 {
     using Base;
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Log;
+    using Contracts.Attributes;
+    using Contracts.Log;
     using System;
     using System.IO;
+
     /// <summary>
     /// The log engine, simple version.
     /// </summary>
@@ -38,7 +40,8 @@ namespace GrabCaster.Framework.Log.File
     public class LogEngine : ILogEngine
     {
         private string PathFile = "";
-        StreamWriter logFile = null; 
+        StreamWriter logFile;
+
         /// <summary>
         /// Initialize log.
         /// </summary>
@@ -48,7 +51,8 @@ namespace GrabCaster.Framework.Log.File
         public bool InitLog()
         {
             Directory.CreateDirectory(ConfigurationBag.DirectoryLog());
-            PathFile = Path.Combine(ConfigurationBag.DirectoryLog(),$"{DateTime.Now.Month.ToString()}{DateTime.Now.Day.ToString()}{DateTime.Now.Year.ToString()}-{Guid.NewGuid().ToString()}.txt");
+            PathFile = Path.Combine(ConfigurationBag.DirectoryLog(),
+                $"{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Year}-{Guid.NewGuid()}.txt");
             logFile = File.AppendText(PathFile);
             return true;
         }
@@ -69,7 +73,6 @@ namespace GrabCaster.Framework.Log.File
                 logFile.WriteLine($"{DateTime.Now} - {logMessage.Message}");
                 return true;
             }
-
         }
 
         public void Flush()

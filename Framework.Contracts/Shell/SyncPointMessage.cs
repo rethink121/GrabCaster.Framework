@@ -24,14 +24,14 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Contracts.Shell
 {
+    using Points;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.Serialization;
-
-    using GrabCaster.Framework.Contracts.Points;
 
     /// <summary>
     /// The shell item type.
@@ -130,7 +130,8 @@ namespace GrabCaster.Framework.Contracts.Shell
         /// Gets or sets the ip.
         /// </summary>
         [DataMember]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+             Justification = "Reviewed. Suppression is OK here.")]
         public string Ip { get; set; }
 
         /// <summary>

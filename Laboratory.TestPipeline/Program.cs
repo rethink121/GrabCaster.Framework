@@ -24,27 +24,25 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace BTSG.TestPipeline
 {
-  static class Program
-  {
-    /// <summary>
-    /// The main entry point for the application.
-    /// </summary>
-    [STAThread]
-    static void Main(string[] args)
+    static class Program
     {
-      
-      Application.EnableVisualStyles();
-      Application.SetCompatibleTextRenderingDefault(false);
-  
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main(string[] args)
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
-      Application.Run(new mainform(args[0]));
+
+            Application.Run(new mainform(args[0]));
+        }
     }
-  }
 }

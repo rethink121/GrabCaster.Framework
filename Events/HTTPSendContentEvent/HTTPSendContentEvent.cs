@@ -24,25 +24,25 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace HTTPSendContentEvent.Event
 {
     using GrabCaster.Framework.Contracts.Attributes;
     using GrabCaster.Framework.Contracts.Events;
     using GrabCaster.Framework.Contracts.Globals;
-    
-using System.IO;
-using System.Net;
+    using System.IO;
+    using System.Net;
 
 
     /// <summary>
     /// The no operation event.
     /// </summary>
-    [EventContract("{8c87cf14-7a9c-4a62-91b5-d47cd57695d8}", "HTTPSendContentEvent", "HTTPSendContentEvent Event component", true)]
+    [EventContract("{8c87cf14-7a9c-4a62-91b5-d47cd57695d8}", "HTTPSendContentEvent",
+         "HTTPSendContentEvent Event component", true)]
     public class HTTPSendContentEvent : IEventType
     {
-        
-		[EventPropertyContract("url", "url property")]
-		public string url { get; set; }
+        [EventPropertyContract("url", "url property")]
+        public string url { get; set; }
 
         /// <summary>
         /// Gets or sets the context.
@@ -70,13 +70,12 @@ using System.Net;
         /// <param name="context">
         /// The context.
         /// </param>
-        [EventActionContract("{83029d5b-dd61-4184-a884-f3b937ce2da1}", "Main action", "Main action executed by the event")]
+        [EventActionContract("{83029d5b-dd61-4184-a884-f3b937ce2da1}", "Main action",
+             "Main action executed by the event")]
         public byte[] Execute(ActionEvent actionEvent, ActionContext context)
         {
-            
-
             // declare httpwebrequet wrt url defined above
-            HttpWebRequest webrequest = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebRequest webrequest = (HttpWebRequest) WebRequest.Create(url);
             // set method as post
             webrequest.Method = "POST";
             // set content type
@@ -88,14 +87,11 @@ using System.Net;
             newStream.Write(DataContext, 0, DataContext.Length);
             newStream.Close();
             // declare & read response from service
-            HttpWebResponse webresponse = (HttpWebResponse)webrequest.GetResponse();
+            HttpWebResponse webresponse = (HttpWebResponse) webrequest.GetResponse();
 
-       
 
             actionEvent(this, context);
             return null;
         }
-        
-
     }
 }

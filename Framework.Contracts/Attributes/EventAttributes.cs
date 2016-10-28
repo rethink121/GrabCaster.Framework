@@ -24,6 +24,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Contracts.Attributes
 {
     using System;
@@ -52,10 +53,10 @@ namespace GrabCaster.Framework.Contracts.Attributes
         /// </param>
         public EventContract(string id, string name, string description, bool shared)
         {
-            this.Id = id;
-            this.Name = name;
-            this.Description = description;
-            this.Shared = shared;
+            Id = id;
+            Name = name;
+            Description = description;
+            Shared = shared;
         }
 
         /// <summary>
@@ -96,8 +97,8 @@ namespace GrabCaster.Framework.Contracts.Attributes
         /// </param>
         public EventPropertyContract(string name, string description)
         {
-            this.Name = name;
-            this.Description = description;
+            Name = name;
+            Description = description;
         }
 
         /// <summary>
@@ -131,9 +132,9 @@ namespace GrabCaster.Framework.Contracts.Attributes
         /// </param>
         public EventActionContract(string id, string name, string description)
         {
-            this.Id = id;
-            this.Name = name;
-            this.Description = description;
+            Id = id;
+            Name = name;
+            Description = description;
         }
 
         /// <summary>

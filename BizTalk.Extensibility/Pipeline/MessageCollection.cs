@@ -24,30 +24,27 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
 
 using Microsoft.BizTalk.Message.Interop;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace GrabCaster.BizTalk.Extensibility
 {
-   /// <summary>
-   /// Represents a collection of IBaseMessage
-   /// objects
-   /// </summary>
-   public class MessageCollection : Collection<IBaseMessage>
-   {
-      /// <summary>
-      /// Adds multiple messages to this collection
-      /// </summary>
-      /// <param name="list">List of messages to add</param>
-      public void AddRange(IEnumerable<IBaseMessage> list)
-      {
-         foreach ( IBaseMessage msg in list )
-            Add(msg);
-      }
-   } // class MessageCollection
-
+    /// <summary>
+    /// Represents a collection of IBaseMessage
+    /// objects
+    /// </summary>
+    public class MessageCollection : Collection<IBaseMessage>
+    {
+        /// <summary>
+        /// Adds multiple messages to this collection
+        /// </summary>
+        /// <param name="list">List of messages to add</param>
+        public void AddRange(IEnumerable<IBaseMessage> list)
+        {
+            foreach (IBaseMessage msg in list)
+                Add(msg);
+        }
+    } // class MessageCollection
 } // namespace BTSGBizTalkAddins

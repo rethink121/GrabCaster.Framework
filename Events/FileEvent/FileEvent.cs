@@ -24,21 +24,22 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.FileEvent
 {
+    using Contracts.Attributes;
+    using Contracts.Events;
+    using Contracts.Globals;
+    using Contracts.Serialization;
     using System;
     using System.Diagnostics;
     using System.IO;
 
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Serialization;
-
     /// <summary>
     /// The file event.
     /// </summary>
-    [EventContract("{D438C746-5E75-4D59-B595-8300138FB1EA}", "Write File", "Write the content in a file in a specific folder.", true)]
+    [EventContract("{D438C746-5E75-4D59-B595-8300138FB1EA}", "Write File",
+         "Write the content in a file in a specific folder.", true)]
     public class FileEvent : IEventType
     {
         /// <summary>
@@ -62,7 +63,7 @@ namespace GrabCaster.Framework.FileEvent
         /// </summary>
         [EventPropertyContract("DataContext", "Event Default Main Data")]
         public byte[] DataContext { get; set; }
-        
+
         /// <summary>
         /// The execute.
         /// </summary>
@@ -78,8 +79,9 @@ namespace GrabCaster.Framework.FileEvent
             try
             {
                 Debug.WriteLine("In FileEvent Event.");
-                File.WriteAllBytes(this.OutputDirectory + Guid.NewGuid() + ".txt", this.DataContext == null?new byte[0]: this.DataContext);
-                this.DataContext = Serialization.ObjectToByteArray(true);
+                File.WriteAllBytes(OutputDirectory + Guid.NewGuid() + ".txt",
+                    DataContext == null ? new byte[0] : DataContext);
+                DataContext = Serialization.ObjectToByteArray(true);
                 actionEvent(this, context);
                 return null;
             }

@@ -24,8 +24,10 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.ETW
 {
+    using Core.Eventing.Interop;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -33,8 +35,6 @@ namespace GrabCaster.Framework.ETW
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
     using System.Threading;
-
-    using Core.Eventing.Interop;
 
     /// <summary>
     /// The trace level.
@@ -70,59 +70,60 @@ namespace GrabCaster.Framework.ETW
     /// <summary>
     /// The event trace watcher.
     /// </summary>
-    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1404:CodeAnalysisSuppressionMustHaveJustification", Justification = "Reviewed. Suppression is OK here.")]
+    [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1404:CodeAnalysisSuppressionMustHaveJustification",
+         Justification = "Reviewed. Suppression is OK here.")]
     public sealed class EventTraceWatcher : IDisposable
     {
         /// <summary>
         /// The logger name.
         /// </summary>
-        private readonly string loggerName;
+        private readonly string _loggerName;
 
         /// <summary>
         /// The async result.
         /// </summary>
-        private IAsyncResult asyncResult;
+        private IAsyncResult _asyncResult;
 
         /// <summary>
         /// The enabled.
         /// </summary>
-        private bool enabled;
+        private bool _enabled;
 
         /// <summary>
         /// The event provider id.
         /// </summary>
-        private Guid eventProviderId;
+        private Guid _eventProviderId;
 
         /// <summary>
         /// The event trace properties.
         /// </summary>
-        private EventTraceProperties eventTraceProperties;
+        private EventTraceProperties _eventTraceProperties;
 
         /// <summary>
         /// The log file.
         /// </summary>
-        private EventTraceLogfile logFile;
+        private EventTraceLogfile _logFile;
 
         /// <summary>
         /// The process events delgate.
         /// </summary>
-        private ProcessTraceDelegate processEventsDelgate;
+        private ProcessTraceDelegate _processEventsDelgate;
 
         /// <summary>
         /// The session handle.
         /// </summary>
-        private SessionSafeHandle sessionHandle;
+        private SessionSafeHandle _sessionHandle;
 
         /// <summary>
         /// The trace event info cache.
         /// </summary>
-        private SortedList<byte, TraceEventInfoWrapper> traceEventInfoCache =
+        private SortedList<byte, TraceEventInfoWrapper> _traceEventInfoCache =
             new SortedList<byte /*opcode*/, TraceEventInfoWrapper>();
 
         /// <summary>
         /// The trace handle.
         /// </summary>
-        private TraceSafeHandle traceHandle;
+        private TraceSafeHandle _traceHandle;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EventTraceWatcher"/> class.
@@ -135,8 +136,8 @@ namespace GrabCaster.Framework.ETW
         /// </param>
         public EventTraceWatcher(string loggerName, Guid eventProviderId)
         {
-            this.loggerName = loggerName;
-            this.eventProviderId = eventProviderId;
+            this._loggerName = loggerName;
+            this._eventProviderId = eventProviderId;
         }
 
         /// <summary>
@@ -154,7 +155,7 @@ namespace GrabCaster.Framework.ETW
         /// </summary>
         public void Dispose()
         {
-            this.Cleanup();
+            Cleanup();
             GC.SuppressFinalize(this);
         }
 
@@ -163,7 +164,7 @@ namespace GrabCaster.Framework.ETW
         /// </summary>
         ~EventTraceWatcher()
         {
-            this.Cleanup();
+            Cleanup();
         }
 
         /// <summary>
@@ -176,13 +177,13 @@ namespace GrabCaster.Framework.ETW
         /// </summary>
         private void Cleanup()
         {
-            this.SetEnabled(false);
-            foreach (var value in this.traceEventInfoCache.Values)
+            SetEnabled(false);
+            foreach (var value in _traceEventInfoCache.Values)
             {
                 value.Dispose();
             }
 
-            this.traceEventInfoCache = null;
+            _traceEventInfoCache = null;
         }
 
         /// <summary>
@@ -201,17 +202,17 @@ namespace GrabCaster.Framework.ETW
             var shouldDispose = false;
 
             // Find the event information (schema).
-            var index = this.traceEventInfoCache.IndexOfKey(eventOpcode);
+            var index = _traceEventInfoCache.IndexOfKey(eventOpcode);
             if (index >= 0)
             {
-                traceEventInfo = this.traceEventInfoCache.Values[index];
+                traceEventInfo = _traceEventInfoCache.Values[index];
             }
             else
             {
                 traceEventInfo = new TraceEventInfoWrapper(eventRecord);
                 try
                 {
-                    this.traceEventInfoCache.Add(eventOpcode, traceEventInfo);
+                    _traceEventInfoCache.Add(eventOpcode, traceEventInfo);
                 }
                 catch (ArgumentException)
                 {
@@ -242,10 +243,10 @@ namespace GrabCaster.Framework.ETW
         /// </param>
         private void EventRecordCallback([In] ref EventRecord eventRecord)
         {
-            var eventArrived = this.EventArrived;
+            var eventArrived = EventArrived;
             if (eventArrived != null)
             {
-                var e = this.CreateEventArgsFromEventRecord(eventRecord);
+                var e = CreateEventArgsFromEventRecord(eventRecord);
                 eventArrived(this, e);
             }
         }
@@ -261,8 +262,8 @@ namespace GrabCaster.Framework.ETW
         private bool LoadExistingEventTraceProperties()
         {
             const int ErrorWmiInstanceNotFound = 4201;
-            this.eventTraceProperties = new EventTraceProperties(true);
-            var status = NativeMethods.QueryTrace(0, this.loggerName, ref this.eventTraceProperties);
+            _eventTraceProperties = new EventTraceProperties(true);
+            var status = NativeMethods.QueryTrace(0, _loggerName, ref _eventTraceProperties);
             if (status == 0)
             {
                 return true;
@@ -289,7 +290,7 @@ namespace GrabCaster.Framework.ETW
         private void ProcessTraceInBackground(TraceSafeHandle traceInternalHandle)
         {
             Exception asyncException = null;
-            ulong[] array = { traceInternalHandle.UnsafeValue };
+            ulong[] array = {traceInternalHandle.UnsafeValue};
 
             try
             {
@@ -316,7 +317,7 @@ namespace GrabCaster.Framework.ETW
             }
 
             // Send exception to subscribers.
-            var eventArrived = this.EventArrived;
+            var eventArrived = EventArrived;
             if (asyncException != null && eventArrived != null)
             {
                 try
@@ -346,23 +347,21 @@ namespace GrabCaster.Framework.ETW
         /// </param>
         private void SetEnabled(bool value)
         {
-
-            if (this.enabled == value)
+            if (_enabled == value)
             {
                 return;
             }
 
             if (value)
             {
-                this.StartTracing();
+                StartTracing();
             }
             else
             {
-                this.StopTracing();
+                StopTracing();
             }
 
-            this.enabled = value;
-            
+            _enabled = value;
         }
 
         /// <summary>
@@ -370,7 +369,7 @@ namespace GrabCaster.Framework.ETW
         /// </summary>
         public void Start()
         {
-            this.SetEnabled(true);
+            SetEnabled(true);
         }
 
         /// <summary>
@@ -389,45 +388,45 @@ namespace GrabCaster.Framework.ETW
             const uint FlushTimerSeconds = 1;
             int status;
 
-            if (!this.LoadExistingEventTraceProperties())
+            if (!LoadExistingEventTraceProperties())
             {
-                this.eventTraceProperties.SetParameters(RealTime, BufferSize, MinBuffers, MaxBuffers, FlushTimerSeconds);
+                _eventTraceProperties.SetParameters(RealTime, BufferSize, MinBuffers, MaxBuffers, FlushTimerSeconds);
 
                 // Start trace session
                 ulong unsafeSessionHandle;
                 status = NativeMethods.StartTrace(
                     out unsafeSessionHandle,
-                    this.loggerName,
-                    ref this.eventTraceProperties);
+                    _loggerName,
+                    ref _eventTraceProperties);
                 if (status != 0)
                 {
                     throw new Win32Exception(status);
                 }
 
-                this.sessionHandle = new SessionSafeHandle(unsafeSessionHandle, this.loggerName);
+                _sessionHandle = new SessionSafeHandle(unsafeSessionHandle, _loggerName);
 
                 var emptyGuid = Guid.Empty;
 
                 var windows7Version = new Version(6, 1, 7600);
                 if (Environment.OSVersion.Version.CompareTo(windows7Version) >= 0)
                 {
-                    const int TimeToWaitForInitialize = 10 * 1000;
+                    const int TimeToWaitForInitialize = 10*1000;
                     var enableParameters = new EnableTraceParameters
-                                               {
-                                                   Version = 1,
-                                                   EnableProperty = EventEnableProperty.Sid
-                                               };
+                    {
+                        Version = 1,
+                        EnableProperty = EventEnableProperty.Sid
+                    };
 
                     // ENABLE_TRACE_PARAMETERS_VERSION
                     status = NativeMethods.EnableTraceEx2(
                         unsafeSessionHandle,
-                        ref this.eventProviderId,
+                        ref _eventProviderId,
                         1,
 
 
                         // controlCode - EVENT_CONTROL_CODE_ENABLE_PROVIDER
-                        (byte)this.Level,
-                        this.MatchAnyKeyword,
+                        (byte) Level,
+                        MatchAnyKeyword,
                         0,
                         // matchAnyKeyword
                         TimeToWaitForInitialize,
@@ -436,14 +435,14 @@ namespace GrabCaster.Framework.ETW
                 else
                 {
                     status = NativeMethods.EnableTraceEx(
-                        ref this.eventProviderId,
+                        ref _eventProviderId,
                         ref emptyGuid,
                         // sourceId
                         unsafeSessionHandle,
                         1,
                         // isEnabled
-                        (byte)this.Level,
-                        this.MatchAnyKeyword,
+                        (byte) Level,
+                        MatchAnyKeyword,
                         0,
                         // matchAllKeywords
                         EventEnableProperty.Sid,
@@ -455,24 +454,24 @@ namespace GrabCaster.Framework.ETW
                 }
             }
 
-            this.logFile = new EventTraceLogfile
-                               {
-                                   LoggerName = this.loggerName,
-                                   EventRecordCallback = this.EventRecordCallback,
-                                   ProcessTraceMode = EventRecord | RealTime
-                               };
+            _logFile = new EventTraceLogfile
+            {
+                LoggerName = _loggerName,
+                EventRecordCallback = EventRecordCallback,
+                ProcessTraceMode = EventRecord | RealTime
+            };
 
-            var unsafeTraceHandle = NativeMethods.OpenTrace(ref this.logFile);
+            var unsafeTraceHandle = NativeMethods.OpenTrace(ref _logFile);
             status = Marshal.GetLastWin32Error();
             if (status != 0)
             {
                 throw new Win32Exception(status);
             }
 
-            this.traceHandle = new TraceSafeHandle(unsafeTraceHandle);
+            _traceHandle = new TraceSafeHandle(unsafeTraceHandle);
 
-            this.processEventsDelgate = this.ProcessTraceInBackground;
-            this.asyncResult = this.processEventsDelgate.BeginInvoke(this.traceHandle, null, this.processEventsDelgate);
+            _processEventsDelgate = ProcessTraceInBackground;
+            _asyncResult = _processEventsDelgate.BeginInvoke(_traceHandle, null, _processEventsDelgate);
         }
 
         /// <summary>
@@ -480,7 +479,7 @@ namespace GrabCaster.Framework.ETW
         /// </summary>
         public void Stop()
         {
-            this.SetEnabled(false);
+            SetEnabled(false);
         }
 
         /// <summary>
@@ -489,23 +488,23 @@ namespace GrabCaster.Framework.ETW
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         private void StopTracing()
         {
-            if (this.traceHandle != null)
+            if (_traceHandle != null)
             {
-                this.traceHandle.Dispose();
-                this.traceHandle = null;
+                _traceHandle.Dispose();
+                _traceHandle = null;
             }
 
-            if (this.sessionHandle != null)
+            if (_sessionHandle != null)
             {
-                this.sessionHandle.Dispose();
-                this.sessionHandle = null;
+                _sessionHandle.Dispose();
+                _sessionHandle = null;
             }
 
             // Once the unmanaged resources got released, end the process trace thread
             // that may throw exception (e.g. OOM).
-            if (this.processEventsDelgate != null && this.asyncResult != null)
+            if (_processEventsDelgate != null && _asyncResult != null)
             {
-                this.processEventsDelgate.EndInvoke(this.asyncResult);
+                _processEventsDelgate.EndInvoke(_asyncResult);
             }
         }
 
@@ -532,42 +531,42 @@ namespace GrabCaster.Framework.ETW
             public TraceSafeHandle(ulong handle)
                 : base(IntPtr.Zero, true)
             {
-                this.UnsafeValue = handle;
+                UnsafeValue = handle;
             }
 
             /// <summary>
             /// Gets a value indicating whether is invalid.
             /// </summary>
-            public override bool IsInvalid => this.UnsafeValue == 0;
+            public override bool IsInvalid => UnsafeValue == 0;
 
             internal ulong UnsafeValue { get; }
 
             protected override bool ReleaseHandle()
             {
-                return NativeMethods.CloseTrace(this.UnsafeValue) != 0;
+                return NativeMethods.CloseTrace(UnsafeValue) != 0;
             }
         }
 
         private sealed class SessionSafeHandle : SafeHandle
         {
-            private readonly string loggerName;
+            private readonly string _loggerName;
 
-            private readonly ulong sessionHandle;
+            private readonly ulong _sessionHandle;
 
             [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
             public SessionSafeHandle(ulong sessionHandle, string loggerName)
                 : base(IntPtr.Zero, true)
             {
-                this.sessionHandle = sessionHandle;
-                this.loggerName = loggerName;
+                _sessionHandle = sessionHandle;
+                _loggerName = loggerName;
             }
 
-            public override bool IsInvalid => this.sessionHandle == 0;
+            public override bool IsInvalid => _sessionHandle == 0;
 
             protected override bool ReleaseHandle()
             {
-                var properties = new EventTraceProperties(true /*initialize*/);
-                return NativeMethods.StopTrace(this.sessionHandle, this.loggerName, out properties /*as statistics*/)
+                EventTraceProperties properties;
+                return NativeMethods.StopTrace(_sessionHandle, _loggerName, out properties /*as statistics*/)
                        != 0;
             }
         }

@@ -24,17 +24,16 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.NTService
 {
+    using Base;
+    using Log;
     using System;
     using System.Collections;
     using System.Configuration.Install;
-    using System.Diagnostics;
     using System.Reflection;
     using System.ServiceProcess;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Log;
 
     /// <summary>
     /// Contains helper methods to start, stop and (un)install service.
@@ -63,13 +62,14 @@ namespace GrabCaster.Framework.NTService
                 {
                     return false;
                 }
- // try/catch
+                // try/catch
 
                 return true;
             }
- // using
+            // using
         }
- // IsInstalled
+
+        // IsInstalled
 
         /// <summary>
         /// Determines whether the Windows Service is running.
@@ -83,13 +83,14 @@ namespace GrabCaster.Framework.NTService
                 {
                     return false;
                 }
- // if
+                // if
 
                 return controller.Status == ServiceControllerStatus.Running;
             }
- // using
+            // using
         }
- // IsRunning
+
+        // IsRunning
 
         /// <summary>
         /// Creates an <see cref="AssemblyInstaller"/> object to perform the service installation.
@@ -98,14 +99,15 @@ namespace GrabCaster.Framework.NTService
         public static AssemblyInstaller GetInstaller()
         {
             var installer = new AssemblyInstaller(typeof(NTWindowsService).Assembly, null)
-                                              {
-                                                  UseNewContext
-                                                      = true
-                                              };
+            {
+                UseNewContext
+                    = true
+            };
 
             return installer;
         }
- // GetInstaller
+
+        // GetInstaller
 
         /// <summary>
         /// Installs the Windows Service.
@@ -115,17 +117,17 @@ namespace GrabCaster.Framework.NTService
             if (IsInstalled())
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"NT Service instance {ServiceName} is already installed.", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesConsole, 
-                    null, 
+                    ConfigurationBag.EngineName,
+                    $"NT Service instance {ServiceName} is already installed.",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesConsole,
+                    null,
                     Constant.LogLevelInformation);
                 Console.ReadLine();
 
                 return;
             }
- // if
+            // if
 
             using (var installer = GetInstaller())
             {
@@ -136,11 +138,11 @@ namespace GrabCaster.Framework.NTService
                     installer.Commit(state);
 
                     LogEngine.WriteLog(
-                        ConfigurationBag.EngineName, 
-                        $"NT Service instance {ServiceName} installation completed.", 
-                        Constant.LogLevelError, 
-                        Constant.TaskCategoriesConsole, 
-                        null, 
+                        ConfigurationBag.EngineName,
+                        $"NT Service instance {ServiceName} installation completed.",
+                        Constant.LogLevelError,
+                        Constant.TaskCategoriesConsole,
+                        null,
                         Constant.LogLevelInformation);
                     Console.ReadLine();
                 }
@@ -160,7 +162,8 @@ namespace GrabCaster.Framework.NTService
                 }
             }
         }
- // InstallService
+
+        // InstallService
 
         /// <summary>
         /// Uninstalls the Windows Service.
@@ -170,34 +173,35 @@ namespace GrabCaster.Framework.NTService
             if (!IsInstalled())
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"NT Service instance {ServiceName} is not installed.", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesConsole, 
-                    null, 
+                    ConfigurationBag.EngineName,
+                    $"NT Service instance {ServiceName} is not installed.",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesConsole,
+                    null,
                     Constant.LogLevelWarning);
                 Console.ReadLine();
 
                 return;
             }
- // if
+            // if
 
             using (var installer = GetInstaller())
             {
                 IDictionary state = new Hashtable();
                 installer.Uninstall(state);
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Service {ServiceName} Uninstallation completed.", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesConsole, 
-                    null, 
+                    ConfigurationBag.EngineName,
+                    $"Service {ServiceName} Uninstallation completed.",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesConsole,
+                    null,
                     Constant.LogLevelInformation);
                 Console.ReadLine();
             }
- // using
+            // using
         }
- // UninstallService
+
+        // UninstallService
 
         /// <summary>
         /// Starts the Windows Service.
@@ -207,39 +211,40 @@ namespace GrabCaster.Framework.NTService
             if (!IsInstalled())
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"NT Service instance {ServiceName} is not installed.", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesConsole, 
-                    null, 
+                    ConfigurationBag.EngineName,
+                    $"NT Service instance {ServiceName} is not installed.",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesConsole,
+                    null,
                     Constant.LogLevelWarning);
                 Console.ReadLine();
 
                 return;
             }
- // if
+            // if
 
             try
             {
-                ServiceBase[] servicesToRun = { new NTWindowsService() };
+                ServiceBase[] servicesToRun = {new NTWindowsService()};
                 ServiceBase.Run(servicesToRun);
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    "Error in " + MethodBase.GetCurrentMethod().Name, 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesConsole, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    "Error in " + MethodBase.GetCurrentMethod().Name,
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesConsole,
+                    ex,
                     Constant.LogLevelError);
                 Console.ReadLine();
 
                 throw;
             }
- // try/catch
+            // try/catch
         }
- // StartService
+
+        // StartService
 
         /// <summary>
         /// Stops the Windows Service.
@@ -260,25 +265,26 @@ namespace GrabCaster.Framework.NTService
                         controller.Stop();
                         controller.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(10));
                     }
- // if
+                    // if
                 }
                 catch (Exception ex)
                 {
                     LogEngine.WriteLog(
-                        ConfigurationBag.EngineName, 
-                        "Error in " + MethodBase.GetCurrentMethod().Name, 
-                        Constant.LogLevelError, 
-                        Constant.TaskCategoriesConsole, 
-                        ex, 
+                        ConfigurationBag.EngineName,
+                        "Error in " + MethodBase.GetCurrentMethod().Name,
+                        Constant.LogLevelError,
+                        Constant.TaskCategoriesConsole,
+                        ex,
                         Constant.LogLevelError);
                     Console.ReadLine();
 
                     throw;
                 }
- // try/catch
+                // try/catch
             }
- // usnig
+            // usnig
         }
- // StopService
+
+        // StopService
     } // NTService
 } // namespace

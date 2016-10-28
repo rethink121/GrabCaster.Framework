@@ -24,37 +24,32 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Threading;
-using System.Threading.Tasks;
+
 using GrabCaster.Framework.Contracts.Storage;
 
 namespace GrabCaster.Framework.Engine.OnRamp
 {
+    using Base;
+    using Contracts.Attributes;
+    using Contracts.Bubbling;
+    using Engine;
+    using Log;
+    using OffRamp;
+    using Serialization.Object;
     using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Text;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Bubbling;
-    using GrabCaster.Framework.Contracts.Messaging;
-    using GrabCaster.Framework.Engine;
-    using GrabCaster.Framework.Engine.OffRamp;
-    using GrabCaster.Framework.Log;
-    using GrabCaster.Framework.Serialization.Object;
-    using GrabCaster.Framework.Storage;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Engine main message ingestor
     /// </summary>
     public static class MessageIngestor
     {
-        public delegate void SetConsoleActionEventEmbedded(string DestinationConsolePointId, IBubblingObject bubblingObject);
+        public delegate void SetConsoleActionEventEmbedded(
+            string DestinationConsolePointId, IBubblingObject bubblingObject);
+
         /// <summary>
         /// Used internally by the embedded
         /// </summary>
@@ -64,37 +59,34 @@ namespace GrabCaster.Framework.Engine.OnRamp
         private static bool secondaryPersistProviderEnabled;
         private static int secondaryPersistProviderByteSize;
         private static IDevicePersistentProvider DevicePersistentProvider;
-        private static readonly object[] ParametersPersistEventFromBlob = { null };
+        private static readonly object[] ParametersPersistEventFromBlob = {null};
 
         public static void InitSecondaryPersistProvider()
         {
             try
             {
-
                 secondaryPersistProviderEnabled = ConfigurationBag.Configuration.SecondaryPersistProviderEnabled;
                 secondaryPersistProviderByteSize = ConfigurationBag.Configuration.SecondaryPersistProviderByteSize;
 
                 // Load the abrstracte persistent provider
                 var devicePersistentProviderComponent = Path.Combine(
-                                    ConfigurationBag.Configuration.DirectoryOperativeRootExeName,
-                                    ConfigurationBag.Configuration.PersistentProviderComponent);
+                    ConfigurationBag.Configuration.DirectoryOperativeRootExeName,
+                    ConfigurationBag.Configuration.PersistentProviderComponent);
 
                 // Create the reflection method cached 
                 var assemblyPersist = Assembly.LoadFrom(devicePersistentProviderComponent);
 
                 // Main class logging
                 var assemblyClassDpp = (from t in assemblyPersist.GetTypes()
-                                        let attributes = t.GetCustomAttributes(typeof(DevicePersistentProviderContract), true)
-                                        where t.IsClass && attributes != null && attributes.Length > 0
-                                        select t).First();
+                    let attributes = t.GetCustomAttributes(typeof(DevicePersistentProviderContract), true)
+                    where t.IsClass && attributes != null && attributes.Length > 0
+                    select t).First();
 
 
                 DevicePersistentProvider = Activator.CreateInstance(assemblyClassDpp) as IDevicePersistentProvider;
-
             }
             catch (Exception ex)
             {
-
                 LogEngine.WriteLog(
                     ConfigurationBag.EngineName,
                     $"Error in {MethodBase.GetCurrentMethod().Name}",
@@ -104,31 +96,28 @@ namespace GrabCaster.Framework.Engine.OnRamp
                     Constant.LogLevelError);
             }
         }
+
         public static void IngestMessagge(BubblingObject bubblingObject)
         {
-
-
-       
             try
             {
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                                    $"IngestMessagge bubblingObject.SenderChannelId {bubblingObject.SenderChannelId } " +
-                                    $"bubblingObject.SenderPointId {bubblingObject.SenderPointId} " +
-                                    $"bubblingObject.DestinationChannelId {bubblingObject.DestinationChannelId} " +
-                                    $" bubblingObject.DestinationPointId {bubblingObject.DestinationPointId} " +
-                                    $"bubblingObject.MessageType {bubblingObject.MessageType}" +
-                                    $"bubblingObject.Persisting {bubblingObject.Persisting} " +
-                                    $"bubblingObject.MessageId {bubblingObject.MessageId} " +
-                                    $"bubblingObject.Name {bubblingObject.Name}",
-                                    Constant.LogLevelError,
-                                    Constant.TaskCategoriesConsole,
-                                    null,
-                                    Constant.LogLevelVerbose);
-                
+                    $"IngestMessagge bubblingObject.SenderChannelId {bubblingObject.SenderChannelId} " +
+                    $"bubblingObject.SenderPointId {bubblingObject.SenderPointId} " +
+                    $"bubblingObject.DestinationChannelId {bubblingObject.DestinationChannelId} " +
+                    $" bubblingObject.DestinationPointId {bubblingObject.DestinationPointId} " +
+                    $"bubblingObject.MessageType {bubblingObject.MessageType}" +
+                    $"bubblingObject.Persisting {bubblingObject.Persisting} " +
+                    $"bubblingObject.MessageId {bubblingObject.MessageId} " +
+                    $"bubblingObject.Name {bubblingObject.Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesConsole,
+                    null,
+                    Constant.LogLevelVerbose);
+
                 //If local event then execute
                 if (bubblingObject.LocalEvent)
                 {
-
                     //new Task(() =>
                     //{
                     //    EventsEngine.ExecuteEventsInTrigger(
@@ -139,10 +128,10 @@ namespace GrabCaster.Framework.Engine.OnRamp
 
                     //}).Start();
                     EventsEngine.ExecuteEventsInTrigger(
-                       bubblingObject,
-                       bubblingObject.Events[0],
-                       false,
-                       bubblingObject.SenderPointId);
+                        bubblingObject,
+                        bubblingObject.Events[0],
+                        false,
+                        bubblingObject.SenderPointId);
                     return;
                 }
 
@@ -170,10 +159,10 @@ namespace GrabCaster.Framework.Engine.OnRamp
                     // **************************** HA AREA *************************
 
 
-                    if (bubblingObject.MessageType == "HA" && bubblingObject.HAGroup == ConfigurationBag.Configuration.HAGroup &&
-                            EventsEngine.HAEnabled)
+                    if (bubblingObject.MessageType == "HA" &&
+                        bubblingObject.HAGroup == ConfigurationBag.Configuration.HAGroup &&
+                        EventsEngine.HAEnabled)
                     {
-
                         //If HA group member and HA 
 
                         EventsEngine.HAPoints[EventsEngine.HAPointTickId] = DateTime.Now;
@@ -201,14 +190,10 @@ namespace GrabCaster.Framework.Engine.OnRamp
 
                         bubblingObject.MessageType = "HA";
                         OffRampEngineSending.SendMessageOffRamp(bubblingObjectToSync,
-                                                                "HA",
-                                                                bubblingObject.SenderChannelId,
-                                                                bubblingObject.SenderPointId,
-                                                                string.Empty);
-
-
-
-
+                            "HA",
+                            bubblingObject.SenderChannelId,
+                            bubblingObject.SenderPointId,
+                            string.Empty);
                     }
                     else
                     {
@@ -218,11 +203,14 @@ namespace GrabCaster.Framework.Engine.OnRamp
                 // ****************************GET FROM STORAGE IF REQUIRED*************************
                 if (bubblingObject.Persisting)
                 {
-                    bubblingObject = (BubblingObject)SerializationEngine.ByteArrayToObject(DevicePersistentProvider.PersistEventFromStorage(bubblingObject.MessageId));
+                    bubblingObject =
+                        (BubblingObject)
+                        SerializationEngine.ByteArrayToObject(
+                            DevicePersistentProvider.PersistEventFromStorage(bubblingObject.MessageId));
                 }
 
-
                 #region EVENT
+
                 // ****************************IF EVENT TYPE*************************
                 if (bubblingObject.MessageType == "Event")
                 {
@@ -237,15 +225,15 @@ namespace GrabCaster.Framework.Engine.OnRamp
                             return;
                         }
                     }
-                        //Check if is Syncronouse response
+                    //Check if is Syncronouse response
                     if (bubblingObject.SyncronousFromEvent &&
-                    bubblingObject.SenderPointId == ConfigurationBag.Configuration.PointId)
+                        bubblingObject.SenderPointId == ConfigurationBag.Configuration.PointId)
                     {
                         //Yes it's a syncronous response from my request from this pointid
                         //Execute the delegate and exit
                         var propDataContext = bubblingObject.DataContext;
                         bubblingObject.SyncronousFromEvent = false;
-                        EventsEngine.SyncAsyncEventsExecuteDelegate(bubblingObject.SyncronousToken,(byte[]) propDataContext);
+                        EventsEngine.SyncAsyncEventsExecuteDelegate(bubblingObject.SyncronousToken, propDataContext);
                         bubblingObject.SenderPointId = "";
                         bubblingObject.SyncronousToken = "";
                         return;
@@ -262,10 +250,7 @@ namespace GrabCaster.Framework.Engine.OnRamp
 
                 #endregion
 
-
                 #region CONSOLE
-
-
 
                 // **************************** SYNC AREA *************************
 
@@ -273,50 +258,42 @@ namespace GrabCaster.Framework.Engine.OnRamp
                 //Receive a package folder to syncronize him self
                 if (bubblingObject.MessageType == "SyncPull")
                 {
-                    byte[] content = GrabCaster.Framework.CompressionLibrary.Helpers.CreateFromDirectory(ConfigurationBag.Configuration.DirectoryOperativeRootExeName);
+                    byte[] content =
+                        CompressionLibrary.Helpers.CreateFromDirectory(
+                            ConfigurationBag.Configuration.DirectoryOperativeRootExeName);
 
                     BubblingObject bubblingObjectToSync = new BubblingObject(content);
                     bubblingObject.MessageType = "SyncPush";
                     OffRampEngineSending.SendMessageOffRamp(bubblingObjectToSync,
-                                                            "SyncPush",
-                                                            bubblingObject.SenderChannelId,
-                                                            bubblingObject.SenderPointId,
-                                                            string.Empty);
-
-
-
-
+                        "SyncPush",
+                        bubblingObject.SenderChannelId,
+                        bubblingObject.SenderPointId,
+                        string.Empty);
                 }
                 //Receive the request to send the bubbling
                 if (bubblingObject.MessageType == "SyncPush")
                 {
-                    LogEngine.DirectEventViewerLog($"Received a syncronization package from channel ID {bubblingObject.SenderChannelId} and point ID {bubblingObject.SenderChannelId}\rAutoSyncronizationEnabled parameter = {ConfigurationBag.Configuration.AutoSyncronizationEnabled}",2);
+                    LogEngine.DirectEventViewerLog(
+                        $"Received a syncronization package from channel ID {bubblingObject.SenderChannelId} and point ID {bubblingObject.SenderChannelId}\rAutoSyncronizationEnabled parameter = {ConfigurationBag.Configuration.AutoSyncronizationEnabled}",
+                        2);
                     if (ConfigurationBag.Configuration.AutoSyncronizationEnabled)
                     {
                         byte[] bubblingContent = SerializationEngine.ObjectToByteArray(bubblingObject.Data);
                         string currentSyncFolder = ConfigurationBag.SyncDirectorySyncIn();
-                        GrabCaster.Framework.CompressionLibrary.Helpers.CreateFromBytearray(bubblingObject.Data, currentSyncFolder);
+                        CompressionLibrary.Helpers.CreateFromBytearray(bubblingObject.Data, currentSyncFolder);
                     }
-
                 }
 
                 #endregion
-
             }
             catch (Exception ex)
             {
-
-
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                                  $"Error in {MethodBase.GetCurrentMethod().Name}",
-                                  Constant.LogLevelError,
-                                  Constant.TaskCategoriesError,
-                                  ex,
-                                  Constant.LogLevelError);
-
-
-
-
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
+                    Constant.LogLevelError);
             }
         }
     }

@@ -24,19 +24,14 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using GrabCaster.Framework.Contracts.Channels;
 
 namespace GrabCaster.Framework.Contracts.Configuration
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
     using System.Runtime.Serialization;
-
-    using GrabCaster.Framework.Base;
-
-    using Newtonsoft.Json;
 
     /// <summary>
     ///     Trigger configuration File, To create a configuration file trigger who able to activate a trigger action/s
@@ -56,14 +51,12 @@ namespace GrabCaster.Framework.Contracts.Configuration
         /// </summary>
         [DataMember]
         public List<Event> Events { get; set; }
-
-
     }
 
     /// <summary>
     /// The trigger.
     /// </summary>
-    [DataContract,Serializable]
+    [DataContract, Serializable]
     public class Trigger
     {
         /// <summary>
@@ -80,10 +73,10 @@ namespace GrabCaster.Framework.Contracts.Configuration
         /// </param>
         public Trigger(string idComponent, string idConfiguration, string name, string description)
         {
-            this.IdComponent = idComponent;
-            this.IdConfiguration = idConfiguration;
-            this.Name = name;
-            this.Description = description;
+            IdComponent = idComponent;
+            IdConfiguration = idConfiguration;
+            Name = name;
+            Description = description;
         }
 
 
@@ -111,11 +104,13 @@ namespace GrabCaster.Framework.Contracts.Configuration
         /// </summary>
         [DataMember]
         public string Description { get; set; }
+
         /// <summary>
         /// Gets or sets the channels where the trigger could be executes, if null then can be executed anyway.
         /// </summary>
         [DataMember]
         public List<Channel> Channels { get; set; }
+
         /// <summary>
         /// Gets or sets the id chains.
         /// </summary>
@@ -146,8 +141,8 @@ namespace GrabCaster.Framework.Contracts.Configuration
         /// </param>
         public TriggerProperty(string name, object value)
         {
-            this.Name = name;
-            this.Value = value;
+            Name = name;
+            Value = value;
         }
 
         /// <summary>
@@ -180,8 +175,8 @@ namespace GrabCaster.Framework.Contracts.Configuration
         /// </param>
         public TriggerAction(string id, string name)
         {
-            this.Id = id;
-            this.Name = name;
+            Id = id;
+            Name = name;
         }
 
         /// <summary>

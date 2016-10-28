@@ -24,20 +24,18 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Log
 {
+    using Base;
+    using Contracts.Attributes;
+    using Contracts.Log;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Threading;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Common;
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Log;
 
     /// <summary>
     /// Class to manage the console messages
@@ -46,8 +44,8 @@ namespace GrabCaster.Framework.Log
     {
         public ConsoleMessage(string message, ConsoleColor consoleColor)
         {
-            this.ConsoleColor = consoleColor;
-            this.Message = message;
+            ConsoleColor = consoleColor;
+            Message = message;
         }
 
         public ConsoleColor ConsoleColor { get; set; }
@@ -103,9 +101,9 @@ namespace GrabCaster.Framework.Log
                 var assembly = Assembly.LoadFrom(loggingComponent);
                 //Main class logging
                 var assemblyClass = (from t in assembly.GetTypes()
-                                     let attributes = t.GetCustomAttributes(typeof(LogContract), true)
-                                     where t.IsClass && attributes != null && attributes.Length > 0
-                                     select t).First();
+                    let attributes = t.GetCustomAttributes(typeof(LogContract), true)
+                    where t.IsClass && attributes != null && attributes.Length > 0
+                    select t).First();
 
 
                 LogEngineComponent = Activator.CreateInstance(assemblyClass) as ILogEngine;
@@ -142,8 +140,8 @@ namespace GrabCaster.Framework.Log
             }
             catch (Exception ex)
             {
-                LogEngine.DirectEventViewerLog($"Error in {MethodBase.GetCurrentMethod().Name} - {ex.Message}",1);
-                LogEngine.WriteLog(
+                DirectEventViewerLog($"Error in {MethodBase.GetCurrentMethod().Name} - {ex.Message}", 1);
+                WriteLog(
                     ConfigurationBag.EngineName,
                     $"Error in {MethodBase.GetCurrentMethod().Name}",
                     Constant.LogLevelError,
@@ -155,12 +153,12 @@ namespace GrabCaster.Framework.Log
         }
 
         public static void WriteLog(
-        string source,
-        string message,
-        int eventId,
-        string taskCategory,
-        Exception exception,
-        int logLevel)
+            string source,
+            string message,
+            int eventId,
+            string taskCategory,
+            Exception exception,
+            int logLevel)
         {
             if (!Enabled || ConfigurationBag.Configuration.LoggingLevel <= logLevel)
                 return;
@@ -169,8 +167,6 @@ namespace GrabCaster.Framework.Log
             var logMessage = new LogMessage();
             try
             {
-
-
                 if (exception != null)
                 {
                     logMessage.ExceptionObject =
@@ -196,18 +192,21 @@ namespace GrabCaster.Framework.Log
 
                 logMessage.ChannelName = ConfigurationBag.Configuration.ChannelName;
                 logMessage.TaskCategory = taskCategory;
-                var exceptionText = logMessage.ExceptionObject != "" ? "\r-->Exception:" + logMessage.ExceptionObject : "";
+                var exceptionText = logMessage.ExceptionObject != ""
+                    ? "\r-->Exception:" + logMessage.ExceptionObject
+                    : "";
                 logMessage.Message =
                     $"-Level:{logLevel}|Source:{source}|Message:{message}|Severity:{eventId}|-TaskCategory:{taskCategory}{exceptionText}";
 
                 QueueAbstractMessage.Enqueue(logMessage);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //Last error point
                 DirectEventViewerLog(logMessage.Message, Constant.LogLevelError);
             }
         }
+
         /// <summary>
         /// Write in eventviewer
         /// </summary>
@@ -215,8 +214,9 @@ namespace GrabCaster.Framework.Log
         /// <param name="eventLogEntryType"></param>
         public static void DirectEventViewerLog(string message, int eventLogEntryType)
         {
-            EventLog.WriteEntry("GrabCaster", message, (EventLogEntryType)eventLogEntryType, 0);
+            EventLog.WriteEntry("GrabCaster", message, (EventLogEntryType) eventLogEntryType, 0);
         }
+
         #region MAIN LOG ABSTRACTED ENGINE
 
         /// <summary>
@@ -224,12 +224,11 @@ namespace GrabCaster.Framework.Log
         /// </summary>
         public sealed class LogQueueAbstractMessage : LockSlimQueueLog<LogMessage>
         {
-
             public LogQueueAbstractMessage(int capLimit, int timeLimit)
             {
-                this.CapLimit = capLimit;
-                this.TimeLimit = timeLimit;
-                this.InitTimer();
+                CapLimit = capLimit;
+                TimeLimit = timeLimit;
+                InitTimer();
             }
         }
 
@@ -246,10 +245,9 @@ namespace GrabCaster.Framework.Log
                 LogEngineComponent.WriteLog(logMessage);
             }
             //If something logged then flush
-            if(logMessages.Count > 0)
+            if (logMessages.Count > 0)
                 LogEngineComponent.Flush();
         }
-
 
         #endregion
 
@@ -262,9 +260,9 @@ namespace GrabCaster.Framework.Log
         {
             public LogQueueConsoleMessage(int capLimit, int timeLimit)
             {
-                this.CapLimit = capLimit;
-                this.TimeLimit = timeLimit;
-                this.InitTimer();
+                CapLimit = capLimit;
+                TimeLimit = timeLimit;
+                InitTimer();
             }
         }
 

@@ -24,15 +24,11 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GrabCaster.Framework.Library.Azure
 {
-    using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Table;
 
     public static class LogEngine
@@ -43,11 +39,13 @@ namespace GrabCaster.Framework.Library.Azure
 
             WriteMessage(logMessage);
         }
+
         public static void TraceWarning(string message)
         {
             string logMessage = $"{""} - {message}";
             WriteMessage(logMessage);
         }
+
         public static void TraceError(string message)
         {
             string logMessage = $"{""} - {message}";
@@ -80,21 +78,21 @@ namespace GrabCaster.Framework.Library.Azure
             }
             catch (Exception)
             {
-                
-        
             }
-
         }
     }
+
     public class LogrEntity : TableEntity
     {
         public LogrEntity(string partitionKey, string rowKey)
         {
-            this.PartitionKey = partitionKey;
-            this.RowKey = rowKey;
+            PartitionKey = partitionKey;
+            RowKey = rowKey;
         }
 
-        public LogrEntity() { }
+        public LogrEntity()
+        {
+        }
 
         public string Message { get; set; }
 

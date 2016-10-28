@@ -24,16 +24,18 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.NopEvent
 {
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
+    using Contracts.Attributes;
+    using Contracts.Events;
+    using Contracts.Globals;
 
     /// <summary>
     /// The no operation event.
     /// </summary>
-    [EventContract("{D1EC2907-56A9-474B-B08A-750E72F0C29D}", "NOP Event", "No operation Event, used for testing purpose.", true)]
+    [EventContract("{D1EC2907-56A9-474B-B08A-750E72F0C29D}", "NOP Event",
+         "No operation Event, used for testing purpose.", true)]
     public class NopEvent : IEventType
     {
         /// <summary>

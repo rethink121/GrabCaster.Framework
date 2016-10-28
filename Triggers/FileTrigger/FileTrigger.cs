@@ -24,23 +24,22 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.FileTrigger
 {
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Triggers;
     using System;
     using System.IO;
     using System.Linq;
-    using System.Text.RegularExpressions;
     using System.Threading;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
-    using GrabCaster.Framework.Storage;
 
     /// <summary>
     /// The file trigger.
     /// </summary>
-    [TriggerContract("{3C62B951-C353-4899-8670-C6687B6EAEFC}", "FileTrigger", "Get the content from file in a specific directory or shared forlder.", false, true, false)]
+    [TriggerContract("{3C62B951-C353-4899-8670-C6687B6EAEFC}", "FileTrigger",
+         "Get the content from file in a specific directory or shared forlder.", false, true, false)]
     public class FileTrigger : ITriggerType
     {
         /// <summary>
@@ -54,6 +53,7 @@ namespace GrabCaster.Framework.FileTrigger
         /// </summary>
         [TriggerPropertyContract("BatchFilesSize", "Number of file to receive fro each batch.")]
         public int BatchFilesSize { get; set; }
+
         /// <summary>
         /// Gets or sets the polling time.
         /// </summary>
@@ -71,7 +71,7 @@ namespace GrabCaster.Framework.FileTrigger
         /// </summary>
         [TriggerPropertyContract("InputDirectory", "Input Directory location")]
         public string InputDirectory { get; set; }
-  
+
         /// <summary>
         /// Gets or sets the context.
         /// </summary>
@@ -81,6 +81,7 @@ namespace GrabCaster.Framework.FileTrigger
         /// Gets or sets the set event action trigger.
         /// </summary>
         public ActionTrigger ActionTrigger { get; set; }
+
         /// <summary>
         /// If must be syncronous
         /// </summary>
@@ -110,7 +111,10 @@ namespace GrabCaster.Framework.FileTrigger
                 //context.SyncAsyncEventAction = SyncAsyncActionReceived;
                 while (true)
                 {
-                    var files = Directory.GetFiles(this.InputDirectory, "*.*", SearchOption.AllDirectories).Where(path => Path.GetExtension(path) == RegexFilePattern).ToArray();
+                    var files =
+                        Directory.GetFiles(InputDirectory, "*.*", SearchOption.AllDirectories)
+                            .Where(path => Path.GetExtension(path) == RegexFilePattern)
+                            .ToArray();
 
                     if (files.Length != 0)
                     {
@@ -125,20 +129,17 @@ namespace GrabCaster.Framework.FileTrigger
                         {
                             file = files[i];
                             var data = File.ReadAllBytes(file);
-                            File.Delete(Path.ChangeExtension(file, this.DoneExtensionName));
-                            File.Move(file, Path.ChangeExtension(file, this.DoneExtensionName));
-                            this.DataContext = data;
+                            File.Delete(Path.ChangeExtension(file, DoneExtensionName));
+                            File.Move(file, Path.ChangeExtension(file, DoneExtensionName));
+                            DataContext = data;
                             actionTrigger(this, context);
                         }
-
-
                     }
 
-                    Thread.Sleep(this.PollingTime);
+                    Thread.Sleep(PollingTime);
                 }
-                
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 actionTrigger(this, null);
                 return null;

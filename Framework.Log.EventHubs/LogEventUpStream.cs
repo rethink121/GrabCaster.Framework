@@ -24,19 +24,16 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Log.EventHubs
 {
-    using System;
-    using System.Diagnostics;
-    using System.Text;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Contracts.Log;
-
+    using Base;
+    using Contracts.Log;
     using Microsoft.ServiceBus;
     using Microsoft.ServiceBus.Messaging;
-
     using Newtonsoft.Json;
+    using System;
+    using System.Diagnostics;
 
     /// <summary>
     ///     Send messages to EH
@@ -55,7 +52,6 @@ namespace GrabCaster.Framework.Log.EventHubs
         {
             try
             {
-
                 Debug.WriteLine("-------------- Engine LogEventUpStream --------------");
                 Debug.WriteLine("LogEventUpStream - Get Configuration settings.");
                 //Event Hub Configuration
@@ -69,8 +65,8 @@ namespace GrabCaster.Framework.Log.EventHubs
                 var builder = new ServiceBusConnectionStringBuilder(azureNameSpaceConnectionString)
                 {
                     TransportType =
-                                          TransportType
-                                          .Amqp
+                        TransportType
+                            .Amqp
                 };
 
                 Debug.WriteLine("LogEventUpStream - Create the eventHubClient.");
@@ -95,7 +91,9 @@ namespace GrabCaster.Framework.Log.EventHubs
             {
                 if (ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
                 {
-                    EventLog.WriteEntry("Framework.Log.EventHubs", "The remote logging storage provider is not available, this GrabCaster point is configured for local only execution.", EventLogEntryType.Error);
+                    EventLog.WriteEntry("Framework.Log.EventHubs",
+                        "The remote logging storage provider is not available, this GrabCaster point is configured for local only execution.",
+                        EventLogEntryType.Error);
                     return true;
                 }
 

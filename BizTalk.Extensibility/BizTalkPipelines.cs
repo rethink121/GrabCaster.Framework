@@ -24,24 +24,21 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
+using GrabCaster.Framework.Base;
+using Microsoft.BizTalk.Message.Interop;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using GrabCaster.BizTalk.Extensibility;
-using GrabCaster.Framework.Base;
-using Microsoft.BizTalk.Message.Interop;
 
 namespace GrabCaster.BizTalk.Extensibility
 {
     public static class BizTalkPipelines
     {
-
-        public static byte[] ExecutePipeline(string assemblyfile, string assdirectory, string pipetype, string inputinstance, string filename)
+        public static byte[] ExecutePipeline(string assemblyfile, string assdirectory, string pipetype,
+            string inputinstance, string filename)
         {
             IBaseMessage inputMessage = MessageHelper.CreateFromStream(LoadMessage(inputinstance));
             Assembly btAssembly;
@@ -127,8 +124,7 @@ namespace GrabCaster.BizTalk.Extensibility
                         returnContent = null;
                         break;
 
-                        //***********************************************************
-
+                    //***********************************************************
                 }
 
                 return returnContent;
@@ -136,15 +132,15 @@ namespace GrabCaster.BizTalk.Extensibility
             catch (Exception ex)
             {
                 string fileresult = assdirectory + Path.GetFileNameWithoutExtension(inputinstance) + "_" +
-                                    Guid.NewGuid().ToString() + "txt";
+                                    Guid.NewGuid() + "txt";
                 File.WriteAllText(fileresult, "Error: " + ex.Message + "\r\n\r\n" + ex.StackTrace);
                 System.Diagnostics.Process.Start("IExplore.exe", fileresult);
                 return returnContent;
             }
-
         }
 
-        private static  List<string> getspecandassnamefrompipeline(string xmlfile, string pathnodes, string assemblypath, string assdirectory)
+        private static List<string> getspecandassnamefrompipeline(string xmlfile, string pathnodes, string assemblypath,
+            string assdirectory)
         {
             List<string> values = new List<string>();
 
@@ -180,22 +176,21 @@ namespace GrabCaster.BizTalk.Extensibility
                     {
                         docspec = node.InnerText.Trim();
                         assname = assemblypath;
-
                     }
                     else
                     {
                         int secondcomma = node.InnerText.IndexOf(',', firstcomma + 1) - 1;
 
                         docspec = node.InnerText.Substring(0, node.InnerText.IndexOf(',')).Trim();
-                        assname = assdirectory + node.InnerText.Substring(firstcomma + 1, secondcomma - firstcomma).Trim() + ".dll";
+                        assname = assdirectory +
+                                  node.InnerText.Substring(firstcomma + 1, secondcomma - firstcomma).Trim() + ".dll";
                     }
                     values.Add(docspec + "|" + assname);
-
-
                 }
-                catch { //MessageBox.Show("Cannot extract docspec from pipeline.");
+                catch
+                {
+                    //MessageBox.Show("Cannot extract docspec from pipeline.");
                 }
-
             }
             return values;
         }
@@ -209,7 +204,9 @@ namespace GrabCaster.BizTalk.Extensibility
             {
                 content = File.ReadAllText(filename + ".cs");
             }
-            catch { //MessageBox.Show("Compile the project."); 
+            catch
+            {
+                //MessageBox.Show("Compile the project."); 
             }
 
             int first = 0;
@@ -218,14 +215,13 @@ namespace GrabCaster.BizTalk.Extensibility
             sec = content.IndexOf("{");
             string ppnamespace = content.Substring(first + "namespace ".Length, sec - "namespace ".Length).Trim();
 
-            string ppclassname = "";
-            string pptype = "";
-
 
             first = content.IndexOf(" : Microsoft.BizTalk.PipelineOM.");
             int firstgraph = content.IndexOf("{");
             sec = content.IndexOf("{", firstgraph + 2);
-            string pppipelinetype = content.Substring(first + " : Microsoft.BizTalk.PipelineOM.".Length, sec - first - " : Microsoft.BizTalk.PipelineOM.".Length).Trim();
+            string pppipelinetype =
+                content.Substring(first + " : Microsoft.BizTalk.PipelineOM.".Length,
+                    sec - first - " : Microsoft.BizTalk.PipelineOM.".Length).Trim();
 
             return pppipelinetype;
         }
@@ -239,6 +235,7 @@ namespace GrabCaster.BizTalk.Extensibility
         {
             data = new MemoryStream(EncodingDecoding.EncodingString2Bytes(value ?? ""));
         }
+
         /// <summary>
         /// Loads a message from disk
         /// </summary>

@@ -24,13 +24,13 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Contracts.Bubbling
 {
+    using Configuration;
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-
-    using GrabCaster.Framework.Contracts.Configuration;
 
     /// <summary>
     /// The correlation.
@@ -53,9 +53,9 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         /// </param>
         public Correlation(string name, string scriptRule, List<Event> events)
         {
-            this.Name = name;
-            this.ScriptRule = scriptRule;
-            this.Events = events;
+            Name = name;
+            ScriptRule = scriptRule;
+            Events = events;
         }
 
         /// <summary>

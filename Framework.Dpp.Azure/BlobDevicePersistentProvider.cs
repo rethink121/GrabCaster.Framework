@@ -24,37 +24,30 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Storage
 {
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Reflection;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Common;
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Bubbling;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Storage;
-    using GrabCaster.Framework.Log;
-
+    using Base;
+    using Contracts.Attributes;
+    using Contracts.Storage;
+    using Log;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Blob;
-
-    using Newtonsoft.Json;
+    using System;
+    using System.Diagnostics;
+    using System.Reflection;
 
     /// <summary>
     /// Main persistent provider.
     /// </summary>
-    [DevicePersistentProviderContract("{53158DA4-EAEA-4D8A-90C8-81A66F7A0F74}", "DevicePersistentProvider", "Device Persistent Provider for Azure")]
-    public class BlobDevicePersistentProvider:IDevicePersistentProvider
+    [DevicePersistentProviderContract("{53158DA4-EAEA-4D8A-90C8-81A66F7A0F74}", "DevicePersistentProvider",
+         "Device Persistent Provider for Azure")]
+    public class BlobDevicePersistentProvider : IDevicePersistentProvider
     {
         public void PersistEventToStorage(byte[] messageBody, string messageId)
         {
             try
             {
-
                 var storageAccountName = ConfigurationBag.Configuration.GroupEventHubsStorageAccountName;
                 var storageAccountKey = ConfigurationBag.Configuration.GroupEventHubsStorageAccountKey;
                 var connectionString =
@@ -68,23 +61,22 @@ namespace GrabCaster.Framework.Storage
                 // Create the container if it doesn't already exist.
                 container.CreateIfNotExists();
                 container.SetPermissions(
-                    new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
+                    new BlobContainerPermissions {PublicAccess = BlobContainerPublicAccessType.Blob});
 
                 // Create the messageid reference
                 var blockBlob = container.GetBlockBlobReference(messageId);
                 blockBlob.UploadFromByteArray(messageBody, 0, messageBody.Length);
                 Debug.WriteLine(
-                    "Event persisted -  Consistency Transaction Point created.", 
-                    ConsoleColor.DarkGreen);
+                    "Event persisted -  Consistency Transaction Point created.");
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
             }
         }
@@ -106,7 +98,7 @@ namespace GrabCaster.Framework.Storage
                 // Create the container if it doesn't already exist.
                 container.CreateIfNotExists();
                 container.SetPermissions(
-                    new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
+                    new BlobContainerPermissions {PublicAccess = BlobContainerPublicAccessType.Blob});
 
                 // Create the messageid reference
                 var blockBlob = container.GetBlockBlobReference(messageId);
@@ -122,19 +114,18 @@ namespace GrabCaster.Framework.Storage
                 blockBlob.DownloadToByteArray(msgContent, 0);
 
                 Debug.WriteLine(
-                    "Event persisted recovered -  Consistency Transaction Point restored.", 
-                    ConsoleColor.DarkGreen);
+                    "Event persisted recovered -  Consistency Transaction Point restored.");
 
                 return msgContent;
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
                 return null;
             }

@@ -24,24 +24,20 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework
 {
+    using Base;
+    using Engine;
+    using Log;
+    using NTService;
     using System;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.ServiceProcess;
-    using System.Threading;
     using System.Windows.Forms;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Common;
-    using GrabCaster.Framework.Engine;
-    using GrabCaster.Framework.Log;
-    using GrabCaster.Framework.NTService;
-
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
 
     /// <summary>
     /// Class containing the main entry to the program.
@@ -69,7 +65,6 @@ namespace GrabCaster.Framework
         {
             try
             {
-
                 LogEngine.Init();
                 Debug.WriteLine(
                     $"Version {Assembly.GetExecutingAssembly().GetName().Version}",
@@ -88,18 +83,19 @@ namespace GrabCaster.Framework
 
                 if (!Environment.UserInteractive)
                 {
-                    Debug.WriteLine("GrabCaster-services To Run - Not UserInteractive Environment the service will start in ServiceBase mode.");
+                    Debug.WriteLine(
+                        "GrabCaster-services To Run - Not UserInteractive Environment the service will start in ServiceBase mode.");
                     if (args.Length > 0)
                     {
                         //Run in batch and console mode
-                        Debug.WriteLine($"GrabCaster-services To Run - Command line > 0 start NT Service mode . args = {args[0]}.");
+                        Debug.WriteLine(
+                            $"GrabCaster-services To Run - Command line > 0 start NT Service mode . args = {args[0]}.");
                         switch (args[0].ToUpper())
                         {
                             case "S":
                                 Debug.WriteLine("GrabCaster-services To Run - Service Fabric mode requested.");
                                 Debug.WriteLine(
-                                    "--GrabCaster Sevice Initialization--Start Engine.",
-                                    ConsoleColor.Green);
+                                    "--GrabCaster Sevice Initialization--Start Engine.");
                                 CoreEngine.StartEventEngine(null);
                                 Console.WriteLine("\rEngine started...");
                                 Console.ReadLine();
@@ -107,8 +103,7 @@ namespace GrabCaster.Framework
                             case "M":
                                 AppDomain.CurrentDomain.ProcessExit += CurrentDomainProcessExit;
                                 Debug.WriteLine(
-                                    "--GrabCaster Sevice Initialization--Start Engine.",
-                                    ConsoleColor.Green);
+                                    "--GrabCaster Sevice Initialization--Start Engine.");
                                 CoreEngine.StartEventEngine(null);
                                 Console.WriteLine("\rEngine started...");
                                 Console.ReadLine();
@@ -119,22 +114,19 @@ namespace GrabCaster.Framework
                     }
                     else
                     {
-     
                         Debug.WriteLine("GrabCaster-services To Run - Command line = 0 start NT Service mode.");
-                        Debug.WriteLine($"GrabCaster-services To Run - Environment.OSVersion:{Environment.OSVersion} Environment.Version:{Environment.Version}");
+                        Debug.WriteLine(
+                            $"GrabCaster-services To Run - Environment.OSVersion:{Environment.OSVersion} Environment.Version:{Environment.Version}");
                         Debug.WriteLine("GrabCaster-services To Run procedure initialization.");
-                        ServiceBase[] servicesToRun = { new NTWindowsService() };
+                        ServiceBase[] servicesToRun = {new NTWindowsService()};
                         Debug.WriteLine("GrabCaster-services To Run procedure starting.");
                         ServiceBase.Run(servicesToRun);
-
                     }
                 }
                 else
                 {
-
                     if (args.Length == 0)
                     {
-
                         // Set Console windows
                         Console.Title = ConfigurationBag.Configuration.PointName;
                         Console.SetWindowPosition(0, 0);

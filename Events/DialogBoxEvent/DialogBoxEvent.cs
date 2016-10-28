@@ -24,16 +24,15 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using GrabCaster.Framework.Base;
 
 namespace GrabCaster.Framework.DialogBoxEvent
 {
-    using System.Text;
+    using Contracts.Attributes;
+    using Contracts.Events;
+    using Contracts.Globals;
     using System.Windows.Forms;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
 
     [EventContract("{39AD14F3-009E-45EE-83B6-CECD51E6A242}", "DialogBox Event", "Show a DialogBox", true)]
     public class DialogBoxEvent : IEventType
@@ -50,12 +49,15 @@ namespace GrabCaster.Framework.DialogBoxEvent
         {
             try
             {
-                var rfidtag = EncodingDecoding.EncodingBytes2String(this.DataContext);
+                var rfidtag = EncodingDecoding.EncodingBytes2String(DataContext);
                 var dialogResult = MessageBox.Show(
                     $"Authorization for TAG code {rfidtag}.",
                     "Authorization TAG",
                     MessageBoxButtons.YesNo);
-                this.DataContext = EncodingDecoding.EncodingString2Bytes(dialogResult == DialogResult.Yes ? true.ToString() : false.ToString());
+                DataContext =
+                    EncodingDecoding.EncodingString2Bytes(dialogResult == DialogResult.Yes
+                        ? true.ToString()
+                        : false.ToString());
 
                 actionEvent(this, context);
                 return null;

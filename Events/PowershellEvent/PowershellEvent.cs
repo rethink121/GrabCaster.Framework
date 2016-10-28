@@ -24,24 +24,23 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using GrabCaster.Framework.Base;
 
 namespace GrabCaster.Framework.PowershellEvent
 {
+    using Contracts.Attributes;
+    using Contracts.Events;
+    using Contracts.Globals;
     using System;
     using System.IO;
     using System.Management.Automation;
-    using System.Text;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
 
     /// <summary>
     /// The PowerShell event.
     /// </summary>
     [EventContract("{F9A0B69C-64D3-4120-A52D-09D2E014EA91}", "Execute a Powershell Event", "Execute a Powershell Event",
-        true)]
+         true)]
     public class PowershellEvent : IEventType
     {
         /// <summary>
@@ -87,28 +86,28 @@ namespace GrabCaster.Framework.PowershellEvent
             try
             {
                 var script = string.Empty;
-                if (!string.IsNullOrEmpty(this.ScriptFileEvent))
+                if (!string.IsNullOrEmpty(ScriptFileEvent))
                 {
-                    script = File.ReadAllText(this.ScriptFileEvent);
+                    script = File.ReadAllText(ScriptFileEvent);
                 }
                 else
                 {
-                    script = this.ScriptEvent;
+                    script = ScriptEvent;
                 }
 
                 var powerShellScript = PowerShell.Create();
                 powerShellScript.AddScript(script);
 
                 // TODO 1020
-                powerShellScript.AddParameter("DataContext", this.DataContext);
+                powerShellScript.AddParameter("DataContext", DataContext);
                 powerShellScript.Invoke();
                 var outVar = powerShellScript.Runspace.SessionStateProxy.PSVariable.GetValue("DataContext");
                 if (outVar != null)
                 {
-                    this.DataContext = EncodingDecoding.EncodingString2Bytes(outVar.ToString());
+                    DataContext = EncodingDecoding.EncodingString2Bytes(outVar.ToString());
                     actionEvent(this, context);
                 }
-                return  null;
+                return null;
                 // TODO 1030
             }
             catch (Exception)

@@ -24,11 +24,13 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCasterEvent.Event
 {
     using GrabCaster.Framework.Contracts.Attributes;
     using GrabCaster.Framework.Contracts.Events;
     using GrabCaster.Framework.Contracts.Globals;
+
     //<USING>
 
     /// <summary>
@@ -72,6 +74,7 @@ namespace GrabCasterEvent.Event
             actionEvent(this, context);
             return null;
         }
+
         //<FUNCTIONS>
     }
 }

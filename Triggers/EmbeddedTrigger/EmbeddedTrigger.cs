@@ -24,20 +24,22 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.EmbeddedTrigger
 {
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Triggers;
 
     /// <summary>
     /// The nop trigger.
     /// </summary>
     [TriggerContract("{843008B6-F4E1-4A29-8082-BDC111EA0E99}", "Event Viewer Trigger", "Intercept Event Viewer Message",
-        false, true, false)]
+         false, true, false)]
     public class EmbeddedTrigger : ITriggerType
     {
-        [TriggerPropertyContract("Syncronous", "Define if the action between the trigger and the remote event needs to be syncronous")]
+        [TriggerPropertyContract("Syncronous",
+             "Define if the action between the trigger and the remote event needs to be syncronous")]
         public bool Syncronous { get; set; }
 
         /// <summary>
@@ -68,7 +70,6 @@ namespace GrabCaster.Framework.EmbeddedTrigger
         [TriggerActionContract("{25F85716-1154-4473-AFFE-F8F4E8AC17A9}", "Main action", "Main action description")]
         public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)
         {
-
             actionTrigger(this, context);
             return null;
         }

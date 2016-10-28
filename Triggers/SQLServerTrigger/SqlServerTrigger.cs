@@ -24,25 +24,24 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Threading;
+
 using GrabCaster.Framework.Base;
 
 namespace GrabCaster.Framework.SqlServerTrigger
 {
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Triggers;
     using System;
     using System.Data.SqlClient;
-    using System.Text;
     using System.Xml;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
 
     /// <summary>
     /// The SQL server trigger.
     /// </summary>
-    [TriggerContract("{7920EE0F-CAC8-4ABB-82C2-1C69351EDD28}", "Sql Server Trigger", "Execute a Sql query or stored procedure.",
-        true, true, false)]
+    [TriggerContract("{7920EE0F-CAC8-4ABB-82C2-1C69351EDD28}", "Sql Server Trigger",
+         "Execute a Sql query or stored procedure.",
+         true, true, false)]
     public class SqlServerTrigger : ITriggerType
     {
         /// <summary>
@@ -59,6 +58,7 @@ namespace GrabCaster.Framework.SqlServerTrigger
 
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
+
         public string SupportBag { get; set; }
 
         /// <summary>
@@ -91,12 +91,12 @@ namespace GrabCaster.Framework.SqlServerTrigger
         {
             try
             {
-                this.Context = context;
-                this.ActionTrigger = actionTrigger;
+                Context = context;
+                ActionTrigger = actionTrigger;
 
-                using (var myConnection = new SqlConnection(this.ConnectionString))
+                using (var myConnection = new SqlConnection(ConnectionString))
                 {
-                    var selectCommand = new SqlCommand(this.SqlQuery, myConnection);
+                    var selectCommand = new SqlCommand(SqlQuery, myConnection);
                     myConnection.Open();
                     XmlReader readerResult = null;
                     try
@@ -118,7 +118,7 @@ namespace GrabCaster.Framework.SqlServerTrigger
                     xdoc.Load(readerResult);
                     if (xdoc.OuterXml != string.Empty)
                     {
-                        this.DataContext = EncodingDecoding.EncodingString2Bytes(xdoc.OuterXml);
+                        DataContext = EncodingDecoding.EncodingString2Bytes(xdoc.OuterXml);
                         myConnection.Close();
                         actionTrigger(this, context);
                     }

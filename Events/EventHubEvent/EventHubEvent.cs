@@ -24,19 +24,20 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.EventHubEvent
 {
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
-
+    using Contracts.Attributes;
+    using Contracts.Events;
+    using Contracts.Globals;
     using Microsoft.ServiceBus;
     using Microsoft.ServiceBus.Messaging;
 
     /// <summary>
     /// The event hub event.
     /// </summary>
-    [EventContract("{F249290E-0231-44A9-A348-1CC7FCC33C7F}", "Event Hub Event", "Send a message to Azure Event Hub.", true)]
+    [EventContract("{F249290E-0231-44A9-A348-1CC7FCC33C7F}", "Event Hub Event", "Send a message to Azure Event Hub.",
+         true)]
     public class EventHubEvent : IEventType
     {
         /// <summary>
@@ -83,11 +84,11 @@ namespace GrabCaster.Framework.EventHubEvent
             {
                 if (!InternalEventUpStream.InstanceLoaded)
                 {
-                    InternalEventUpStream.CreateEventUpStream(this.ConnectionString, this.EventHubName);
+                    InternalEventUpStream.CreateEventUpStream(ConnectionString, EventHubName);
                     InternalEventUpStream.InstanceLoaded = true;
                 }
 
-                InternalEventUpStream.SendMessage(this.DataContext);
+                InternalEventUpStream.SendMessage(DataContext);
                 actionEvent(this, context);
                 return null;
             }
@@ -132,7 +133,7 @@ namespace GrabCaster.Framework.EventHubEvent
         {
             try
             {
-                builder = new ServiceBusConnectionStringBuilder(connectionString) { TransportType = TransportType.Amqp };
+                builder = new ServiceBusConnectionStringBuilder(connectionString) {TransportType = TransportType.Amqp};
                 eventHubClient = EventHubClient.CreateFromConnectionString(builder.ToString(), eventHubName);
             }
             catch

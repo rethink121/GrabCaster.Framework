@@ -24,70 +24,62 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
-using Microsoft.BizTalk.PipelineOM;
 using Microsoft.BizTalk.Message.Interop;
-using Microsoft.BizTalk.Component.Interop;
+using System;
 using IPipeline = Microsoft.Test.BizTalk.PipelineObjects.IPipeline;
-using PStage = Microsoft.Test.BizTalk.PipelineObjects.Stage;
 
 namespace GrabCaster.BizTalk.Extensibility
 {
-   /// <summary>
-   /// Wrapper around a send pipeline you can execute
-   /// </summary>
-   public class SWPipeline : BWPipeline
-   {
-      internal SWPipeline(IPipeline pipeline)
-         : base (pipeline, false)
-      {
-         FindStage(ppStage.PreAssembleStage);
-         FindStage(ppStage.AssembleStage);
-         FindStage(ppStage.EncodeStage);
-      }
+    /// <summary>
+    /// Wrapper around a send pipeline you can execute
+    /// </summary>
+    public class SWPipeline : BWPipeline
+    {
+        internal SWPipeline(IPipeline pipeline)
+            : base(pipeline, false)
+        {
+            FindStage(PpStage.PreAssembleStage);
+            FindStage(PpStage.AssembleStage);
+            FindStage(PpStage.EncodeStage);
+        }
 
 
-      /// <summary>
-      /// Execute the send pipeline
-      /// </summary>
-      /// <param name="inputMessages">Set of input messages to feed to the pipeline</param>
-      /// <returns>The output message</returns>
-      public IBaseMessage Execute(MessageCollection inputMessages)
-      {
-         if ( inputMessages == null )
-            throw new ArgumentNullException("inputMessages");
-         if ( inputMessages.Count <= 0 )
-            throw new ArgumentException("Must provide at least one input message", "inputMessages");
+        /// <summary>
+        /// Execute the send pipeline
+        /// </summary>
+        /// <param name="inputMessages">Set of input messages to feed to the pipeline</param>
+        /// <returns>The output message</returns>
+        public IBaseMessage Execute(MessageCollection inputMessages)
+        {
+            if (inputMessages == null)
+                throw new ArgumentNullException("inputMessages");
+            if (inputMessages.Count <= 0)
+                throw new ArgumentException("Must provide at least one input message", "inputMessages");
 
-         foreach ( IBaseMessage inputMessage in inputMessages )
-         {
-            Pipeline.InputMessages.Add(inputMessage);
-         }
+            foreach (IBaseMessage inputMessage in inputMessages)
+            {
+                Pipeline.InputMessages.Add(inputMessage);
+            }
 
-         MessageCollection output = new MessageCollection();
-         Pipeline.Execute(Context);
+            MessageCollection output = new MessageCollection();
+            Pipeline.Execute(Context);
 
-         IBaseMessage om = Pipeline.GetNextOutputMessage(Context);
-         return om;
-      }
+            IBaseMessage om = Pipeline.GetNextOutputMessage(Context);
+            return om;
+        }
 
-      /// <summary>
-      /// Executes the send pipeline with all messages
-      /// provided as inputs
-      /// </summary>
-      /// <param name="inputMessages">One or more input messages to the pipeline</param>
-      /// <returns>The single output message</returns>
-      public IBaseMessage Execute(params IBaseMessage[] inputMessages)
-      {
-         MessageCollection inputs = new MessageCollection();
-         inputs.AddRange(inputMessages);
-         return Execute(inputs);
-      }
-
-   } // class SendPipelineWrapper
-
+        /// <summary>
+        /// Executes the send pipeline with all messages
+        /// provided as inputs
+        /// </summary>
+        /// <param name="inputMessages">One or more input messages to the pipeline</param>
+        /// <returns>The single output message</returns>
+        public IBaseMessage Execute(params IBaseMessage[] inputMessages)
+        {
+            MessageCollection inputs = new MessageCollection();
+            inputs.AddRange(inputMessages);
+            return Execute(inputs);
+        }
+    } // class SendPipelineWrapper
 } // namespace BTSGBizTalkAddins

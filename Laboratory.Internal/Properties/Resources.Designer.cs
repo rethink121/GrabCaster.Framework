@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GrabCaster.InternalLaboratory.Properties {
-    using System;
-    
-    
+namespace GrabCaster.InternalLaboratory.Properties
+{
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>

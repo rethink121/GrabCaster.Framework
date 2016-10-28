@@ -24,25 +24,20 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
+
 using GrabCaster.Framework.Base;
 using GrabCaster.Framework.Contracts.Attributes;
 using GrabCaster.Framework.Contracts.Globals;
 using GrabCaster.Framework.Contracts.Triggers;
+using System;
 
 namespace HM.OMS.PageOneMessageTrigger
 {
     /// <summary>
     /// The file trigger.
     /// </summary>
-    [TriggerContract("{EFE0DDCC-4470-4D0C-AB00-BEB6549D8591}", "PageOneMessageTrigger", "PageOneMessageTrigger is the OMS service to send mails", false, true, false)]
+    [TriggerContract("{EFE0DDCC-4470-4D0C-AB00-BEB6549D8591}", "PageOneMessageTrigger",
+         "PageOneMessageTrigger is the OMS service to send mails", false, true, false)]
     public class PageOneMessageTrigger : ITriggerType
     {
         /// <summary>
@@ -56,11 +51,13 @@ namespace HM.OMS.PageOneMessageTrigger
         /// </summary>
         [TriggerPropertyContract("From", "The mail from")]
         public string From { get; set; }
+
         /// <summary>
         /// [message] to send an email - [auth] to check the authentication
         /// </summary>
         [TriggerPropertyContract("To", "The mail to")]
         public string To { get; set; }
+
         /// <summary>
         /// [message] to send an email - [auth] to check the authentication
         /// </summary>
@@ -88,6 +85,7 @@ namespace HM.OMS.PageOneMessageTrigger
         /// </summary>
         [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
         public byte[] DataContext { get; set; }
+
         /// <summary>
         /// The execute.
         /// </summary>
@@ -104,22 +102,18 @@ namespace HM.OMS.PageOneMessageTrigger
             {
                 if (input.Length != 0)
                 {
-                    
-
                     actionTrigger(this, context);
                 }
-                return this.DataContext;
-
+                return DataContext;
             }
             catch (Exception ex)
             {
-                this.DataContext = EncodingDecoding.EncodingString2Bytes(ex.Message); 
+                DataContext = EncodingDecoding.EncodingString2Bytes(ex.Message);
                 actionTrigger(this, context);
-                this.ActionTrigger = actionTrigger;
-                this.Context = context;
+                ActionTrigger = actionTrigger;
+                Context = context;
                 return EncodingDecoding.EncodingString2Bytes(ex.Message);
             }
         }
-
     }
 }

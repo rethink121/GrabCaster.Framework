@@ -24,45 +24,42 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Security.Cryptography;
-using System.Text;
-using GrabCaster.Framework.Base;
 
 namespace GrabCaster.Framework.Base
 {
-    public class AESEncryption
+    public class AesEncryption
     {
         private static string SecurityFile = "KeyFile.gck";
+
         public static bool CreateSecurityKey_Aes()
         {
             byte[] Key = new byte[32];
             byte[] IV = new byte[16];
             bool ret = false;
 
-                // Create an AesManaged object
-                // with the specified key and IV.
-                using (AesManaged aesAlg = new AesManaged())
+            // Create an AesManaged object
+            // with the specified key and IV.
+            using (AesManaged aesAlg = new AesManaged())
+            {
+                byte[] keyContent = aesAlg.Key.Concat(aesAlg.IV).ToArray();
+                File.WriteAllBytes(GetSecurityFileName_Aes(), keyContent);
+                string[] filesConf = Directory.GetFiles(ConfigurationBag.Configuration.BaseDirectory, "*.cfg");
+                foreach (var item in filesConf)
                 {
-                    byte[] keyContent = aesAlg.Key.Concat(aesAlg.IV).ToArray();
-                    File.WriteAllBytes(GetSecurityFileName_Aes(), keyContent);
-                    string[] filesConf = System.IO.Directory.GetFiles(ConfigurationBag.Configuration.BaseDirectory, "*.cfg");
-                    foreach (var item in filesConf)
-                    {
-                        byte[] content = File.ReadAllBytes(item);
-                        byte[] contentCrypted = EncryptByteToBytes_Aes(content);
-                        File.WriteAllBytes(item, contentCrypted);
-                    }
+                    byte[] content = File.ReadAllBytes(item);
+                    byte[] contentCrypted = EncryptByteToBytes_Aes(content);
+                    File.WriteAllBytes(item, contentCrypted);
                 }
-                ret = true;
+            }
+            ret = true;
 
 
             return ret;
-
         }
 
         public static bool DeleteSecurityKey_Aes()
@@ -72,134 +69,117 @@ namespace GrabCaster.Framework.Base
             bool ret = false;
 
 
-                // Create an AesManaged object
-                // with the specified key and IV.
-                using (AesManaged aesAlg = new AesManaged())
+            // Create an AesManaged object
+            // with the specified key and IV.
+            using (AesManaged aesAlg = new AesManaged())
+            {
+                byte[] keyContent = aesAlg.Key.Concat(aesAlg.IV).ToArray();
+                File.WriteAllBytes(GetSecurityFileName_Aes(), keyContent);
+                string[] filesConf = Directory.GetFiles(ConfigurationBag.Configuration.BaseDirectory, "*.cfg");
+                foreach (var item in filesConf)
                 {
-                    byte[] keyContent = aesAlg.Key.Concat(aesAlg.IV).ToArray();
-                    File.WriteAllBytes(GetSecurityFileName_Aes(), keyContent);
-                    string[] filesConf = System.IO.Directory.GetFiles(ConfigurationBag.Configuration.BaseDirectory, "*.cfg");
-                    foreach (var item in filesConf)
-                    {
-                        byte[] content = File.ReadAllBytes(item);
-                        byte[] contentCrypted = EncryptByteToBytes_Aes(content);
-                        File.WriteAllBytes(item, contentCrypted);
-                    }
+                    byte[] content = File.ReadAllBytes(item);
+                    byte[] contentCrypted = EncryptByteToBytes_Aes(content);
+                    File.WriteAllBytes(item, contentCrypted);
                 }
-                ret = true;
-
+            }
+            ret = true;
 
 
             return ret;
-
         }
 
         public static bool SecurityOn_Aes()
         {
             return File.Exists(GetSecurityFileName_Aes());
-
         }
+
         public static string GetSecurityFileName_Aes()
         {
             string secFile = Path.Combine(ConfigurationBag.Configuration.BaseDirectory, SecurityFile);
             return secFile;
-
         }
+
         public static byte[] GetSecurityContent_Aes()
         {
             return File.ReadAllBytes(GetSecurityFileName_Aes());
-
         }
+
         public static byte[] EncryptByteToBytes_Aes(byte[] byteContent)
         {
-
             byte[] encrypted = null;
 
 
             // Create an AesManaged object
             // with the specified key and IV.
 
-                using (AesManaged aesAlg = new AesManaged())
+            using (AesManaged aesAlg = new AesManaged())
+            {
+                byte[] Key = new byte[32];
+                byte[] IV = new byte[16];
+
+                byte[] contentKey = GetSecurityContent_Aes();
+                Array.Copy(contentKey, 0, Key, 0, 32);
+                Array.Copy(contentKey, 32, IV, 0, 16);
+
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                // Create a decrytor to perform the stream transform.
+                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+
+                // Create the streams used for encryption.
+                using (MemoryStream msEncrypt = new MemoryStream())
                 {
-                    byte[] Key = new byte[32];
-                    byte[] IV = new byte[16];
-
-                    byte[] contentKey = GetSecurityContent_Aes();
-                    Array.Copy(contentKey, 0, Key, 0, 32);
-                    Array.Copy(contentKey, 32, IV, 0, 16);
-
-                    aesAlg.Key = Key;
-                    aesAlg.IV = IV;
-
-                    // Create a decrytor to perform the stream transform.
-                    ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
-
-                    // Create the streams used for encryption.
-                    using (MemoryStream msEncrypt = new MemoryStream())
+                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
                     {
-                        using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                        {
-
-                            csEncrypt.Write(byteContent, 0, byteContent.Length);
-                            csEncrypt.FlushFinalBlock();
-                            encrypted = msEncrypt.ToArray();
-                            msEncrypt.Close();
-                            csEncrypt.Close();
-                        }
+                        csEncrypt.Write(byteContent, 0, byteContent.Length);
+                        csEncrypt.FlushFinalBlock();
+                        encrypted = msEncrypt.ToArray();
+                        msEncrypt.Close();
+                        csEncrypt.Close();
                     }
-
                 }
-                // Return the encrypted bytes from the memory stream.
-                return encrypted;
-
-
-
-
-
-
+            }
+            // Return the encrypted bytes from the memory stream.
+            return encrypted;
         }
 
         public static byte[] DecryptByteFromBytes_Aes(byte[] cipherText)
         {
-
             // the decrypted byte array.
-            byte[] deCipherText = new byte[cipherText.Length]; ;
+            byte[] deCipherText = new byte[cipherText.Length];
+            ;
 
             // Create an AesManaged object
             // with the specified key and IV.
 
-                using (AesManaged aesAlg = new AesManaged())
+            using (AesManaged aesAlg = new AesManaged())
+            {
+                byte[] Key = new byte[32];
+                byte[] IV = new byte[16];
+                byte[] contentKey = GetSecurityContent_Aes();
+                Array.Copy(contentKey, 0, Key, 0, 32);
+                Array.Copy(contentKey, 32, IV, 0, 16);
+
+                aesAlg.Key = Key;
+                aesAlg.IV = IV;
+
+                // Create a decrytor to perform the stream transform.
+                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+                // Create the streams used for decryption.
+                using (MemoryStream msDecrypt = new MemoryStream(cipherText))
                 {
-                    byte[] Key = new byte[32];
-                    byte[] IV = new byte[16];
-                    byte[] contentKey = GetSecurityContent_Aes();
-                    Array.Copy(contentKey, 0, Key, 0, 32);
-                    Array.Copy(contentKey, 32, IV, 0, 16);
-
-                    aesAlg.Key = Key;
-                    aesAlg.IV = IV;
-
-                    // Create a decrytor to perform the stream transform.
-                    ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-
-                    // Create the streams used for decryption.
-                    using (MemoryStream msDecrypt = new MemoryStream(cipherText))
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                     {
-                        using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                        {
-                            csDecrypt.Read(deCipherText, 0, deCipherText.Length);
-                            msDecrypt.Close();
-                            csDecrypt.Close();
-                        }
+                        csDecrypt.Read(deCipherText, 0, deCipherText.Length);
+                        msDecrypt.Close();
+                        csDecrypt.Close();
                     }
                 }
-                return deCipherText;
-
-
- 
+            }
+            return deCipherText;
         }
-
-
-
     }
 }

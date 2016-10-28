@@ -24,12 +24,12 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.AzureBlobEvent
 {
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
-
+    using Contracts.Attributes;
+    using Contracts.Events;
+    using Contracts.Globals;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -105,22 +105,22 @@ namespace GrabCaster.Framework.AzureBlobEvent
         {
             try
             {
-                this.Context = context;
-                this.ActionEvent = actionEvent;
+                Context = context;
+                ActionEvent = actionEvent;
 
-                var storageAccount = CloudStorageAccount.Parse(this.StorageAccount);
+                var storageAccount = CloudStorageAccount.Parse(StorageAccount);
                 var blobClient = storageAccount.CreateCloudBlobClient();
 
                 // Retrieve a reference to a container. 
-                var container = blobClient.GetContainerReference(this.BlobContainer);
+                var container = blobClient.GetContainerReference(BlobContainer);
 
                 // Create the container if it doesn't already exist.
                 container.CreateIfNotExists();
                 container.SetPermissions(
-                    new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
+                    new BlobContainerPermissions {PublicAccess = BlobContainerPublicAccessType.Blob});
 
-                var blockBlob = container.GetBlockBlobReference(this.BlobBlockReference);
-                blockBlob.UploadFromByteArray(this.DataContext, 0, this.DataContext.Length);
+                var blockBlob = container.GetBlockBlobReference(BlobBlockReference);
+                blockBlob.UploadFromByteArray(DataContext, 0, DataContext.Length);
 
                 actionEvent(this, context);
                 return null;
@@ -129,7 +129,6 @@ namespace GrabCaster.Framework.AzureBlobEvent
             {
                 return null;
             }
-
         } // Execute
     } // AzureBlobEvent
 } // namespace

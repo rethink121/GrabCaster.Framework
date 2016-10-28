@@ -24,27 +24,23 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Engine
 {
+    using Base;
+    using Common;
+    using Contracts.Bubbling;
+    using Log;
+    using Newtonsoft.Json;
+    using OffRamp;
+    using Serialization.Xml;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using System.ServiceModel.Web;
-    using System.Text;
     using System.Xml;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Common;
-    using GrabCaster.Framework.Contracts.Bubbling;
-    using GrabCaster.Framework.Engine.OffRamp;
-    using GrabCaster.Framework.Log;
-    using GrabCaster.Framework.Serialization;
-    using GrabCaster.Framework.Serialization.Xml;
-    using Newtonsoft.Json;
-
     using Formatting = Newtonsoft.Json.Formatting;
 
     /// <summary>
@@ -73,32 +69,27 @@ namespace GrabCaster.Framework.Engine
         {
             try
             {
-                byte[] content = GrabCaster.Framework.CompressionLibrary.Helpers.CreateFromDirectory(ConfigurationBag.Configuration.DirectoryOperativeRootExeName);
+                byte[] content =
+                    CompressionLibrary.Helpers.CreateFromDirectory(
+                        ConfigurationBag.Configuration.DirectoryOperativeRootExeName);
 
                 BubblingObject bubblingObject = new BubblingObject(content);
                 bubblingObject.MessageType = "SyncPush";
                 OffRampEngineSending.SendMessageOffRamp(bubblingObject,
-                                                        "SyncPush",
-                                                        destinationChannelId,
-                                                        destinationPointId,
-                                                        string.Empty);
+                    "SyncPush",
+                    destinationChannelId,
+                    destinationPointId,
+                    string.Empty);
             }
             catch (Exception ex)
             {
-
-
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                                            "Configuration.WebApiEndPoint key empty, internal Web Api interface disable",
-                                            Constant.LogLevelError,
-                                            Constant.TaskCategoriesError,
-                                            null,
-                                            Constant.LogLevelWarning);
-
+                    "Configuration.WebApiEndPoint key empty, internal Web Api interface disable",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
+                    Constant.LogLevelWarning);
             }
-
-
-
-
         }
 
         /// <summary>
@@ -108,32 +99,25 @@ namespace GrabCaster.Framework.Engine
         {
             try
             {
-
                 BubblingObject bubblingObject = new BubblingObject(null);
                 bubblingObject.MessageType = "SyncPull";
                 OffRampEngineSending.SendMessageOffRamp(bubblingObject,
-                                                        "SyncPull",
-                                                        destinationChannelId,
-                                                        destinationPointId,
-                                                        string.Empty);
+                    "SyncPull",
+                    destinationChannelId,
+                    destinationPointId,
+                    string.Empty);
             }
             catch (Exception ex)
             {
-
-
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                                            "Configuration.WebApiEndPoint key empty, internal Web Api interface disable",
-                                            Constant.LogLevelError,
-                                            Constant.TaskCategoriesError,
-                                            null,
-                                            Constant.LogLevelWarning);
-
+                    "Configuration.WebApiEndPoint key empty, internal Web Api interface disable",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
+                    Constant.LogLevelWarning);
             }
-
-
-
-
         }
+
         /// <summary>
         /// The sync write configuration.
         /// </summary>
@@ -151,7 +135,7 @@ namespace GrabCaster.Framework.Engine
             try
             {
                 Debug.WriteLine(
-                    $"Received configuration from ChannelID: {channelId} PointID {pointId}", 
+                    $"Received configuration from ChannelID: {channelId} PointID {pointId}",
                     ConsoleColor.Green);
                 var folder = string.Concat(ConfigurationBag.SyncDirectoryGcPoints(), "\\", channelId, "\\", pointId);
                 if (!Directory.Exists(folder))
@@ -164,11 +148,11 @@ namespace GrabCaster.Framework.Engine
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
             }
         }
@@ -184,26 +168,26 @@ namespace GrabCaster.Framework.Engine
             try
             {
                 Debug.WriteLine(
-                    $"Syncronize configuration file.{syncConfigurationFile.Name}", 
+                    $"Syncronize configuration file.{syncConfigurationFile.Name}",
                     ConsoleColor.Green);
                 var filename = Path.GetFileName(syncConfigurationFile.Name);
 
                 var configurationFile = string.Concat(
                     syncConfigurationFile.FileType == "Trigger"
                         ? ConfigurationBag.DirectoryBubblingTriggers()
-                        : ConfigurationBag.DirectoryBubblingEvents(), 
-                    "\\", 
+                        : ConfigurationBag.DirectoryBubblingEvents(),
+                    "\\",
                     filename);
                 File.WriteAllBytes(configurationFile, syncConfigurationFile.FileContent);
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
             }
         }
@@ -236,54 +220,54 @@ namespace GrabCaster.Framework.Engine
         /// The Channel Description.
         /// </param>
         public static void SyncBubblingConfigurationFile(
-            SyncConfigurationFile syncConfigurationFile, 
-            string messageType, 
-            string senderId, 
-            string senderName, 
-            string senderDescriprion, 
-            string channelId, 
-            string channelName, 
+            SyncConfigurationFile syncConfigurationFile,
+            string messageType,
+            string senderId,
+            string senderName,
+            string senderDescriprion,
+            string channelId,
+            string channelName,
             string channelDescription)
         {
             try
             {
                 Debug.WriteLine(
-                    $"Syncronize configuration file. {syncConfigurationFile.Name} from PointID {senderId} ", 
+                    $"Syncronize configuration file. {syncConfigurationFile.Name} from PointID {senderId} ",
                     ConsoleColor.Green);
 
                 var gcPointInfo = string.Concat(
-                    channelId, 
-                    "^", 
-                    channelName, 
-                    "^", 
-                    channelDescription, 
-                    "^", 
-                    senderId, 
-                    "^", 
-                    senderName, 
-                    "^", 
+                    channelId,
+                    "^",
+                    channelName,
+                    "^",
+                    channelDescription,
+                    "^",
+                    senderId,
+                    "^",
+                    senderName,
+                    "^",
                     senderDescriprion);
                 var filename = Path.GetFileName(syncConfigurationFile.Name);
 
                 var configurationFile = string.Concat(
-                    ConfigurationBag.SyncDirectoryGcPoints(), 
-                    "\\", 
-                    channelId, 
-                    "\\", 
-                    senderId, 
-                    "\\", 
+                    ConfigurationBag.SyncDirectoryGcPoints(),
+                    "\\",
+                    channelId,
+                    "\\",
+                    senderId,
+                    "\\",
                     syncConfigurationFile.FileType == "Trigger"
                         ? ConfigurationBag.DirectoryNameTriggers
-                        : ConfigurationBag.DirectoryNameEvents, 
-                    "\\", 
+                        : ConfigurationBag.DirectoryNameEvents,
+                    "\\",
                     filename);
                 var gcPointInfoFile = string.Concat(
-                    ConfigurationBag.SyncDirectoryGcPoints(), 
-                    "\\", 
-                    channelId, 
-                    "\\", 
-                    senderId, 
-                    "\\", 
+                    ConfigurationBag.SyncDirectoryGcPoints(),
+                    "\\",
+                    channelId,
+                    "\\",
+                    senderId,
+                    "\\",
                     ConfigurationBag.DirectoryFileNameTriggerEventInfo);
                 var directory = Path.GetDirectoryName(configurationFile);
                 if (directory != null && !Directory.Exists(directory))
@@ -293,12 +277,11 @@ namespace GrabCaster.Framework.Engine
                 }
                 else
                 {
-
-                    LogEngine.WriteLog(ConfigurationBag.EngineName, 
-                        $"Error in {MethodBase.GetCurrentMethod().Name} - Missing configuration file.", 
-                        Constant.LogLevelError, 
-                        Constant.TaskCategoriesError, 
-                        null, 
+                    LogEngine.WriteLog(ConfigurationBag.EngineName,
+                        $"Error in {MethodBase.GetCurrentMethod().Name} - Missing configuration file.",
+                        Constant.LogLevelError,
+                        Constant.TaskCategoriesError,
+                        null,
                         Constant.LogLevelError);
                 }
 
@@ -309,11 +292,11 @@ namespace GrabCaster.Framework.Engine
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
             }
         }
@@ -347,13 +330,13 @@ namespace GrabCaster.Framework.Engine
         /// TODO The channel description.
         /// </param>
         public static void SyncBubblingConfigurationFileList(
-            List<SyncConfigurationFile> syncConfigurationFileList, 
-            string messageType, 
-            string senderId, 
-            string senderName, 
-            string senderDescriprion, 
-            string channelId, 
-            string channelName, 
+            List<SyncConfigurationFile> syncConfigurationFileList,
+            string messageType,
+            string senderId,
+            string senderName,
+            string senderDescriprion,
+            string channelId,
+            string channelName,
             string channelDescription)
         {
             try
@@ -361,24 +344,24 @@ namespace GrabCaster.Framework.Engine
                 foreach (var syncConfigurationFile in syncConfigurationFileList)
                 {
                     SyncBubblingConfigurationFile(
-                        syncConfigurationFile, 
-                        messageType, 
-                        senderId, 
-                        senderName, 
-                        senderDescriprion, 
-                        channelId, 
-                        channelName, 
+                        syncConfigurationFile,
+                        messageType,
+                        senderId,
+                        senderName,
+                        senderDescriprion,
+                        channelId,
+                        channelName,
                         channelDescription);
                 }
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
             }
         }
@@ -402,11 +385,11 @@ namespace GrabCaster.Framework.Engine
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
             }
         }
@@ -424,11 +407,10 @@ namespace GrabCaster.Framework.Engine
         {
             try
             {
-
                 if (!ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
                 {
                     Debug.WriteLine(
-                        $"Syncronizing  Bubbling confuguration - Point ID {ConfigurationBag.Configuration.PointId}", 
+                        $"Syncronizing  Bubbling confuguration - Point ID {ConfigurationBag.Configuration.PointId}",
                         ConsoleColor.Yellow);
                     //todo optimization adesso usi il bubblingobject per trasporto, serializza il tutto e mettilo the datastorage del bubblingobject
                     //OffRampEngineSending.SendMessageOnRamp(
@@ -441,22 +423,22 @@ namespace GrabCaster.Framework.Engine
                 else
                 {
                     LogEngine.WriteLog(
-                        ConfigurationBag.EngineName, 
-                        "Warning the Device Provider Interface is disable, the GrabCaster point will be able to work in local mode only.", 
-                        Constant.LogLevelError, 
-                        Constant.TaskCategoriesError, 
-                        null, 
+                        ConfigurationBag.EngineName,
+                        "Warning the Device Provider Interface is disable, the GrabCaster point will be able to work in local mode only.",
+                        Constant.LogLevelError,
+                        Constant.TaskCategoriesError,
+                        null,
                         Constant.LogLevelWarning);
                 }
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
             }
         }
@@ -477,7 +459,7 @@ namespace GrabCaster.Framework.Engine
                 if (!ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
                 {
                     Debug.WriteLine(
-                        $"Send all confuguration - Point ID {ConfigurationBag.Configuration.PointId}", 
+                        $"Send all confuguration - Point ID {ConfigurationBag.Configuration.PointId}",
                         ConsoleColor.Yellow);
                     var stream = GetConfiguration();
 
@@ -498,22 +480,22 @@ namespace GrabCaster.Framework.Engine
                 else
                 {
                     LogEngine.WriteLog(
-                        ConfigurationBag.EngineName, 
-                        "Warning the Device Provider Interface is disable, the GrabCaster point will be able to work in local mode only.", 
-                        Constant.LogLevelError, 
-                        Constant.TaskCategoriesError, 
-                        null, 
+                        ConfigurationBag.EngineName,
+                        "Warning the Device Provider Interface is disable, the GrabCaster point will be able to work in local mode only.",
+                        Constant.LogLevelError,
+                        Constant.TaskCategoriesError,
+                        null,
                         Constant.LogLevelWarning);
                 }
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
             }
         }
@@ -534,9 +516,9 @@ namespace GrabCaster.Framework.Engine
         /// TODO The message type.
         /// </param>
         public static void SyncSendFileBubblingConfiguration(
-            string channelId, 
-            string pointId, 
-            string fileName, 
+            string channelId,
+            string pointId,
+            string fileName,
             string messageType)
         {
             try
@@ -544,27 +526,27 @@ namespace GrabCaster.Framework.Engine
                 if (ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
                 {
                     LogEngine.WriteLog(
-                        ConfigurationBag.EngineName, 
-                        "Warning the Device Provider Interface is disable, the GrabCaster point will be able to work in local mode only.", 
-                        Constant.LogLevelError, 
-                        Constant.TaskCategoriesError, 
-                        null, 
+                        ConfigurationBag.EngineName,
+                        "Warning the Device Provider Interface is disable, the GrabCaster point will be able to work in local mode only.",
+                        Constant.LogLevelError,
+                        Constant.TaskCategoriesError,
+                        null,
                         Constant.LogLevelWarning);
                     return;
                 }
 
                 Debug.WriteLine(
-                    $"Syncronizing  Bubbling confuguration - Point ID {ConfigurationBag.Configuration.PointId}", 
+                    $"Syncronizing  Bubbling confuguration - Point ID {ConfigurationBag.Configuration.PointId}",
                     ConsoleColor.Yellow);
                 var triggerConfigurationList = new List<SyncConfigurationFile>();
 
                 try
                 {
                     var folder = Path.Combine(
-                        ConfigurationBag.SyncDirectoryGcPoints(), 
-                        channelId, 
-                        pointId, 
-                        messageType.ToString() == "Trigger"
+                        ConfigurationBag.SyncDirectoryGcPoints(),
+                        channelId,
+                        pointId,
+                        messageType == "Trigger"
                             ? ConfigurationBag.DirectoryNameTriggers
                             : ConfigurationBag.DirectoryNameEvents);
 
@@ -587,22 +569,22 @@ namespace GrabCaster.Framework.Engine
                 catch (Exception ex)
                 {
                     LogEngine.WriteLog(
-                        ConfigurationBag.EngineName, 
-                        $"Error in {MethodBase.GetCurrentMethod().Name} File {fileName}", 
-                        Constant.LogLevelError, 
-                        Constant.TaskCategoriesError, 
-                        ex, 
+                        ConfigurationBag.EngineName,
+                        $"Error in {MethodBase.GetCurrentMethod().Name} File {fileName}",
+                        Constant.LogLevelError,
+                        Constant.TaskCategoriesError,
+                        ex,
                         Constant.LogLevelError);
                 }
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
             }
         }
@@ -619,24 +601,24 @@ namespace GrabCaster.Framework.Engine
             try
             {
                 Debug.WriteLine(
-                    $"Syncronizing  Bubbling confuguration - Point ID {ConfigurationBag.Configuration.PointId}", 
+                    $"Syncronizing  Bubbling confuguration - Point ID {ConfigurationBag.Configuration.PointId}",
                     ConsoleColor.Yellow);
                 OffRampEngineSending.SendNullMessageOffRamp(
-                    "SyncSendRequestBubblingConfiguration", 
-                    channelId, 
-                    pointId, 
-                    string.Empty, 
+                    "SyncSendRequestBubblingConfiguration",
+                    channelId,
+                    pointId,
+                    string.Empty,
                     null,
                     null);
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
             }
         }
@@ -653,24 +635,24 @@ namespace GrabCaster.Framework.Engine
             try
             {
                 Debug.WriteLine(
-                    $"Syncronizing  Bubbling confuguration - Point ID {ConfigurationBag.Configuration.PointId}", 
+                    $"Syncronizing  Bubbling confuguration - Point ID {ConfigurationBag.Configuration.PointId}",
                     ConsoleColor.Yellow);
                 OffRampEngineSending.SendNullMessageOffRamp(
-                    "SyncSendRequestConfiguration", 
-                    channelId, 
-                    pointId, 
-                    string.Empty, 
+                    "SyncSendRequestConfiguration",
+                    channelId,
+                    pointId,
+                    string.Empty,
                     null,
                     null);
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
             }
         }
@@ -800,24 +782,24 @@ namespace GrabCaster.Framework.Engine
             try
             {
                 Debug.WriteLine(
-                    $"Send request for IDComponent {idComponent} to Point ID {pointId}", 
+                    $"Send request for IDComponent {idComponent} to Point ID {pointId}",
                     ConsoleColor.Yellow);
                 OffRampEngineSending.SendNullMessageOffRamp(
-                    "SyncSendRequestComponent", 
-                    channelId, 
-                    pointId, 
-                    idComponent, 
+                    "SyncSendRequestComponent",
+                    channelId,
+                    pointId,
+                    idComponent,
                     null,
                     null);
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
             }
         }
@@ -845,15 +827,17 @@ namespace GrabCaster.Framework.Engine
                 // ReSharper disable once SpecifyACultureInStringConversionExplicitly
                 XmlHelpers.AddAttribute(docMain, eConfiguration, "DateTimeUtcNow", DateTime.UtcNow.ToString());
                 XmlHelpers.AddAttribute(docMain, eConfiguration, "ChannelId", ConfigurationBag.Configuration.ChannelId);
-                XmlHelpers.AddAttribute(docMain, eConfiguration, "ChannelName", ConfigurationBag.Configuration.ChannelName);
+                XmlHelpers.AddAttribute(docMain, eConfiguration, "ChannelName",
+                    ConfigurationBag.Configuration.ChannelName);
                 XmlHelpers.AddAttribute(
-                    docMain, 
-                    eConfiguration, 
-                    "ChannelDescription", 
+                    docMain,
+                    eConfiguration,
+                    "ChannelDescription",
                     ConfigurationBag.Configuration.ChannelDescription);
                 XmlHelpers.AddAttribute(docMain, eConfiguration, "PointId", ConfigurationBag.Configuration.PointId);
                 XmlHelpers.AddAttribute(docMain, eConfiguration, "PointName", ConfigurationBag.Configuration.PointName);
-                XmlHelpers.AddAttribute(docMain, eConfiguration, "PointDescription", ConfigurationBag.Configuration.PointDescription);
+                XmlHelpers.AddAttribute(docMain, eConfiguration, "PointDescription",
+                    ConfigurationBag.Configuration.PointDescription);
 
                 // Bubbling Triggers
                 var bubbling = docMain.CreateElement(string.Empty, "Bubbling", string.Empty);
@@ -973,9 +957,9 @@ namespace GrabCaster.Framework.Engine
 
                                 XmlHelpers.AddAttribute(docMain, eventCorrelation, "IdComponent", _event.IdComponent);
                                 XmlHelpers.AddAttribute(
-                                    docMain, 
-                                    eventCorrelation, 
-                                    "IDConfiguration", 
+                                    docMain,
+                                    eventCorrelation,
+                                    "IDConfiguration",
                                     _event.IdConfiguration);
                                 XmlHelpers.AddAttribute(docMain, eventCorrelation, "Name", _event.Name);
                                 XmlHelpers.AddAttribute(docMain, eventCorrelation, "Description", _event.Description);
@@ -987,9 +971,9 @@ namespace GrabCaster.Framework.Engine
                         var jsonTemplate = docMain.CreateElement(string.Empty, "JSON", string.Empty);
                         eTrigger.AppendChild(jsonTemplate);
                         var jsonSerialization = JsonConvert.SerializeObject(
-                            triggerConfiguration, 
-                            Formatting.Indented, 
-                            new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+                            triggerConfiguration,
+                            Formatting.Indented,
+                            new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
                         var jsonText = docMain.CreateTextNode(jsonSerialization);
                         jsonTemplate.AppendChild(jsonText);
                     }
@@ -1010,20 +994,20 @@ namespace GrabCaster.Framework.Engine
                     bubblingEvents.AppendChild(eEventBubbling);
 
                     XmlHelpers.AddAttribute(
-                        docMain, 
-                        eEventBubbling, 
-                        "IdConfiguration", 
+                        docMain,
+                        eEventBubbling,
+                        "IdConfiguration",
                         eventConfiguration.Event.IdConfiguration);
                     XmlHelpers.AddAttribute(
-                        docMain, 
-                        eEventBubbling, 
-                        "IdComponent", 
+                        docMain,
+                        eEventBubbling,
+                        "IdComponent",
                         eventConfiguration.Event.IdComponent);
                     XmlHelpers.AddAttribute(docMain, eEventBubbling, "Name", eventConfiguration.Event.Name);
                     XmlHelpers.AddAttribute(
-                        docMain, 
-                        eEventBubbling, 
-                        "Description", 
+                        docMain,
+                        eEventBubbling,
+                        "Description",
                         eventConfiguration.Event.Description);
 
                     if (eventConfiguration.Event.EventProperties != null)
@@ -1048,9 +1032,9 @@ namespace GrabCaster.Framework.Engine
                         var jsonTemplate = docMain.CreateElement(string.Empty, "JSON", string.Empty);
                         bubblingEvents.AppendChild(jsonTemplate);
                         var jsonSerialization = JsonConvert.SerializeObject(
-                            eventConfiguration, 
-                            Formatting.Indented, 
-                            new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+                            eventConfiguration,
+                            Formatting.Indented,
+                            new JsonSerializerSettings {ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
                         var jsonText = docMain.CreateTextNode(jsonSerialization);
                         jsonTemplate.AppendChild(jsonText);
                     }
@@ -1075,12 +1059,12 @@ namespace GrabCaster.Framework.Engine
                     XmlHelpers.AddAttribute(docMain, eTrigger, "Name", triggerAssembly.Value.Name);
                     XmlHelpers.AddAttribute(docMain, eTrigger, "Description", triggerAssembly.Value.Description);
                     XmlHelpers.AddAttribute(docMain, eTrigger, "Version", triggerAssembly.Value.Version.ToString());
-                    XmlHelpers.AddAttribute(docMain, eTrigger, "Shared", triggerAssembly.Value.Shared.ToString());
+                    XmlHelpers.AddAttribute(docMain, eTrigger, "Shared", triggerAssembly.Value.Shared);
                     XmlHelpers.AddAttribute(
-                        docMain, 
-                        eTrigger, 
+                        docMain,
+                        eTrigger,
                         "PollingRequired",
-                        triggerAssembly.Value.PollingRequired.ToString());
+                        triggerAssembly.Value.PollingRequired);
                     XmlHelpers.AddAttribute(docMain, eTrigger, "AssemblyFile", triggerAssembly.Value.AssemblyFile);
 
                     // Actions
@@ -1098,9 +1082,9 @@ namespace GrabCaster.Framework.Engine
                                 XmlHelpers.AddAttribute(docMain, xeProperty, "Name", property.Value.Name);
                                 XmlHelpers.AddAttribute(docMain, xeProperty, "Description", property.Value.Description);
                                 XmlHelpers.AddAttribute(
-                                    docMain, 
-                                    xeProperty, 
-                                    "Type", 
+                                    docMain,
+                                    xeProperty,
+                                    "Type",
                                     property.Value.AssemblyPropertyInfo.PropertyType.ToString());
                             }
                         }
@@ -1135,7 +1119,8 @@ namespace GrabCaster.Framework.Engine
                         // json Template
                         var jsonTemplate = docMain.CreateElement(string.Empty, "JSON", string.Empty);
                         eTrigger.AppendChild(jsonTemplate);
-                        var jsonSerialization = SerializationHelper.CreteJsonTriggerConfigurationTemplate(triggerAssembly.Value);
+                        var jsonSerialization =
+                            SerializationHelper.CreteJsonTriggerConfigurationTemplate(triggerAssembly.Value);
                         var jsonText = docMain.CreateTextNode(jsonSerialization);
                         jsonTemplate.AppendChild(jsonText);
                     }
@@ -1157,12 +1142,12 @@ namespace GrabCaster.Framework.Engine
                     XmlHelpers.AddAttribute(docMain, eEvent, "Name", eventAssembly.Value.Name);
                     XmlHelpers.AddAttribute(docMain, eEvent, "Description", eventAssembly.Value.Description);
                     XmlHelpers.AddAttribute(docMain, eEvent, "Version", eventAssembly.Value.Version.ToString());
-                    XmlHelpers.AddAttribute(docMain, eEvent, "Shared", eventAssembly.Value.Shared.ToString());
+                    XmlHelpers.AddAttribute(docMain, eEvent, "Shared", eventAssembly.Value.Shared);
                     XmlHelpers.AddAttribute(
                         docMain,
                         eEvent,
                         "PollingRequired",
-                        eventAssembly.Value.PollingRequired.ToString());
+                        eventAssembly.Value.PollingRequired);
                     XmlHelpers.AddAttribute(docMain, eEvent, "AssemblyFile", eventAssembly.Value.AssemblyFile);
 
                     // Actions
@@ -1191,7 +1176,8 @@ namespace GrabCaster.Framework.Engine
                         // json Template
                         var jsonTemplate = docMain.CreateElement(string.Empty, "JSON", string.Empty);
                         eEvent.AppendChild(jsonTemplate);
-                        var jsonSerialization = SerializationHelper.CreteJsonEventConfigurationTemplate(eventAssembly.Value);
+                        var jsonSerialization =
+                            SerializationHelper.CreteJsonEventConfigurationTemplate(eventAssembly.Value);
                         var jsonText = docMain.CreateTextNode(jsonSerialization);
                         jsonTemplate.AppendChild(jsonText);
                     }

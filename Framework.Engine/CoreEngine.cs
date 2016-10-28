@@ -24,24 +24,20 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Collections.Generic;
+
 
 namespace GrabCaster.Framework.Engine
 {
+    using Base;
+    using Contracts.Globals;
+    using Log;
+    using OffRamp;
+    using OnRamp;
     using System;
     using System.Diagnostics;
-    using System.Linq;
     using System.Reflection;
     using System.Text;
     using System.Threading;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Engine.OffRamp;
-    using GrabCaster.Framework.Engine.OnRamp;
-    using GrabCaster.Framework.Log;
-
-    using Microsoft.ServiceBus;
 
     /// <summary>
     ///     Primary engine, it start all, this is the first point
@@ -94,17 +90,18 @@ namespace GrabCaster.Framework.Engine
         {
             try
             {
-
                 LogEngine.DirectEventViewerLog("Engine starting...", 4);
                 var current = AppDomain.CurrentDomain;
                 current.AssemblyResolve += HandleAssemblyResolve;
 
                 LogEngine.Enabled = ConfigurationBag.Configuration.LoggingEngineEnabled;
-                Debug.WriteLine("Load Engine configuration.", ConsoleColor.White);
+                Debug.WriteLine("Load Engine configuration.");
 
                 //****************************Check for updates
                 //Check if need to update files received from partners
-                Debug.WriteLine($"Check Engine Syncronization {ConfigurationBag.Configuration.AutoSyncronizationEnabled}.", ConsoleColor.White);
+                Debug.WriteLine(
+                    $"Check Engine Syncronization {ConfigurationBag.Configuration.AutoSyncronizationEnabled}.",
+                    ConsoleColor.White);
                 if (ConfigurationBag.Configuration.AutoSyncronizationEnabled)
                 {
                     EventsEngine.SyncronizePoint();
@@ -113,11 +110,11 @@ namespace GrabCaster.Framework.Engine
                 //****************************Check for updates
 
                 //Set service states
-                Debug.WriteLine("Initialize Engine Service states.", ConsoleColor.White);
+                Debug.WriteLine("Initialize Engine Service states.");
                 ServiceStates.RunPolling = ConfigurationBag.Configuration.RunInternalPolling;
                 ServiceStates.RestartNeeded = false;
 
-                Debug.WriteLine("Initialize Engine.", ConsoleColor.Cyan);
+                Debug.WriteLine("Initialize Engine.");
                 EventsEngine.InitializeEventEngine(delegateEmbedded);
 
                 //Init Message ingestor
@@ -154,7 +151,6 @@ namespace GrabCaster.Framework.Engine
                         haCheck.Start();
                         Thread haClean = new Thread(EventsEngine.HAPointsClean);
                         haClean.Start();
-
                     }
 
                     if (!canStart)
@@ -177,7 +173,8 @@ namespace GrabCaster.Framework.Engine
                 var numOfEvents = 0;
                 var numOfComponents = 0;
 
-                var triggersAndEventsLoaded = EventsEngine.LoadAssemblyComponents(ref numOfTriggers, ref numOfEvents,ref numOfComponents);
+                var triggersAndEventsLoaded = EventsEngine.LoadAssemblyComponents(ref numOfTriggers, ref numOfEvents,
+                    ref numOfComponents);
                 if (triggersAndEventsLoaded)
                 {
                     Debug.WriteLine(
@@ -198,11 +195,11 @@ namespace GrabCaster.Framework.Engine
                 else
                 {
                     LogEngine.WriteLog(ConfigurationBag.EngineName,
-                                            $"Configuration.EnginePollingTime = {ConfigurationBag.Configuration.EnginePollingTime}, internal polling system disabled.",
-                                            Constant.LogLevelError,
-                                            Constant.TaskCategoriesError,
-                                            null,
-                                            Constant.LogLevelWarning);
+                        $"Configuration.EnginePollingTime = {ConfigurationBag.Configuration.EnginePollingTime}, internal polling system disabled.",
+                        Constant.LogLevelError,
+                        Constant.TaskCategoriesError,
+                        null,
+                        Constant.LogLevelWarning);
                 }
 
                 //Start Engine Service
@@ -292,13 +289,9 @@ namespace GrabCaster.Framework.Engine
                         null,
                         Constant.LogLevelWarning);
                     return;
+                }
+                Debug.WriteLine("Start Trigger Polling Cycle", ConsoleColor.Blue);
 
-                }
-                else
-                {
-                    Debug.WriteLine("Start Trigger Polling Cycle", ConsoleColor.Blue);
-                }
-                
 
                 while (ServiceStates.RunPolling)
                 {
@@ -325,7 +318,6 @@ namespace GrabCaster.Framework.Engine
                     Thread.Sleep(pollingTime);
                     var treadPollingRun = new Thread(EventsEngine.ExecuteBubblingTriggerConfigurationPolling);
                     treadPollingRun.Start();
-
                 }
             }
             catch (Exception ex)

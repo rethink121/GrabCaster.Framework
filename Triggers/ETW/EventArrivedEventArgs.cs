@@ -24,6 +24,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.ETW
 {
     using System;
@@ -40,7 +41,7 @@ namespace GrabCaster.Framework.ETW
         internal EventArrivedEventArgs(Exception error)
             : this(0 /*eventId*/, new PropertyBag())
         {
-            this.Error = error;
+            Error = error;
         }
 
         /// <summary>
@@ -54,8 +55,8 @@ namespace GrabCaster.Framework.ETW
         /// </param>
         internal EventArrivedEventArgs(ushort eventId, PropertyBag properties)
         {
-            this.EventId = eventId;
-            this.Properties = properties;
+            EventId = eventId;
+            Properties = properties;
         }
 
         /// <summary>

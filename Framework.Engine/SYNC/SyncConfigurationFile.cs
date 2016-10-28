@@ -24,12 +24,11 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Engine
 {
     using System;
     using System.Runtime.Serialization;
-
-    using GrabCaster.Framework.Base;
 
     /// <summary>
     /// The sync configuration file.
@@ -59,10 +58,10 @@ namespace GrabCaster.Framework.Engine
             byte[] fileContent,
             string channelId)
         {
-            this.FileType = fileType;
-            this.Name = name;
-            this.FileContent = fileContent;
-            this.ChannelId = channelId;
+            FileType = fileType;
+            Name = name;
+            FileContent = fileContent;
+            ChannelId = channelId;
         }
 
         /// <summary>

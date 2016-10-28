@@ -24,23 +24,22 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.EventHubsTrigger
 {
-    using System;
-    using System.Threading;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
-
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Triggers;
     using Microsoft.ServiceBus;
     using Microsoft.ServiceBus.Messaging;
+    using System;
+    using System.Threading;
 
     /// <summary>
     /// The event hubs trigger.
     /// </summary>
     [TriggerContract("{AD270984-5695-4D1F-AB78-1E960AFBEE9D}", "Event Hubs Trigger", "Get messages from Event Hubs",
-        false, true, false)]
+         false, true, false)]
     public class EventHubsTrigger : ITriggerType
     {
         /// <summary>
@@ -57,6 +56,7 @@ namespace GrabCaster.Framework.EventHubsTrigger
 
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
+
         public string SupportBag { get; set; }
 
         /// <summary>
@@ -89,28 +89,28 @@ namespace GrabCaster.Framework.EventHubsTrigger
         {
             try
             {
-                this.Context = context;
-                this.ActionTrigger = actionTrigger;
+                Context = context;
+                ActionTrigger = actionTrigger;
 
                 // Create the connection string
-                var builder = new ServiceBusConnectionStringBuilder(this.EventHubsConnectionString)
-                                  {
-                                      TransportType =
-                                          TransportType
-                                          .Amqp
-                                  };
+                var builder = new ServiceBusConnectionStringBuilder(EventHubsConnectionString)
+                {
+                    TransportType =
+                        TransportType
+                            .Amqp
+                };
 
                 // Create the EH Client
-                var eventHubClient = EventHubClient.CreateFromConnectionString(builder.ToString(), this.EventHubsName);
+                var eventHubClient = EventHubClient.CreateFromConnectionString(builder.ToString(), EventHubsName);
 
                 // muli partition sample
                 var namespaceManager = NamespaceManager.CreateFromConnectionString(builder.ToString());
-                var eventHubDescription = namespaceManager.GetEventHub(this.EventHubsName);
+                var eventHubDescription = namespaceManager.GetEventHub(EventHubsName);
 
                 // Use the default consumer group
                 foreach (var partitionId in eventHubDescription.PartitionIds)
                 {
-                    var myNewThread = new Thread(() => this.ReceiveDirectFromPartition(eventHubClient, partitionId));
+                    var myNewThread = new Thread(() => ReceiveDirectFromPartition(eventHubClient, partitionId));
                     myNewThread.Start();
                 }
                 return null;
@@ -140,8 +140,8 @@ namespace GrabCaster.Framework.EventHubsTrigger
                 var message = receiver.Receive();
                 if (message != null)
                 {
-                    this.DataContext = message.GetBytes();
-                    this.ActionTrigger(this, this.Context);
+                    DataContext = message.GetBytes();
+                    ActionTrigger(this, Context);
                 }
             }
             // ReSharper disable once FunctionNeverReturns

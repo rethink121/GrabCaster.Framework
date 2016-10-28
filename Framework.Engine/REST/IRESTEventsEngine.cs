@@ -24,13 +24,12 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Engine
 {
     using System.IO;
     using System.ServiceModel;
     using System.ServiceModel.Web;
-
-    using GrabCaster.Framework.Base;
 
     /// <summary>
     /// The RestEventsEngine interface.
@@ -65,118 +64,6 @@ namespace GrabCaster.Framework.Engine
         [OperationContract]
         [WebGet]
         string Sync();
-
-        /// <summary>
-        /// The sync send bubbling configuration.
-        /// </summary>
-        /// <param name="channelId">
-        /// The channel id.
-        /// </param>
-        /// <param name="pointId">
-        /// The point id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        [OperationContract]
-        [WebGet]
-        string SyncSendBubblingConfiguration(string channelId, string pointId);
-
-        /// <summary>
-        /// The sync send file bubbling configuration.
-        /// </summary>
-        /// <param name="channelId">
-        /// The channel id.
-        /// </param>
-        /// <param name="pointId">
-        /// The point id.
-        /// </param>
-        /// <param name="fileName">
-        /// The file name.
-        /// </param>
-        /// <param name="messageType">
-        /// The message type.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        [OperationContract]
-        [WebGet]
-        string SyncSendFileBubblingConfiguration(
-            string channelId,
-            string pointId,
-            string fileName,
-            string messageType);
-
-        /// <summary>
-        /// The sync send request bubbling configuration.
-        /// </summary>
-        /// <param name="channelId">
-        /// The channel id.
-        /// </param>
-        /// <param name="pointId">
-        /// The point id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        [OperationContract]
-        [WebGet]
-        string SyncSendRequestBubblingConfiguration(string channelId, string pointId);
-
-        /// <summary>
-        /// The sync send component.
-        /// </summary>
-        /// <param name="channelId">
-        /// The channel id.
-        /// </param>
-        /// <param name="pointId">
-        /// The point id.
-        /// </param>
-        /// <param name="idComponent">
-        /// The id component.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        //[OperationContract]
-        //[WebGet]
-        //string SyncSendComponent(string channelId, string pointId, string idComponent);
-
-        /// <summary>
-        /// The sync send request configuration.
-        /// </summary>
-        /// <param name="channelId">
-        /// The channel id.
-        /// </param>
-        /// <param name="pointId">
-        /// The point id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        [OperationContract]
-        [WebGet]
-        string SyncSendRequestConfiguration(string channelId, string pointId);
-
-        /// <summary>
-        /// The sync send request component.
-        /// </summary>
-        /// <param name="channelId">
-        /// The channel id.
-        /// </param>
-        /// <param name="pointId">
-        /// The point id.
-        /// </param>
-        /// <param name="idComponent">
-        /// The id component.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        [OperationContract]
-        [WebGet]
-        string SyncSendRequestComponent(string channelId, string pointId, string idComponent);
 
         /// <summary>
         /// The configuration.

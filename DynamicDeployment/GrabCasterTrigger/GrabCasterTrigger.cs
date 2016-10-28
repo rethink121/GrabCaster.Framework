@@ -24,11 +24,13 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCasterTrigger.Trigger
 {
     using GrabCaster.Framework.Contracts.Attributes;
     using GrabCaster.Framework.Contracts.Globals;
     using GrabCaster.Framework.Contracts.Triggers;
+
     //<USING>
     /// <summary>
     /// The nop trigger.
@@ -37,7 +39,8 @@ namespace GrabCasterTrigger.Trigger
     public class GrabCasterTrigger : ITriggerType
     {
         //<PROPERTIES>
-        [TriggerPropertyContract("Syncronous", "Define if the action between the trigger and the remote event needs to be syncronous")]
+        [TriggerPropertyContract("Syncronous",
+             "Define if the action between the trigger and the remote event needs to be syncronous")]
         public bool Syncronous { get; set; }
 
         /// <summary>
@@ -73,6 +76,7 @@ namespace GrabCasterTrigger.Trigger
             actionTrigger(this, context);
             return null;
         }
+
         //<FUNCTIONS>
     }
 }

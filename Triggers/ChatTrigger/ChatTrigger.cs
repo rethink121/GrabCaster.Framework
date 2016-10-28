@@ -24,11 +24,14 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Threading;
+
 using GrabCaster.Framework.Base;
 
 namespace GrabCaster.Framework.ChatTrigger
 {
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Triggers;
     using System;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
@@ -36,33 +39,31 @@ namespace GrabCaster.Framework.ChatTrigger
     using System.Text;
     using System.Windows.Forms;
 
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
-
     /// <summary>
     /// The chat trigger.
     /// </summary>
-    [TriggerContract("{B515A376-B91E-495C-ADEE-2AD3DC54C2B3}", "ChatTrigger", "Create a P2P chat bridge.", false, true, 
-        false)]
+    [TriggerContract("{B515A376-B91E-495C-ADEE-2AD3DC54C2B3}", "ChatTrigger", "Create a P2P chat bridge.", false, true,
+         false)]
     public class ChatTrigger : ITriggerType
     {
         /// <summary>
         /// The w h_ keyboar d_ ll.
         /// </summary>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+             Justification = "Reviewed. Suppression is OK here.")] [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore",
+                                                                        Justification = "Reviewed. Suppression is OK here.")]
         // ReSharper disable once InconsistentNaming
         private const int WH_KEYBOARD_LL = 13;
 
         /// <summary>
         /// The w m_ keydown.
         /// </summary>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+             Justification = "Reviewed. Suppression is OK here.")] [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore",
+                                                                        Justification = "Reviewed. Suppression is OK here.")]
         // ReSharper disable once InconsistentNaming
         private const int WM_KEYDOWN = 0x0100;
-        
+
         /// <summary>
         /// The line chat.
         /// </summary>
@@ -71,8 +72,9 @@ namespace GrabCaster.Framework.ChatTrigger
         /// <summary>
         /// The _proc.
         /// </summary>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
-        private static readonly LowLevelKeyboardProc Proc = HookCallback;
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+             Justification = "Reviewed. Suppression is OK here.")] private static readonly LowLevelKeyboardProc Proc =
+            HookCallback;
 
         /// <summary>
         /// The hook id.
@@ -96,8 +98,10 @@ namespace GrabCaster.Framework.ChatTrigger
         /// <param name="lParam">
         /// The l param.
         /// </param>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1615:ElementReturnValueMustBeDocumented", Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1615:ElementReturnValueMustBeDocumented",
+             Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+             Justification = "Reviewed. Suppression is OK here.")]
         private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         /// <summary>
@@ -109,7 +113,8 @@ namespace GrabCaster.Framework.ChatTrigger
         /// <returns>
         /// The <see cref="IntPtr"/>.
         /// </returns>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+             Justification = "Reviewed. Suppression is OK here.")]
         private static IntPtr SetHook(LowLevelKeyboardProc proc)
         {
             using (var curProcess = Process.GetCurrentProcess())
@@ -134,11 +139,13 @@ namespace GrabCaster.Framework.ChatTrigger
         /// <returns>
         /// The <see cref="IntPtr"/>.
         /// </returns>
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation",
+             Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+             Justification = "Reviewed. Suppression is OK here.")]
         private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
+            if (nCode >= 0 && wParam == (IntPtr) WM_KEYDOWN)
             {
                 var notepads = Process.GetProcessesByName("notepad");
                 Process notepadChat = null;
@@ -147,14 +154,14 @@ namespace GrabCaster.Framework.ChatTrigger
                     if (notepad.MainWindowTitle.ToUpper() == "CHAT.TXT - NOTEPAD")
                         notepadChat = notepad;
                 }
-                
 
-                if (notepadChat != null )
+
+                if (notepadChat != null)
                 {
                     var virtualkCode = Marshal.ReadInt32(lParam);
                     if (virtualkCode != 13)
                     {
-                        LineChat.Append((char)virtualkCode);
+                        LineChat.Append((char) virtualkCode);
                     }
 
                     if (virtualkCode == 13)
@@ -166,31 +173,38 @@ namespace GrabCaster.Framework.ChatTrigger
                         InternalActionTrigger(trigger, InternalContext);
                     }
                 }
-                
             }
 
             return CallNextHookEx(hookId, nCode, wParam, lParam);
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation",
+             Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation",
+             Justification = "Reviewed. Suppression is OK here.")]
         private static extern IntPtr SetWindowsHookEx(
             int idHook,
             LowLevelKeyboardProc lpfn,
             IntPtr hMod,
             uint dwThreadId);
+
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool UnhookWindowsHookEx(IntPtr hhk);
+
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation",
+             Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation",
+             Justification = "Reviewed. Suppression is OK here.")]
         private static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation",
+             Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation",
+             Justification = "Reviewed. Suppression is OK here.")]
         private static extern IntPtr GetModuleHandle(string lpModuleName);
 
         /// <summary>
@@ -254,7 +268,7 @@ namespace GrabCaster.Framework.ChatTrigger
             trigger = this;
             InternalContext = context;
             InternalActionTrigger = actionTrigger;
-            InternalDataContext = this.DataContext;
+            InternalDataContext = DataContext;
             StartHooking();
             return null;
         }

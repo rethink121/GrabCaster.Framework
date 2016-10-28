@@ -24,16 +24,18 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.EmbeddedEvent
 {
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
+    using Contracts.Attributes;
+    using Contracts.Events;
+    using Contracts.Globals;
 
     /// <summary>
     /// The no operation event.
     /// </summary>
-    [EventContract("{A31209D7-C989-4E5D-93DA-BD341D843870}", "Embedded Event", "Event use in the enbedded components.", true)]
+    [EventContract("{A31209D7-C989-4E5D-93DA-BD341D843870}", "Embedded Event", "Event use in the enbedded components.",
+         true)]
     public class EmbeddedEvent : IEventType
     {
         /// <summary>

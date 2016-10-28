@@ -24,22 +24,18 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Storage
 {
+    using Base;
+    using Contracts.Bubbling;
+    using Contracts.Globals;
+    using Log;
+    using Newtonsoft.Json;
     using System;
     using System.Diagnostics;
     using System.IO;
     using System.Reflection;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Contracts.Bubbling;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Log;
-
-    using Microsoft.WindowsAzure.Storage;
-    using Microsoft.WindowsAzure.Storage.Blob;
-
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Main persistent provider.
@@ -60,7 +56,7 @@ namespace GrabCaster.Framework.Storage
                 return true;
             }
 
-            return PersistMessage(actionContext,CommunicationDiretion.OnRamp);
+            return PersistMessage(actionContext, CommunicationDiretion.OnRamp);
         }
 
         /// <summary>
@@ -75,7 +71,7 @@ namespace GrabCaster.Framework.Storage
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public static bool PersistMessage(ActionContext actionContext,CommunicationDiretion communicationDiretion)
+        public static bool PersistMessage(ActionContext actionContext, CommunicationDiretion communicationDiretion)
         {
             try
             {
@@ -86,44 +82,45 @@ namespace GrabCaster.Framework.Storage
 
                 var serializedMessage = JsonConvert.SerializeObject(actionContext.BubblingObjectBag);
                 var directoryDate = string.Concat(
-                    DateTime.Now.Year, 
-                    "\\", 
-                    DateTime.Now.Month.ToString().PadLeft(2, '0'), 
-                    "\\", 
-                    DateTime.Now.Day.ToString().PadLeft(2, '0'), 
-                    "\\", 
+                    DateTime.Now.Year,
+                    "\\",
+                    DateTime.Now.Month.ToString().PadLeft(2, '0'),
+                    "\\",
+                    DateTime.Now.Day.ToString().PadLeft(2, '0'),
+                    "\\",
                     communicationDiretion.ToString());
                 var datetimeFile = string.Concat(
-                    DateTime.Now.Year, 
-                    DateTime.Now.Month.ToString().PadLeft(2, '0'), 
-                    DateTime.Now.Day.ToString().PadLeft(2, '0'), 
-                    "-", 
-                    DateTime.Now.Hour.ToString().PadLeft(2, '0'), 
-                    "-", 
-                    DateTime.Now.Minute.ToString().PadLeft(2, '0'), 
-                    "-", 
+                    DateTime.Now.Year,
+                    DateTime.Now.Month.ToString().PadLeft(2, '0'),
+                    DateTime.Now.Day.ToString().PadLeft(2, '0'),
+                    "-",
+                    DateTime.Now.Hour.ToString().PadLeft(2, '0'),
+                    "-",
+                    DateTime.Now.Minute.ToString().PadLeft(2, '0'),
+                    "-",
                     DateTime.Now.Second.ToString().PadLeft(2, '0'));
 
-                var persistingForlder = Path.Combine(ConfigurationBag.Configuration.LocalStorageConnectionString, directoryDate);
+                var persistingForlder = Path.Combine(ConfigurationBag.Configuration.LocalStorageConnectionString,
+                    directoryDate);
                 Directory.CreateDirectory(persistingForlder);
                 var filePersisted = Path.Combine(
-                    persistingForlder, 
-                    string.Concat(datetimeFile, "-", actionContext.MessageId, ConfigurationBag.MessageFileStorageExtension));
+                    persistingForlder,
+                    string.Concat(datetimeFile, "-", actionContext.MessageId,
+                        ConfigurationBag.MessageFileStorageExtension));
 
                 File.WriteAllText(filePersisted, serializedMessage);
                 Debug.WriteLine(
-                    "Event persisted -  Consistency Transaction Point created.", 
-                    ConsoleColor.DarkGreen);
+                    "Event persisted -  Consistency Transaction Point created.");
                 return true;
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
                 return false;
             }
@@ -141,7 +138,8 @@ namespace GrabCaster.Framework.Storage
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public static bool PersistMessage(BubblingObject bubblingObject,string MessageId, CommunicationDiretion communicationDiretion)
+        public static bool PersistMessage(BubblingObject bubblingObject, string MessageId,
+            CommunicationDiretion communicationDiretion)
         {
             try
             {
@@ -170,7 +168,8 @@ namespace GrabCaster.Framework.Storage
                     "-",
                     DateTime.Now.Second.ToString().PadLeft(2, '0'));
 
-                var persistingForlder = Path.Combine(ConfigurationBag.Configuration.LocalStorageConnectionString, directoryDate);
+                var persistingForlder = Path.Combine(ConfigurationBag.Configuration.LocalStorageConnectionString,
+                    directoryDate);
                 Directory.CreateDirectory(persistingForlder);
                 var filePersisted = Path.Combine(
                     persistingForlder,
@@ -194,6 +193,5 @@ namespace GrabCaster.Framework.Storage
                 return false;
             }
         }
-
     }
 }

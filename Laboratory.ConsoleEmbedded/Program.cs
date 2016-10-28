@@ -24,38 +24,22 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+
 using GrabCaster.Framework.Base;
 using GrabCaster.Framework.Contracts;
 using GrabCaster.Framework.Contracts.Bubbling;
-using GrabCaster.Framework.Contracts.Serialization;
-using GrabCaster.Framework.FileTrigger;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace GrabCaster.Laboratory.ConsoleEmbedded
 {
-    using System.Text;
-    using System.Threading.Tasks;
-    using System.Collections.Concurrent;
-    using System.Threading;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Library;
+    using Framework.Contracts.Events;
+    using Framework.Contracts.Globals;
+    using Framework.Library;
+
     class Program
     {
-        /// <summary>
-        /// The set event action event embedded.
-        /// </summary>
-        private static Embedded.SetEventActionEventEmbedded setEventActionEventEmbedded;
-
-
         /// <summary>
         /// The main.
         /// </summary>
@@ -107,15 +91,15 @@ namespace GrabCaster.Laboratory.ConsoleEmbedded
             //return;
 
             Console.WriteLine("Start Test...");
-            GrabCaster.Framework.Library.Embedded.StartMinimalEngine();
+            Embedded.StartMinimalEngine();
 
             //One run
             {
                 //Initialize trigger
 
 
-                TriggerEmbeddedBag triggerEmbeddedBag = 
-                    GrabCaster.Framework.Library.Embedded.InitializeEmbeddedTrigger(
+                TriggerEmbeddedBag triggerEmbeddedBag =
+                    Embedded.InitializeEmbeddedTrigger(
                         "{DF3F9F3F-938F-43F7-AE39-2DA5F9C1BD9E}",
                         "{306DE168-1CEF-4D29-B280-225B5D0D76FD}");
 
@@ -129,7 +113,6 @@ namespace GrabCaster.Laboratory.ConsoleEmbedded
 
                 triggerEmbeddedBag.Properties = properties;
 
-                long calls = 0;
                 string ret = "";
 
                 long totalCycles = 0;
@@ -152,16 +135,15 @@ namespace GrabCaster.Laboratory.ConsoleEmbedded
                     long ElapsedTime = EndingTime - StartingTime;
 
 
-                    double ElapsedSeconds = ElapsedTime * (1000.0 / Stopwatch.Frequency);
+                    double ElapsedSeconds = ElapsedTime*(1000.0/Stopwatch.Frequency);
 
 
                     totalElapsed = totalElapsed + ElapsedSeconds;
-                    avgElapsedSeconds = totalElapsed / totalCycles;
+                    avgElapsedSeconds = totalElapsed/totalCycles;
 
                     if (ElapsedSeconds < minimunElapsedSeconds)
                         minimunElapsedSeconds = ElapsedSeconds;
                     threadSafe = guid == ret;
-
 
 
                     Console.WriteLine($"--------------------------------------------------------------");
@@ -174,28 +156,21 @@ namespace GrabCaster.Laboratory.ConsoleEmbedded
                     {
                         Console.WriteLine($"Thread Safe KO :[{guid}]-[{ret}]");
                         Console.ReadLine();
-
-
-
                     }
-
-
-
                 }
-
             }
-
-
         }
 
         static string ExecuteTestTriggerTest(TriggerEmbeddedBag triggerEmbeddedBag)
         {
-                return EncodingDecoding.EncodingBytes2String(GrabCaster.Framework.Library.Embedded.ExecuteEmbeddedTrigger(triggerEmbeddedBag));
+            return EncodingDecoding.EncodingBytes2String(Embedded.ExecuteEmbeddedTrigger(triggerEmbeddedBag));
         }
+
         static void start()
         {
-            GrabCaster.Framework.Library.Embedded.StartEngine();
+            Embedded.StartEngine();
         }
+
         /// <summary>
         /// The event received from embedded.
         /// </summary>
@@ -207,10 +182,9 @@ namespace GrabCaster.Laboratory.ConsoleEmbedded
         /// </param>
         private static void EventReceivedFromEmbedded(IEventType eventType, ActionContext context)
         {
-
             string stringValue = EncodingDecoding.EncodingBytes2String(eventType.DataContext);
             Console.WriteLine("---------------EVENT RECEIVED FROM EMBEDDED LIBRARY---------------");
             Console.WriteLine(stringValue);
-         }
+        }
     }
 }

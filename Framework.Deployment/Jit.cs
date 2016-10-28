@@ -24,33 +24,30 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+
 using GrabCaster.Framework.Base;
 using GrabCaster.Framework.Log;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace GrabCaster.Framework.Deployment
 {
     public class Jit
     {
-        private static string locationOfMSBuilldEXE = "";
-
-        public static bool CompilePublishing(string projectExtension,string projectName, string ConfigurationBuild, string Platform)
+        public static bool CompilePublishing(string projectExtension, string projectName, string configurationBuild,
+            string platform)
         {
             try
             {
-
                 string projectType = "";
                 switch (projectExtension.ToLower())
                 {
@@ -62,8 +59,6 @@ namespace GrabCaster.Framework.Deployment
                         break;
                     case "component":
                         projectType = "Component";
-                        break;
-                    default:
                         break;
                 }
                 string projectTtypeName = $"GrabCaster{projectType}";
@@ -87,12 +82,14 @@ namespace GrabCaster.Framework.Deployment
                 //Create all of the directories
                 foreach (string dirPath in Directory.GetDirectories(sourcePublishing, "*",
                     SearchOption.AllDirectories))
-                    Directory.CreateDirectory(dirPath.Replace(sourcePublishing, destinationPath + $"\\bin\\{ConfigurationBuild}") );
+                    Directory.CreateDirectory(dirPath.Replace(sourcePublishing,
+                        destinationPath + $"\\bin\\{configurationBuild}"));
 
                 //Copy all the files & Replaces any files with the same name
                 foreach (string newPath in Directory.GetFiles(sourcePublishing, "*.*",
                     SearchOption.AllDirectories))
-                    File.Copy(newPath, newPath.Replace(sourcePublishing, destinationPath + $"\\bin\\{ConfigurationBuild}"), true);
+                    File.Copy(newPath,
+                        newPath.Replace(sourcePublishing, destinationPath + $"\\bin\\{configurationBuild}"), true);
 
 
                 string solutionFile = Path.Combine(destinationPath, projectName + ".sln");
@@ -111,24 +108,26 @@ namespace GrabCaster.Framework.Deployment
                 string textBag = File.ReadAllText(Path.Combine(sourcePublishing, projectName + $".{projectExtension}"));
 
                 //Get Dll to add as reference 
-                var dllsReference = Directory.GetFiles(destinationPath + $"\\bin\\{ConfigurationBuild}", "*.*", SearchOption.AllDirectories)
-                    .Where(path => Path.GetExtension(path) == ".dll" && !Path.GetFileName(path).Contains("GrabCaster.Framework"));
+                var dllsReference = Directory.GetFiles(destinationPath + $"\\bin\\{configurationBuild}", "*.*",
+                        SearchOption.AllDirectories)
+                    .Where(
+                        path =>
+                            Path.GetExtension(path) == ".dll" &&
+                            !Path.GetFileName(path).Contains("GrabCaster.Framework"));
 
                 string dllTextReference =
                     "<Reference Include=\"FULLNAME, processorArchitecture=MSIL\">\r" +
                     "<SpecificVersion>False</SpecificVersion>\r" +
-                    $"<HintPath>bin\\{ConfigurationBuild}\\DLLNAME </HintPath>\r" +
+                    $"<HintPath>bin\\{configurationBuild}\\DLLNAME </HintPath>\r" +
                     "</Reference>\r";
 
-                StringBuilder sbDlls = new StringBuilder(); 
+                StringBuilder sbDlls = new StringBuilder();
                 foreach (var dllReference in dllsReference)
                 {
                     Assembly assembly = Assembly.LoadFrom(dllReference);
                     sbDlls.AppendLine(dllTextReference.Replace("FULLNAME", assembly.FullName)
                         .Replace("DLLNAME", Path.GetFileName(assembly.Location)));
-
                 }
-
 
 
                 //Rename markup in solution file
@@ -140,17 +139,17 @@ namespace GrabCaster.Framework.Deployment
                 string textProj = File.ReadAllText(projectFile);
                 textProj = textProj.Replace(projectTtypeName, projectName);
                 textProj = textProj.Replace("<!--DLL-->", sbDlls.ToString());
-                textProj = textProj.Replace("*CONFIGURATION*", ConfigurationBuild);
-                textProj = textProj.Replace("*PLATFORM*", Platform);
+                textProj = textProj.Replace("*CONFIGURATION*", configurationBuild);
+                textProj = textProj.Replace("*PLATFORM*", platform);
                 File.WriteAllText(projectFile, textProj);
 
                 //Rename markup in class file
                 string textCs = File.ReadAllText(classFile);
                 textCs = textCs.Replace(projectTtypeName, projectName);
 
-                string componentID = Guid.NewGuid().ToString();
+                string componentId = Guid.NewGuid().ToString();
                 //TriggerID
-                textCs = textCs.Replace("*ID*", componentID);
+                textCs = textCs.Replace("*ID*", componentId);
 
                 //ContractID
                 textCs = textCs.Replace("*CONTRACTID*", Guid.NewGuid().ToString());
@@ -160,17 +159,25 @@ namespace GrabCaster.Framework.Deployment
 
                 //Description
                 textCs = textCs.Replace("*DESCRIPTION*", $"{projectName} {projectType} component");
-                
+
                 //using
-                var textUsing = Regex.Matches(textBag, "<USING>(.*?)</USING>", RegexOptions.Multiline | RegexOptions.Singleline)[0].Value.Replace("<USING>", "").Replace("</USING>", "");
-                StringBuilder sbUsing = new StringBuilder();
+                var textUsing =
+                    Regex.Matches(textBag, "<USING>(.*?)</USING>", RegexOptions.Multiline | RegexOptions.Singleline)[0]
+                        .Value.Replace("<USING>", "").Replace("</USING>", "");
                 textCs = textCs.Replace("//<USING>", textUsing);
 
                 //Code
-                var textCode = Regex.Matches(textBag, "<MAINCODE>(.*?)</MAINCODE>", RegexOptions.Multiline | RegexOptions.Singleline)[0].Value.Replace("<MAINCODE>", "").Replace("</MAINCODE>", "");
+                var textCode =
+                    Regex.Matches(textBag, "<MAINCODE>(.*?)</MAINCODE>",
+                            RegexOptions.Multiline | RegexOptions.Singleline)[0].Value.Replace("<MAINCODE>", "")
+                        .Replace("</MAINCODE>", "");
 
                 //Properties
-                var textCodeLines = Regex.Matches(textBag, "<MAINCODE>(.*?)</MAINCODE>", RegexOptions.Multiline | RegexOptions.Singleline)[0].Value.Replace("<MAINCODE>", "").Replace("</MAINCODE>", "").Split('\r');
+                var textCodeLines =
+                    Regex.Matches(textBag, "<MAINCODE>(.*?)</MAINCODE>",
+                            RegexOptions.Multiline | RegexOptions.Singleline)[0].Value.Replace("<MAINCODE>", "")
+                        .Replace("</MAINCODE>", "")
+                        .Split('\r');
 
                 string functionName = "";
                 string innerArgs = "";
@@ -192,7 +199,7 @@ namespace GrabCaster.Framework.Deployment
                 //Remove the first and last brachet
                 int brachet = textCode.IndexOf("{") + 1;
                 textCode = textCode.Substring(brachet, textCode.Length - brachet);
-                textCode = textCode.Substring(0, textCode.LastIndexOf("}")-1);
+                textCode = textCode.Substring(0, textCode.LastIndexOf("}") - 1);
 
                 textCs = textCs.Replace("//<MAINCODE>", textCode);
 
@@ -205,21 +212,24 @@ namespace GrabCaster.Framework.Deployment
                 foreach (var item in paramTags)
                 {
                     string[] param = item.ToString().Split(' ');
-                    sbParamsComponent.AppendLine($"\t\t[{projectType}PropertyContract(\"{param[1]}\", \"{param[1]} property\")]");
+                    sbParamsComponent.AppendLine(
+                        $"\t\t[{projectType}PropertyContract(\"{param[1]}\", \"{param[1]} property\")]");
                     sbParamsComponent.AppendLine("\t\tpublic " + item + " { get; set; }");
 
                     sbParamsConfiguration.AppendLine("\t\t{");
                     sbParamsConfiguration.AppendLine($"\t\t\"Name\": \"{param[1]}\",");
                     sbParamsConfiguration.AppendLine("\t\t\"Value\": \"\"");
                     sbParamsConfiguration.AppendLine("\t\t},");
-
                 }
 
 
                 textCs = textCs.Replace("//<PROPERTIES>", sbParamsComponent.ToString());
 
                 //functions
-                string textFunctions = Regex.Matches(textBag, "<FUNCTIONS>(.*?)</FUNCTIONS>", RegexOptions.Multiline | RegexOptions.Singleline)[0].Value.Replace("<FUNCTIONS>", "").Replace("</FUNCTIONS>", ""); ;
+                string textFunctions =
+                    Regex.Matches(textBag, "<FUNCTIONS>(.*?)</FUNCTIONS>",
+                            RegexOptions.Multiline | RegexOptions.Singleline)[0].Value.Replace("<FUNCTIONS>", "")
+                        .Replace("</FUNCTIONS>", "");
                 textCs = textCs.Replace("//<FUNCTIONS>", textFunctions);
 
                 File.WriteAllText(classFile, textCs);
@@ -231,7 +241,10 @@ namespace GrabCaster.Framework.Deployment
 
                 //Create the Configuration file
                 var configurationFiles = Directory.GetFiles(destinationPath, "*.*", SearchOption.AllDirectories)
-                      .Where(path => Path.GetExtension(path) == ".off" || Path.GetExtension(path) == ".cmp" || Path.GetExtension(path) == ".evn");
+                    .Where(
+                        path =>
+                            Path.GetExtension(path) == ".off" || Path.GetExtension(path) == ".cmp" ||
+                            Path.GetExtension(path) == ".evn");
 
                 foreach (var file in configurationFiles)
                 {
@@ -240,14 +253,15 @@ namespace GrabCaster.Framework.Deployment
                     string textJson = File.ReadAllText(configurationFile);
 
                     string configurationProperties = sbParamsConfiguration.ToString();
-                    configurationProperties = configurationProperties.Substring(0, configurationProperties.LastIndexOf(","));
+                    configurationProperties = configurationProperties.Substring(0,
+                        configurationProperties.LastIndexOf(","));
 
                     textJson = textJson.Replace("//<PROPERTIES>", configurationProperties);
-                    textJson = textJson.Replace("*ID*", componentID);
+                    textJson = textJson.Replace("*ID*", componentId);
                     textJson = textJson.Replace("*IDCONFIGURATION*", Guid.NewGuid().ToString());
 
                     //Name
-                    textJson = textJson.Replace("*NAME*", $"{ projectName} { projectType} configuration");
+                    textJson = textJson.Replace("*NAME*", $"{projectName} {projectType} configuration");
 
                     //Description
                     textJson = textJson.Replace("*DESCRIPTION*", $"{projectName} {projectType} configuration");
@@ -255,15 +269,12 @@ namespace GrabCaster.Framework.Deployment
                 }
 
 
-
-
                 //Build the project
-                bool resultOk = Build(projectFile, sourcePublishing, projectName, ConfigurationBuild, Platform);
+                bool resultOk = Build(projectFile, sourcePublishing, projectName, configurationBuild, platform);
 
                 //Copy the {Configuration} into the component
                 if (resultOk)
                 {
-
                     string folderConfigurationFile = "";
                     string folderdllFile = "";
                     switch (projectExtension.ToLower())
@@ -285,18 +296,23 @@ namespace GrabCaster.Framework.Deployment
                     }
 
                     //Copy the dll
-                    string source = Path.Combine(destinationPath, $"bin\\{ConfigurationBuild}\\{projectName}.{projectType}.dll");
+                    string source = Path.Combine(destinationPath,
+                        $"bin\\{configurationBuild}\\{projectName}.{projectType}.dll");
                     string destinationDll = Path.Combine(folderdllFile,
                         $"{projectName}.{projectType}.dll");
                     File.Copy(source, destinationDll, true);
 
                     var configurationFilesNew = Directory.GetFiles(destinationPath, "*.*", SearchOption.AllDirectories)
-                                .Where(path => Path.GetExtension(path) == ".off" || Path.GetExtension(path) == ".cmp" || Path.GetExtension(path) == ".evn");
+                        .Where(
+                            path =>
+                                Path.GetExtension(path) == ".off" || Path.GetExtension(path) == ".cmp" ||
+                                Path.GetExtension(path) == ".evn");
 
                     //Copy the configuration files
                     foreach (var configurationFile in configurationFilesNew)
                     {
-                        File.Copy(configurationFile,Path.Combine(folderConfigurationFile,Path.GetFileName(configurationFile)), true);
+                        File.Copy(configurationFile,
+                            Path.Combine(folderConfigurationFile, Path.GetFileName(configurationFile)), true);
                     }
                 }
 
@@ -304,53 +320,51 @@ namespace GrabCaster.Framework.Deployment
             }
             catch (Exception ex)
             {
-
-
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                           "Configuration.WebApiEndPoint key empty, internal Web Api interface disable",
-                           Constant.LogLevelError,
-                           Constant.TaskCategoriesError,
-                           null,
-                           Constant.LogLevelWarning);
+                    "Configuration.WebApiEndPoint key empty, internal Web Api interface disable",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
+                    Constant.LogLevelWarning);
                 return false;
             }
         }
 
 
-        public static bool Build(string msbuildFileName,string destinationLogFolder,string fileLogName,string Configuration,string Platform)
+        public static bool Build(string msbuildFileName, string destinationLogFolder, string fileLogName,
+            string Configuration, string Platform)
         {
             try
             {
-
                 var projectCollection = new ProjectCollection();
                 var buildParamters = new BuildParameters(projectCollection);
-                buildParamters.Loggers = new List<Microsoft.Build.Framework.ILogger>() { new FileLogger() { Parameters = $"logfile={destinationLogFolder} \\{fileLogName}Build.log" } };
+                buildParamters.Loggers = new List<ILogger>
+                {
+                    new FileLogger {Parameters = $"logfile={destinationLogFolder} \\{fileLogName}Build.log"}
+                };
 
                 var globalProperty = new Dictionary<String, String>();
-                globalProperty.Add("Configuration",Configuration );
-                globalProperty.Add("Platform",Platform );
+                globalProperty.Add("Configuration", Configuration);
+                globalProperty.Add("Platform", Platform);
 
                 BuildManager.DefaultBuildManager.ResetCaches();
 
-                var buildRequest = new BuildRequestData(msbuildFileName, globalProperty, null, new String[] { "Clean", "Build" }, null);
+                var buildRequest = new BuildRequestData(msbuildFileName, globalProperty, null, new[] {"Clean", "Build"},
+                    null);
                 var buildResult = BuildManager.DefaultBuildManager.Build(buildParamters, buildRequest);
-                
+
                 return buildResult.OverallResult == BuildResultCode.Success;
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                   "Configuration.WebApiEndPoint key empty, internal Web Api interface disable",
-                   Constant.LogLevelError,
-                   Constant.TaskCategoriesError,
-                   null,
-                   Constant.LogLevelWarning);
+                    "Configuration.WebApiEndPoint key empty, internal Web Api interface disable",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
+                    Constant.LogLevelWarning);
                 return false;
-
-
             }
-
         }
-
     }
 }

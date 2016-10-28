@@ -24,34 +24,29 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace BTSG.TestPipeline
 {
-  public partial class flatViewer : Form
-  {
-    public string text = "";
-    public flatViewer()
+    public partial class FlatViewer : Form
     {
-      InitializeComponent();
-    }
+        private string text = "";
 
-    private void close_Click(object sender, EventArgs e)
-    {
-      this.Close();
+        public FlatViewer()
+        {
+            InitializeComponent();
+        }
 
-    }
+        private void close_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
 
-    private void flatViewer_Load(object sender, EventArgs e)
-    {
-      txtflat.Text = text;
+        private void flatViewer_Load(object sender, EventArgs e)
+        {
+            txtflat.Text = text;
+        }
     }
-  }
 }

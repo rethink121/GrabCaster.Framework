@@ -24,45 +24,39 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Threading.Tasks;
+
 using GrabCaster.Framework.Contracts;
-using GrabCaster.Framework.Contracts.Bubbling;
-using GrabCaster.Framework.Contracts.Serialization;
-using GrabCaster.Framework.Contracts.Triggers;
 
 namespace GrabCaster.Framework.Library
 {
+    using Base;
+    using Contracts.Events;
+    using Contracts.Globals;
+    using Engine;
+    using Log;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Diagnostics;
+    using System.Linq;
     using System.Reflection;
     using System.Threading;
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Common;
-    using GrabCaster.Framework.Contracts.Configuration;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Engine;
-    using GrabCaster.Framework.Engine.OffRamp;
-    using GrabCaster.Framework.Log;
-    using System.IO;
-    using System.Text;    /// <summary>
-                          /// The embedded point.
-                          /// </summary>
+
+    /// <summary>
+    /// The embedded point.
+    /// </summary>
     public class Embedded
     {
-
         public delegate void SetEventActionEventEmbedded(IEventType _this, ActionContext context);
 
         /// <summary>
         /// Used internally by the embedded
         /// </summary>
         public static SetEventActionEventEmbedded setEventActionEventEmbedded { get; set; }
+
         /// <summary>
         /// 
         /// </summary>
-        public static bool engineLoaded = false;
+        public static bool engineLoaded;
+
         // Global Action Events
         /// <summary>
         /// The delegate action event.
@@ -86,6 +80,7 @@ namespace GrabCaster.Framework.Library
             t.Start();
             EngineStartedAsync();
         }
+
         public static void StartMinimalEngine()
         {
             try
@@ -115,14 +110,13 @@ namespace GrabCaster.Framework.Library
                 //    // ServiceBase.Run(servicesToRun);
                 //}
 
-                Debug.WriteLine("--GrabCaster Sevice Initialization--Start Engine.", ConsoleColor.Green);
-               // delegateActionEvent = delegateActionEventEmbedded;
+                Debug.WriteLine("--GrabCaster Sevice Initialization--Start Engine.");
+                // delegateActionEvent = delegateActionEventEmbedded;
                 CoreEngine.StartEventEngine(null);
                 engineLoaded = true;
             }
             catch (NotImplementedException ex)
             {
-                
                 LogEngine.WriteLog(
                     ConfigurationBag.EngineName,
                     "Error in " + MethodBase.GetCurrentMethod().Name,
@@ -154,7 +148,6 @@ namespace GrabCaster.Framework.Library
                     LogEngine.QueueConsoleMessageOnPublish(LogEngine.QueueConsoleMessage.ToArray().ToList());
                 }
             }
-
         }
 
         public static void StartEngine()
@@ -225,7 +218,6 @@ namespace GrabCaster.Framework.Library
                     LogEngine.QueueConsoleMessageOnPublish(LogEngine.QueueConsoleMessage.ToArray().ToList());
                 }
             }
-
         }
 
         public static void EngineStartedAsync()
@@ -247,10 +239,9 @@ namespace GrabCaster.Framework.Library
             {
                 //If embedded mode and trigger source == embeddedtrigger then not execute the internal embedded delelegate 
                 //todo optimization qui controllavo se chi ha chiamato levento e un trigger? forse meglio usare un approccio diverso, ho rimosso il check fdel trigger, sembra inutile
-               
-             //   if (context.BubblingObjectBag.AssemblyClassType != typeof(GrabCaster.Framework.EmbeddedTrigger.EmbeddedTrigger))
-                setEventActionEventEmbedded(eventType, context);
 
+                //   if (context.BubblingObjectBag.AssemblyClassType != typeof(GrabCaster.Framework.EmbeddedTrigger.EmbeddedTrigger))
+                setEventActionEventEmbedded(eventType, context);
             }
             catch (Exception ex)
             {
@@ -264,7 +255,6 @@ namespace GrabCaster.Framework.Library
                     ex,
                     Constant.LogLevelError);
             }
-            
         }
 
         /// <summary>
@@ -273,14 +263,14 @@ namespace GrabCaster.Framework.Library
         public static void InitializeOffRampEmbedded(ActionEvent delegateEmbedded)
         {
             //Load Configuration
-            GrabCaster.Framework.Base.ConfigurationBag.LoadConfiguration();
+            ConfigurationBag.LoadConfiguration();
 
             LogEngine.WriteLog(ConfigurationBag.EngineName,
-                            "Inizialize Off Ramp embedded messaging.",
-                            Constant.LogLevelError,
-                            Constant.TaskCategoriesError,
-                            null,
-                            Constant.LogLevelInformation);
+                "Inizialize Off Ramp embedded messaging.",
+                Constant.LogLevelError,
+                Constant.TaskCategoriesError,
+                null,
+                Constant.LogLevelInformation);
 
             //Solve App domain environment
             var current = AppDomain.CurrentDomain;
@@ -294,7 +284,7 @@ namespace GrabCaster.Framework.Library
             EventsEngine.InitializeTriggerEngine();
             EventsEngine.InitializeEmbeddedEvent(delegateEmbedded);
             //Load component list configuration
-            EventsEngine.LoadAssemblyComponents(ref triggers,ref events, ref components);
+            EventsEngine.LoadAssemblyComponents(ref triggers, ref events, ref components);
 
             //Load event list configuration
             EventsEngine.RefreshBubblingSetting();
@@ -321,8 +311,8 @@ namespace GrabCaster.Framework.Library
             try
             {
                 var triggerSingleInstance = (from trigger in EventsEngine.BubblingTriggerConfigurationsSingleInstance
-                                             where trigger.IdComponent == componeId && trigger.IdConfiguration == configurationId
-                                             select trigger).First();
+                    where trigger.IdComponent == componeId && trigger.IdConfiguration == configurationId
+                    select trigger).First();
                 EventsEngine.ExecuteTriggerConfiguration(triggerSingleInstance, data);
                 return true;
             }
@@ -354,9 +344,7 @@ namespace GrabCaster.Framework.Library
         {
             try
             {
-
                 return EventsEngine.InitializeEmbeddedTrigger(configurationId, componentId);
-
             }
             catch (Exception ex)
             {
@@ -374,6 +362,7 @@ namespace GrabCaster.Framework.Library
         public static AutoResetEvent eventStop { get; set; }
         public static SyncAsyncEventAction SyncAsyncEventAction { get; set; }
         private static byte[] _syncronousDataContext;
+
         /// <summary>
         /// Execute an embedded trigger 
         /// </summary>
@@ -390,7 +379,8 @@ namespace GrabCaster.Framework.Library
                 eventStop = new AutoResetEvent(false);
                 SyncAsyncEventAction = SyncAsyncActionReceived;
                 triggerEmbeddedBag.ActionContext.BubblingObjectBag.SyncronousToken = Guid.NewGuid().ToString();
-                EventsEngine.SyncAsyncEventsAddDelegate(triggerEmbeddedBag.ActionContext.BubblingObjectBag.SyncronousToken,
+                EventsEngine.SyncAsyncEventsAddDelegate(
+                    triggerEmbeddedBag.ActionContext.BubblingObjectBag.SyncronousToken,
                     SyncAsyncActionReceived);
 
                 EventsEngine.EngineExecuteEmbeddedTrigger(triggerEmbeddedBag);
@@ -398,9 +388,6 @@ namespace GrabCaster.Framework.Library
                 eventStop.WaitOne();
 
                 return _syncronousDataContext;
-
-
-               
             }
             catch (Exception ex)
             {
@@ -420,10 +407,5 @@ namespace GrabCaster.Framework.Library
             _syncronousDataContext = content;
             eventStop.Set();
         }
-
-
-
-
-
     }
 }

@@ -24,22 +24,23 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.BulksqlServerEvent
 {
+    using Contracts.Attributes;
+    using Contracts.Events;
+    using Contracts.Globals;
+    using Contracts.Serialization;
     using System;
     using System.Data;
     using System.Data.SqlClient;
 
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Serialization;
-
     /// <summary>
     /// The bulksql server event.
     /// </summary>
-    [EventContract("{767D579B-986B-47B1-ACDF-46738434043F}", "BulksqlServerEvent Event", "Receive a Sql Server recordset to perform a bulk insert.",
-        true)]
+    [EventContract("{767D579B-986B-47B1-ACDF-46738434043F}", "BulksqlServerEvent Event",
+         "Receive a Sql Server recordset to perform a bulk insert.",
+         true)]
     public class BulksqlServerEvent : IEventType
     {
         /// <summary>
@@ -75,7 +76,7 @@ namespace GrabCaster.Framework.BulksqlServerEvent
         /// </summary>
         [EventPropertyContract("DataContext", "Event Default Main Data")]
         public byte[] DataContext { get; set; }
-        
+
         /// <summary>
         /// The execute.
         /// </summary>
@@ -90,17 +91,17 @@ namespace GrabCaster.Framework.BulksqlServerEvent
         {
             try
             {
-                using (var destinationConnection = new SqlConnection(this.ConnectionString))
+                using (var destinationConnection = new SqlConnection(ConnectionString))
                 {
                     destinationConnection.Open();
-                    using (var bulkCopy = new SqlBulkCopy(this.ConnectionString))
+                    using (var bulkCopy = new SqlBulkCopy(ConnectionString))
                     {
-                        bulkCopy.DestinationTableName = this.TableNameDestination;
+                        bulkCopy.DestinationTableName = TableNameDestination;
                         try
                         {
-                            object obj = Serialization.ByteArrayToDataTable(this.DataContext);
-                            var dataTable = (DataTable)obj;
-                            
+                            object obj = Serialization.ByteArrayToDataTable(DataContext);
+                            var dataTable = (DataTable) obj;
+
                             // Write from the source to the destination.
                             bulkCopy.WriteToServer(dataTable);
                         }

@@ -24,18 +24,17 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Reflection;
+
 
 namespace GrabCaster.Framework.Base
 {
+    using Microsoft.ServiceBus;
+    using Newtonsoft.Json;
     using System;
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.Serialization;
     using System.Text;
-    using Microsoft.ServiceBus;
-    using Newtonsoft.Json;
-    using GrabCaster.Framework.Common;
 
     public enum EhReceivePatternType
     {
@@ -66,8 +65,6 @@ namespace GrabCaster.Framework.Base
     /// </summary>
     public static class ConfigurationBag
     {
-
-
         //Configuration storagew
         //Abstraction layer for the configuration storage, now is using json file
         public static Configuration Configuration;
@@ -176,7 +173,8 @@ namespace GrabCaster.Framework.Base
             {
                 //Get Exe name
                 var filename =
-                    Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName).Replace(".vshost", "");
+                    Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName)
+                        .Replace(".vshost", "");
 
                 //Get the configuration file
                 configurationFile = Path.Combine(
@@ -199,7 +197,8 @@ namespace GrabCaster.Framework.Base
                     Configuration.BaseDirectory = Configuration.ClusterBaseFolder;
                     if (!Directory.Exists(Configuration.BaseDirectory))
                     {
-                        throw new NotImplementedException($"Missing the Cluster Base Folder Directory {Configuration.BaseDirectory}.");
+                        throw new NotImplementedException(
+                            $"Missing the Cluster Base Folder Directory {Configuration.BaseDirectory}.");
                     }
                 }
                 else
@@ -213,7 +212,8 @@ namespace GrabCaster.Framework.Base
 
                 if (!Directory.Exists(rootDirConf))
                 {
-                    EventLog.WriteEntry("GrabCaster", $"Missing the Configuration Directory {rootDirConf}.", EventLogEntryType.Error);
+                    EventLog.WriteEntry("GrabCaster", $"Missing the Configuration Directory {rootDirConf}.",
+                        EventLogEntryType.Error);
                     throw new NotImplementedException($"Missing the Configuration Directory {rootDirConf}.");
                 }
 
@@ -222,11 +222,9 @@ namespace GrabCaster.Framework.Base
                     Configuration.BaseDirectory,
                     string.Concat(DirectoryNameConfigurationRoot, "_", filename));
                 Configuration.DirectoryServiceExecutable = Configuration.BaseDirectory;
-
             }
             catch (Exception ex)
             {
-
                 EventLog.WriteEntry("GrabCaster", ex.Message, EventLogEntryType.Error);
                 throw ex;
             }
@@ -271,7 +269,6 @@ namespace GrabCaster.Framework.Base
         }
 
 
-
         /// <summary>
         ///     BUBBLING\Log directory
         /// </summary>
@@ -280,6 +277,7 @@ namespace GrabCaster.Framework.Base
         {
             return Path.Combine(Configuration.BaseDirectory, "Log");
         }
+
         /// <summary>
         ///     BUBBLING\Log\Concole directory
         /// </summary>
@@ -288,6 +286,7 @@ namespace GrabCaster.Framework.Base
         {
             return Path.Combine(Configuration.BaseDirectory, "Log\\Console");
         }
+
         /// <summary>
         ///     ENDPOINTS directory
         /// </summary>
@@ -323,6 +322,7 @@ namespace GrabCaster.Framework.Base
         {
             return Path.Combine(Configuration.DirectoryOperativeRootExeName, DirectoryNameComponents);
         }
+
         /// <summary>
         ///     ROOT\BUBBLING\TRIGGERS
         /// </summary>
@@ -372,8 +372,6 @@ namespace GrabCaster.Framework.Base
         }
 
 
-
-        
         /// <summary>
         ///     Connection string of storage
         /// </summary>
@@ -383,7 +381,6 @@ namespace GrabCaster.Framework.Base
             return
                 $"DefaultEndpointsProtocol=https;AccountName={Configuration.GroupEventHubsStorageAccountName};AccountKey={Configuration.GroupEventHubsStorageAccountKey}";
         }
-
 
 
         //Syncronization Area
@@ -402,18 +399,22 @@ namespace GrabCaster.Framework.Base
         {
             return Path.Combine(Configuration.BaseDirectory, DirectoryNamePoints, PointId);
         }
+
         public static string SyncBuildSpecificDirectoryGcPointsIn(string PointId)
         {
             return Path.Combine(Configuration.BaseDirectory, DirectoryNamePoints, PointId, DirectoryNameIn);
         }
-        public static string SyncBuildSpecificDirectoryGcPointsOut( string PointId)
+
+        public static string SyncBuildSpecificDirectoryGcPointsOut(string PointId)
         {
             return Path.Combine(Configuration.BaseDirectory, DirectoryNamePoints, PointId, DirectoryNameOut);
         }
+
         public static string SyncDirectorySync()
         {
             return Path.Combine(Configuration.BaseDirectory, DirectoryNameSync);
         }
+
         public static string SyncDirectorySyncIn()
         {
             return Path.Combine(Configuration.BaseDirectory, DirectoryNameSync, DirectoryNameIn);
@@ -421,33 +422,38 @@ namespace GrabCaster.Framework.Base
 
         public static string SyncDirectorySyncOut()
         {
-            return Path.Combine(Configuration.BaseDirectory, DirectoryNameSync,DirectoryNameOut);
+            return Path.Combine(Configuration.BaseDirectory, DirectoryNameSync, DirectoryNameOut);
         }
-
     }
 
     [DataContract]
     [Serializable]
     public class Configuration
     {
-        
         [DataMember]
         public bool RunInternalPolling { get; set; }
+
         [DataMember]
         public int LoggingLevel { get; set; }
+
         [DataMember]
         public bool LoggingVerbose { get; set; }
+
         [DataMember]
         public bool Clustered { get; set; }
+
         [DataMember]
         public string ClusterBaseFolder { get; set; }
+
         [DataMember]
         public bool SecondaryPersistProviderEnabled { get; set; }
+
         [DataMember]
         public int SecondaryPersistProviderByteSize { get; set; }
 
         [DataMember]
         public string PersistentProviderComponent { get; set; }
+
         [DataMember]
         public string EventsStreamComponent { get; set; }
 
@@ -481,7 +487,7 @@ namespace GrabCaster.Framework.Base
         public string DirectoryOperativeRootExeName { get; set; }
 
         public string BaseDirectory { get; set; }
-        
+
         //HA Group
         [DataMember]
         public string HAGroup { get; set; }
@@ -601,7 +607,7 @@ namespace GrabCaster.Framework.Base
         [DataMember]
         public EncodingType EncodingType { get; set; }
 
-        
+
         /// <summary>
         ///     Global Trigger polling time (Milliseconds)
         /// </summary>
@@ -660,18 +666,20 @@ namespace GrabCaster.Framework.Base
 
         [DataMember]
         public int ThrottlingLsiLogIncomingRateSeconds { get; set; }
+
         [DataMember]
         public int MaxWorkerThreads { get; set; }
+
         [DataMember]
         public int MaxAsyncWorkerThreads { get; set; }
+
         [DataMember]
         public int MinWorkerThreads { get; set; }
+
         [DataMember]
         public int MinAsyncWorkerThreads { get; set; }
+
         [DataMember]
         public bool RunLocalOnly { get; set; }
-        
     }
-
-
 }

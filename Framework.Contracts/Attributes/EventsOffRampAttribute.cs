@@ -24,6 +24,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Contracts.Attributes
 {
     using System;
@@ -51,9 +52,9 @@ namespace GrabCaster.Framework.Contracts.Attributes
         /// </param>
         public EventsOffRampContract(string id, string name, string description)
         {
-            this.Id = id;
-            this.Name = name;
-            this.Description = description;
+            Id = id;
+            Name = name;
+            Description = description;
         }
 
         /// <summary>

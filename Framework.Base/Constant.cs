@@ -24,6 +24,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Base
 {
     /// <summary>
@@ -35,6 +36,7 @@ namespace GrabCaster.Framework.Base
         /// The ID for the high critical events (Engine).
         /// </summary>
         public const int LogLevelError = 1;
+
         public const int LogLevelWarning = 2;
         public const int LogLevelInformation = 3;
         public const int LogLevelVerbose = 4;
@@ -51,6 +53,7 @@ namespace GrabCaster.Framework.Base
         public static string TaskCategoriesConsole { get; } = "Console";
 
         public static string EmbeddedEventId { get; } = "{A31209D7-C989-4E5D-93DA-BD341D843870}";
+
         /// <summary>
         /// The task category for event hubs.
         /// </summary>

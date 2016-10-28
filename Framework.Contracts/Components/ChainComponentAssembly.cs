@@ -24,18 +24,16 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+
 using GrabCaster.Framework.Contracts.AssemblyFile;
 using GrabCaster.Framework.Contracts.Bubbling;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace GrabCaster.Framework.Contracts.Components
 {
-    public class ChainComponentAssembly:IAssemblyfile,IChainComponentAssembly
+    public class ChainComponentAssembly : IAssemblyfile, IChainComponentAssembly
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -46,7 +44,7 @@ namespace GrabCaster.Framework.Contracts.Components
         public Version Version { get; set; }
         public byte[] AssemblyContent { get; set; }
         public IChainComponentType ChainComponentType { get; set; }
-        public System.Reflection.Assembly AssemblyObject { get; set; }
+        public Assembly AssemblyObject { get; set; }
         public Type AssemblyClassType { get; set; }
         public string AssemblyFile { get; set; }
         public List<BaseAction> BaseActions { get; set; }

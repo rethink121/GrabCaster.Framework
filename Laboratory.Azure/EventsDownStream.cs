@@ -24,21 +24,16 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using GrabCaster.Framework.Contracts.Bubbling;
 
 namespace GrabCaster.Framework.Library.Azure
 {
-    using System;
-    using System.Diagnostics;
-    using System.Reflection;
-    using System.Threading;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Messaging;
     using Microsoft.ServiceBus;
     using Microsoft.ServiceBus.Messaging;
-
+    using System;
+    using System.Reflection;
+    using System.Threading;
 
 
     /// <summary>
@@ -58,25 +53,28 @@ namespace GrabCaster.Framework.Library.Azure
                 //Load message ingestor
                 MessageIngestor.Init(SetEventActionEventEmbedded);
                 // Assign the delegate 
-           
+
                 // Load vars
                 var eventHubConnectionString = ConfigurationLibrary.AzureNameSpaceConnectionString();
                 var eventHubName = ConfigurationLibrary.GroupEventHubsName();
 
-                LogEngine.TraceInformation($"Start GrabCaster DownStream - Point Id {ConfigurationLibrary.PointId()} - Point name {ConfigurationLibrary.PointName()} - Channel Id {ConfigurationLibrary.ChannelId()} - Channel name {ConfigurationLibrary.ChannelName()} ");
+                LogEngine.TraceInformation(
+                    $"Start GrabCaster DownStream - Point Id {ConfigurationLibrary.PointId()} - Point name {ConfigurationLibrary.PointName()} - Channel Id {ConfigurationLibrary.ChannelId()} - Channel name {ConfigurationLibrary.ChannelName()} ");
 
                 var builder = new ServiceBusConnectionStringBuilder(eventHubConnectionString)
-                                  {
-                                      TransportType =
-                                          TransportType.Amqp
-                                  };
+                {
+                    TransportType =
+                        TransportType.Amqp
+                };
 
                 //If not exit it create one, drop brachets because Azure rules
-                var eventHubConsumerGroup = string.Concat(ConfigurationLibrary.EngineName(), "_", ConfigurationLibrary.ChannelId().Replace("{", "").Replace("}", "").Replace("-", ""));
+                var eventHubConsumerGroup = string.Concat(ConfigurationLibrary.EngineName(), "_",
+                    ConfigurationLibrary.ChannelId().Replace("{", "").Replace("}", "").Replace("-", ""));
 
                 var nsManager = NamespaceManager.CreateFromConnectionString(builder.ToString());
 
-                LogEngine.TraceInformation($"Start DirectRegisterEventReceiving. - Initializing Group Name {eventHubConsumerGroup}");
+                LogEngine.TraceInformation(
+                    $"Start DirectRegisterEventReceiving. - Initializing Group Name {eventHubConsumerGroup}");
 
                 // Create Event Hubs
                 var eventHubClient = EventHubClient.CreateFromConnectionString(builder.ToString(), eventHubName);
@@ -98,7 +96,8 @@ namespace GrabCaster.Framework.Library.Azure
             }
             catch (Exception ex)
             {
-                LogEngine.TraceError($"Error in {MethodBase.GetCurrentMethod().Name} - Hint: Check if the firewall outbound port 5671 is opened. - Error {ex.Message}");
+                LogEngine.TraceError(
+                    $"Error in {MethodBase.GetCurrentMethod().Name} - Hint: Check if the firewall outbound port 5671 is opened. - Error {ex.Message}");
             }
         }
 

@@ -24,6 +24,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Contracts.Bubbling
 {
     using System;
@@ -50,9 +51,9 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         /// </param>
         public Parameter(string name, Type type, object value)
         {
-            this.Name = name;
-            this.Type = type;
-            this.Value = value;
+            Name = name;
+            Type = type;
+            Value = value;
         }
 
         /// <summary>

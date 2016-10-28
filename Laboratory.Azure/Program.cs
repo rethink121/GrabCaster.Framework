@@ -24,32 +24,22 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Library.Azure
 {
+    using Base;
     using System;
-    using System.Diagnostics;
-    using System.Text;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Contracts.Bubbling;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Messaging;
-
-    using Newtonsoft.Json;
 
     //Receiver side
     class Program
     {
-
-        private static MessageIngestor.SetEventActionEventEmbedded setEventActionEventEmbedded;
+        private static MessageIngestor.SetEventActionEventEmbedded _setEventActionEventEmbedded;
 
         static void Main(string[] args)
         {
-
             EventsDownStream eventsDownStream = new EventsDownStream();
-            setEventActionEventEmbedded += SetEventOnRampMessageReceivedMessage;
-            eventsDownStream.Run(setEventActionEventEmbedded);
+            _setEventActionEventEmbedded += SetEventOnRampMessageReceivedMessage;
+            eventsDownStream.Run(_setEventActionEventEmbedded);
         }
 
         private static void SetEventOnRampMessageReceivedMessage(byte[] message)
@@ -59,7 +49,4 @@ namespace GrabCaster.Framework.Library.Azure
             Console.WriteLine(stringValue);
         }
     }
-
-
-  
 }

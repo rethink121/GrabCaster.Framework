@@ -25,22 +25,18 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceModel.Web;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using GrabCaster.Framework.Base;
 using GrabCaster.Framework.Contracts.Globals;
 
 namespace GrabCaster.Framework.DynamicRESTTrigger
 {
-    public class DynamicRESTService:IDynamicREST
+    public class DynamicRestService:IDynamicRest
     {
-        private static Func<ActionTrigger, ActionContext> GetDataTrigger;
+        private static Func<ActionTrigger, ActionContext> _getDataTrigger;
 
         static WebServiceHost engineHost;
         
@@ -52,12 +48,12 @@ namespace GrabCaster.Framework.DynamicRESTTrigger
             return null;
         }
 
-        public static bool StartService(string WebApiEndPoint,Func<ActionTrigger, ActionContext> getDataTrigger)
+        public static bool StartService(string webApiEndPoint,Func<ActionTrigger, ActionContext> getDataTrigger)
         {
-            GetDataTrigger = getDataTrigger;
+            _getDataTrigger = getDataTrigger;
 
-            engineHost = new WebServiceHost(typeof(DynamicRESTService), new Uri("http://localhost:8000"));
-            engineHost.AddServiceEndpoint(typeof(DynamicRESTService), new WebHttpBinding(), ConfigurationBag.EngineName);
+            engineHost = new WebServiceHost(typeof(DynamicRestService), new Uri("http://localhost:8000"));
+            engineHost.AddServiceEndpoint(typeof(DynamicRestService), new WebHttpBinding(), ConfigurationBag.EngineName);
             var stp = engineHost.Description.Behaviors.Find<ServiceDebugBehavior>();
             stp.HttpHelpPageEnabled = false;
             engineHost.Open();

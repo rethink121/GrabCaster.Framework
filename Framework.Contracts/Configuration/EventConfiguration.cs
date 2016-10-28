@@ -24,14 +24,14 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Contracts.Configuration
 {
+    using Bubbling;
+    using Channels;
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-
-    using GrabCaster.Framework.Contracts.Bubbling;
-    using GrabCaster.Framework.Contracts.Channels;
 
     /// <summary>
     ///     Trigger event File
@@ -71,10 +71,10 @@ namespace GrabCaster.Framework.Contracts.Configuration
         /// </param>
         public Event(string idComponent, string idConfiguration, string name, string description)
         {
-            this.IdConfiguration = idConfiguration;
-            this.IdComponent = idComponent;
-            this.Name = name;
-            this.Description = description;
+            IdConfiguration = idConfiguration;
+            IdComponent = idComponent;
+            Name = name;
+            Description = description;
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace GrabCaster.Framework.Contracts.Configuration
         /// <summary>
         /// Cache in dictionary the event properties.
         /// </summary>
-        public Dictionary<string,EventProperty> CacheEventProperties { get; set; }
+        public Dictionary<string, EventProperty> CacheEventProperties { get; set; }
 
         /// <summary>
         /// Gets or sets the channels.
@@ -149,8 +149,8 @@ namespace GrabCaster.Framework.Contracts.Configuration
         /// </param>
         public EventProperty(string name, object value)
         {
-            this.Name = name;
-            this.Value = value;
+            Name = name;
+            Value = value;
         }
 
         /// <summary>
@@ -184,8 +184,8 @@ namespace GrabCaster.Framework.Contracts.Configuration
         /// </param>
         public EventAction(string id, string name)
         {
-            this.Id = id;
-            this.Name = name;
+            Id = id;
+            Name = name;
         }
 
         /// <summary>

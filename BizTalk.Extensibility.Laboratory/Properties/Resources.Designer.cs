@@ -8,10 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GrabCaster.BizTalk.Extensibility.Laboratory.Properties {
-    using System;
-    
-    
+namespace GrabCaster.BizTalk.Extensibility.Laboratory.Properties
+{
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>

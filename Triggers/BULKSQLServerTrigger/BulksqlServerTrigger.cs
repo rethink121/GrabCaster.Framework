@@ -24,26 +24,27 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Threading;
+
 
 namespace GrabCaster.Framework.BulksqlServerTrigger
 {
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Serialization;
+    using Contracts.Triggers;
     using System;
     using System.Data;
     using System.Data.SqlClient;
     using System.Diagnostics.CodeAnalysis;
 
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Serialization;
-    using GrabCaster.Framework.Contracts.Triggers;
-
     /// <summary>
     /// The bulksql server trigger.
     /// </summary>
-    [TriggerContract("{9A989BD1-C8DE-4FC1-B4BA-02E7D8A4AD76}", "SQL Server Bulk Trigger", "Execute a bulk insert between databases.", false,
-        true, true)]
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+    [TriggerContract("{9A989BD1-C8DE-4FC1-B4BA-02E7D8A4AD76}", "SQL Server Bulk Trigger",
+         "Execute a bulk insert between databases.", false,
+         true, true)]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+         Justification = "Reviewed. Suppression is OK here.")]
     public class BulksqlServerTrigger : ITriggerType
     {
         /// <summary>
@@ -66,6 +67,7 @@ namespace GrabCaster.Framework.BulksqlServerTrigger
 
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
+
         public string SupportBag { get; set; }
 
         /// <summary>
@@ -98,19 +100,19 @@ namespace GrabCaster.Framework.BulksqlServerTrigger
         {
             try
             {
-                this.Context = context;
-                this.ActionTrigger = actionTrigger;
+                Context = context;
+                ActionTrigger = actionTrigger;
 
-                using (var sourceConnection = new SqlConnection(this.ConnectionString))
+                using (var sourceConnection = new SqlConnection(ConnectionString))
                 {
                     sourceConnection.Open();
 
                     // Get data from the source table as a SqlDataReader.
-                    var commandSourceData = new SqlCommand(this.BulkSelectQuery, sourceConnection);
+                    var commandSourceData = new SqlCommand(BulkSelectQuery, sourceConnection);
                     var dataTable = new DataTable();
                     var dataAdapter = new SqlDataAdapter(commandSourceData);
                     dataAdapter.Fill(dataTable);
-                    this.DataContext = Serialization.DataTableToByteArray(dataTable);
+                    DataContext = Serialization.DataTableToByteArray(dataTable);
                     actionTrigger(this, context);
                 }
                 return null;

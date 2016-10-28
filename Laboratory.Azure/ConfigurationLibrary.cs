@@ -24,11 +24,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace GrabCaster.Framework.Library.Azure
 {
@@ -56,8 +52,6 @@ namespace GrabCaster.Framework.Library.Azure
     /// </summary>
     public static class ConfigurationLibrary
     {
-
-
         /// <summary>
         /// The azure name space connection string.
         /// </summary>
@@ -90,6 +84,7 @@ namespace GrabCaster.Framework.Library.Azure
         {
             return CloudConfigurationManager.GetSetting("GroupEventHubsStorageAccountKey");
         }
+
         /// <summary>
         /// The group event hubs name.
         /// </summary>
@@ -99,7 +94,6 @@ namespace GrabCaster.Framework.Library.Azure
         public static string GroupEventHubsName()
         {
             return CloudConfigurationManager.GetSetting("GroupEventHubsName");
-
         }
 
         /// <summary>
@@ -111,7 +105,6 @@ namespace GrabCaster.Framework.Library.Azure
         public static string EngineName()
         {
             return "GrabCaster";
-
         }
 
         /// <summary>
@@ -131,7 +124,7 @@ namespace GrabCaster.Framework.Library.Azure
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public static string PointName ()
+        public static string PointName()
         {
             return CloudConfigurationManager.GetSetting("PointName");
         }
@@ -157,6 +150,5 @@ namespace GrabCaster.Framework.Library.Azure
         {
             return CloudConfigurationManager.GetSetting("ChannelName");
         }
-
     }
 }

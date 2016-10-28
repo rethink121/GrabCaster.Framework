@@ -1,6 +1,6 @@
 ﻿namespace BTSG.TestPipeline
 {
-  partial class flatViewer
+    partial class FlatViewer
   {
     /// <summary>
     /// Required designer variable.
@@ -58,7 +58,7 @@
       this.ClientSize = new System.Drawing.Size(784, 654);
       this.Controls.Add(this.close);
       this.Controls.Add(this.txtflat);
-      this.Name = "flatViewer";
+      this.Name = "FlatViewer";
       this.Text = "Flat Viewer";
       this.Load += new System.EventHandler(this.flatViewer_Load);
       this.ResumeLayout(false);

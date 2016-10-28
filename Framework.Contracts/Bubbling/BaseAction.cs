@@ -24,6 +24,7 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Contracts.Bubbling
 {
     using System;
@@ -40,7 +41,7 @@ namespace GrabCaster.Framework.Contracts.Bubbling
     {
         public BaseAction(string ID, string Name, string Description, MethodInfo AssemblyMethodInfo, string ReturnValue)
         {
-            this.Id = ID;
+            Id = ID;
             this.Name = Name;
             this.Description = Description;
             this.AssemblyMethodInfo = AssemblyMethodInfo;

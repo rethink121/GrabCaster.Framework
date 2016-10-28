@@ -24,24 +24,22 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Threading;
+
 
 namespace GrabCaster.Framework.AzureQueueTrigger
 {
-    using System;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
-
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Triggers;
     using Microsoft.ServiceBus;
     using Microsoft.ServiceBus.Messaging;
+    using System;
 
     /// <summary>
     /// The azure queue trigger.
     /// </summary>
     [TriggerContract("{79F1CAB1-6E78-4BF9-8D2E-F15E87F605CA}", "Azure Queue Trigger", "Azure Queue Trigger", false, true,
-        false)]
+         false)]
     public class AzureQueueTrigger : ITriggerType
     {
         /// <summary>
@@ -91,35 +89,35 @@ namespace GrabCaster.Framework.AzureQueueTrigger
         {
             try
             {
-                var namespaceManager = NamespaceManager.CreateFromConnectionString(this.ConnectionString);
+                var namespaceManager = NamespaceManager.CreateFromConnectionString(ConnectionString);
 
-                if (!namespaceManager.QueueExists(this.QueuePath))
+                if (!namespaceManager.QueueExists(QueuePath))
                 {
-                    namespaceManager.CreateQueue(this.QueuePath);
+                    namespaceManager.CreateQueue(QueuePath);
                 }
 
-                var client = QueueClient.CreateFromConnectionString(this.ConnectionString, this.QueuePath);
+                var client = QueueClient.CreateFromConnectionString(ConnectionString, QueuePath);
 
                 // Configure the callback options
-                var options = new OnMessageOptions { AutoComplete = false, AutoRenewTimeout = TimeSpan.FromMinutes(1) };
+                var options = new OnMessageOptions {AutoComplete = false, AutoRenewTimeout = TimeSpan.FromMinutes(1)};
 
                 // Callback to handle received messages
                 client.OnMessage(
                     message =>
+                    {
+                        try
                         {
-                            try
-                            {
-                                // Remove message from queue
-                                this.DataContext = message.GetBody<byte[]>();
-                                message.Complete();
-                                actionTrigger(this, context);
-                            }
-                            catch (Exception)
-                            {
-                                // Indicates a problem, unlock message in queue
-                                message.Abandon();
-                            }
-                        },
+                            // Remove message from queue
+                            DataContext = message.GetBody<byte[]>();
+                            message.Complete();
+                            actionTrigger(this, context);
+                        }
+                        catch (Exception)
+                        {
+                            // Indicates a problem, unlock message in queue
+                            message.Abandon();
+                        }
+                    },
                     options);
                 return null;
             }

@@ -24,17 +24,17 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.NTService
 {
+    using Base;
+    using Engine;
+    using Log;
     using System;
     using System.Diagnostics;
     using System.Reflection;
     using System.ServiceProcess;
     using System.Threading;
-
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Engine;
-    using GrabCaster.Framework.Log;
 
     /// <summary>
     /// Component that represents the Windows Service.
@@ -51,7 +51,7 @@ namespace GrabCaster.Framework.NTService
             {
                 // Start NT service
                 Debug.WriteLine("LogEventUpStream - Initialization--Start Engine.");
-                Debug.WriteLine("Initialization--Start Engine.", ConsoleColor.Green);
+                Debug.WriteLine("Initialization--Start Engine.");
                 LogEngine.Init();
                 Debug.WriteLine("LogEventUpStream - StartEventEngine.");
                 CoreEngine.StartEventEngine(null);
@@ -59,17 +59,18 @@ namespace GrabCaster.Framework.NTService
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
                 Thread.Sleep(ConfigurationBag.Configuration.WaitTimeBeforeRestarting);
                 Environment.Exit(0);
             }
         }
- // StartEngine
+
+        // StartEngine
 
         /// <summary>
         /// Called when the Windows Service starts.
@@ -83,11 +84,11 @@ namespace GrabCaster.Framework.NTService
             {
                 // ******************************************
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Instance {this.ServiceName} engine starting.", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    null, 
+                    ConfigurationBag.EngineName,
+                    $"Instance {ServiceName} engine starting.",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    null,
                     Constant.LogLevelInformation);
 
                 var engineThreadProcess = new Thread(StartEngine);
@@ -95,27 +96,28 @@ namespace GrabCaster.Framework.NTService
                 engineThreadProcess.Start();
 
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Instance {this.ServiceName} engine started.", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    null, 
+                    ConfigurationBag.EngineName,
+                    $"Instance {ServiceName} engine started.",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    null,
                     Constant.LogLevelInformation);
             }
             catch (Exception ex)
             {
                 LogEngine.WriteLog(
-                    ConfigurationBag.EngineName, 
-                    $"Error in {MethodBase.GetCurrentMethod().Name}", 
-                    Constant.LogLevelError, 
-                    Constant.TaskCategoriesError, 
-                    ex, 
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
                     Constant.LogLevelError);
                 Thread.Sleep(ConfigurationBag.Configuration.WaitTimeBeforeRestarting);
                 Environment.Exit(0);
             }
         }
- // OnStart
+
+        // OnStart
 
         /// <summary>
         /// Called when Windows Service stops.
@@ -124,6 +126,7 @@ namespace GrabCaster.Framework.NTService
         {
             CoreEngine.StopEventEngine();
         }
- // OnStop
+
+        // OnStop
     } // NTWindowsService
 } // namespace

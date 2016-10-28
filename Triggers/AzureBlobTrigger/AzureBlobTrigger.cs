@@ -24,26 +24,24 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-using System.Threading;
+
 using GrabCaster.Framework.Base;
+using System.Threading;
 
 namespace GrabCaster.Framework.AzureBlobTrigger
 {
-    using System.Diagnostics;
-    using System.Text;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
-
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Triggers;
     using Microsoft.WindowsAzure.Storage;
     using Microsoft.WindowsAzure.Storage.Blob;
+    using System.Diagnostics;
 
     /// <summary>
     /// The azure blob trigger.
     /// </summary>
     [TriggerContract("{3BADD8A0-211B-4C57-806B-8C0453EB637B}", "Azure Blob Trigger", "Azure Blob Trigger", true, true,
-        false)]
+         false)]
     public class AzureBlobTrigger : ITriggerType
     {
         /// <summary>
@@ -66,7 +64,9 @@ namespace GrabCaster.Framework.AzureBlobTrigger
 
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
+
         public AutoResetEvent WaitHandle { get; set; }
+
         public void SyncAsyncActionReceived(byte[] content)
         {
             throw new System.NotImplementedException();
@@ -104,18 +104,18 @@ namespace GrabCaster.Framework.AzureBlobTrigger
         {
             try
             {
-                var storageAccount = CloudStorageAccount.Parse(this.StorageAccount);
+                var storageAccount = CloudStorageAccount.Parse(StorageAccount);
                 var blobClient = storageAccount.CreateCloudBlobClient();
 
                 // Retrieve a reference to a container. 
-                var container = blobClient.GetContainerReference(this.BlobContainer);
+                var container = blobClient.GetContainerReference(BlobContainer);
 
                 // Create the container if it doesn't already exist.
                 container.CreateIfNotExists();
                 container.SetPermissions(
-                    new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
+                    new BlobContainerPermissions {PublicAccess = BlobContainerPublicAccessType.Blob});
 
-                var blockBlob = container.GetBlockBlobReference(this.BlobBlockReference);
+                var blockBlob = container.GetBlockBlobReference(BlobBlockReference);
 
                 try
                 {
@@ -129,7 +129,7 @@ namespace GrabCaster.Framework.AzureBlobTrigger
 
                     blockBlob.DownloadToByteArray(blobContent, 0);
                     blockBlob.Delete();
-                    this.DataContext = blobContent;
+                    DataContext = blobContent;
                     actionTrigger(this, context);
                 }
                 catch
@@ -156,8 +156,8 @@ namespace GrabCaster.Framework.AzureBlobTrigger
         /// </param>
         public void MyOnEntryWritten(object source, EntryWrittenEventArgs e)
         {
-            this.DataContext = EncodingDecoding.EncodingString2Bytes(e.Entry.Message);
-            this.ActionTrigger(this, this.Context);
+            DataContext = EncodingDecoding.EncodingString2Bytes(e.Entry.Message);
+            ActionTrigger(this, Context);
         }
     }
 }

@@ -24,14 +24,12 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.Contracts.Configuration
 {
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
-
-    using GrabCaster.Framework.Contracts.Bubbling;
-    using GrabCaster.Framework.Contracts.Channels;
 
     /// <summary>
     ///     Component event File
@@ -71,9 +69,9 @@ namespace GrabCaster.Framework.Contracts.Configuration
         /// </param>
         public Chain(string idChain, string name, string description)
         {
-            this.IdChain = idChain;
-            this.Name = name;
-            this.Description = description;
+            IdChain = idChain;
+            Name = name;
+            Description = description;
         }
 
         /// <summary>
@@ -99,7 +97,6 @@ namespace GrabCaster.Framework.Contracts.Configuration
         /// </summary>
         [DataMember]
         public List<ComponentBag> Components { get; set; }
-
     }
 
     /// <summary>
@@ -109,10 +106,9 @@ namespace GrabCaster.Framework.Contracts.Configuration
     [Serializable]
     public class ComponentBag
     {
-
         public ComponentBag(string idcomponent)
         {
-            this.idComponent = idcomponent;
+            idComponent = idcomponent;
         }
 
         /// <summary>
@@ -121,6 +117,4 @@ namespace GrabCaster.Framework.Contracts.Configuration
         [DataMember]
         public string idComponent { get; set; }
     }
-
-
 }

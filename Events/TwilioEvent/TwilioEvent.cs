@@ -24,25 +24,24 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using GrabCaster.Framework.Base;
 
 namespace GrabCaster.Framework.TwilioEvent
 {
+    using Contracts.Attributes;
+    using Contracts.Events;
+    using Contracts.Globals;
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using System.Text;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
-
     using Twilio;
 
     /// <summary>
     /// The twilio event.
     /// </summary>
     [EventContract("{A5765B22-4003-4463-AB93-EEB5C0C477FE}", "Twilio Event", "Twilio send text message", true)]
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "Reviewed. Suppression is OK here.")]
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+         Justification = "Reviewed. Suppression is OK here.")]
     public class TwilioEvent : IEventType
     {
         /// <summary>
@@ -101,10 +100,10 @@ namespace GrabCaster.Framework.TwilioEvent
         {
             try
             {
-                var content = EncodingDecoding.EncodingBytes2String(this.DataContext);
-                var twilio = new TwilioRestClient(this.AccountSid, this.AuthToken);
+                var content = EncodingDecoding.EncodingBytes2String(DataContext);
+                var twilio = new TwilioRestClient(AccountSid, AuthToken);
                 var text = content.Replace("\"", string.Empty).Replace("\\", string.Empty);
-                twilio.SendMessage(this.From, this.To, text);
+                twilio.SendMessage(From, To, text);
                 return null;
                 // SetEventActionEvent(this, context);
             }

@@ -24,26 +24,25 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 using System.Threading;
 
 namespace GrabCaster.Framework.CSharpTrigger
 {
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Triggers;
+    using Roslyn.Compilers;
+    using Roslyn.Scripting.CSharp;
     using System;
     using System.Collections.Generic;
     using System.IO;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
-
-    using Roslyn.Compilers;
-    using Roslyn.Scripting.CSharp;
 
     /// <summary>
     /// The c sharp trigger.
     /// </summary>
     [TriggerContract("{928647A2-9BB3-4D9C-8C4D-C63181AC1686}", "CSharp Trigger",
-        "Execute a trigger write in CSharp script", false, true, false)]
+         "Execute a trigger write in CSharp script", false, true, false)]
     public class CSharpTrigger : ITriggerType
     {
         /// <summary>
@@ -66,7 +65,9 @@ namespace GrabCaster.Framework.CSharpTrigger
 
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
+
         public AutoResetEvent WaitHandle { get; set; }
+
         public void SyncAsyncActionReceived(byte[] content)
         {
             throw new NotImplementedException();
@@ -116,16 +117,16 @@ namespace GrabCaster.Framework.CSharpTrigger
                 session.AddReference(
                     @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Windows.Forms.dll");
 
-                if (this.ScriptFile != null || this.ScriptFile != string.Empty)
+                if (ScriptFile != null || ScriptFile != string.Empty)
                 {
                     // TODO 1020
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    script = File.ReadAllText(this.ScriptFile);
+                    script = File.ReadAllText(ScriptFile);
                     session.ExecuteFile(script);
                 }
                 else
                 {
-                    session.Execute(this.Script);
+                    session.Execute(Script);
                 }
                 return null;
             }

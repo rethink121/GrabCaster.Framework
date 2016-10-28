@@ -24,29 +24,26 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
 namespace GrabCaster.Framework.RunProcess
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using System.Threading;
-
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Globals;
-    using GrabCaster.Framework.Contracts.Triggers;
-    using System.Diagnostics;
-    using System.Text;
-    using Log;
     using Base;
-    using System.Reflection;
-    using System.Security.Principal;
+    using Contracts.Attributes;
+    using Contracts.Globals;
+    using Contracts.Triggers;
+    using Log;
+    using System;
+    using System.Diagnostics;
+    using System.IO;
     using System.Security;
+    using System.Text;
+    using System.Threading;
 
     /// <summary>
     /// The Run Process trigger.
     /// </summary>
-    [TriggerContract("{B7226137-DFF7-44BD-9E48-42B5AC7AF730}", "RunProcess", "Run a specific application or batch.", false,true, false)]
+    [TriggerContract("{B7226137-DFF7-44BD-9E48-42B5AC7AF730}", "RunProcess", "Run a specific application or batch.",
+         false, true, false)]
     public class RunProcess : ITriggerType
     {
         /// <summary>
@@ -58,28 +55,34 @@ namespace GrabCaster.Framework.RunProcess
         /// <summary>
         /// Gets or sets how the process nee to start.
         /// </summary>
-        [TriggerPropertyContract("ProcessStyle", "Process style behaviour, look for ProcessWindowStyle in system.Process.")]
+        [TriggerPropertyContract("ProcessStyle",
+             "Process style behaviour, look for ProcessWindowStyle in system.Process.")]
         public string ProcessStyle { get; set; }
+
         /// <summary>
         /// Gets or sets the polling time.
         /// </summary>
         [TriggerPropertyContract("ExecuteEventAfterRun", "If need to execute the event after run the process.")]
         public bool ExecuteEventAfterRun { get; set; }
+
         /// <summary>
         /// Gets or sets the polling time.
         /// </summary>
         [TriggerPropertyContract("AlwaysRun", "Run again in case of unexpected shutdown.")]
         public bool AlwaysRun { get; set; }
+
         /// <summary>
         /// Gets or sets the Domain.
         /// </summary>
         [TriggerPropertyContract("Domain", "Domain to run the process.")]
         public string Domain { get; set; }
+
         /// <summary>
         /// Gets or sets the polling time.
         /// </summary>
         [TriggerPropertyContract("User", "Username to run the process.")]
         public string User { get; set; }
+
         /// <summary>
         /// Gets or sets the polling time.
         /// </summary>
@@ -88,6 +91,7 @@ namespace GrabCaster.Framework.RunProcess
 
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
+
         public string SupportBag { get; set; }
 
         /// <summary>
@@ -118,7 +122,6 @@ namespace GrabCaster.Framework.RunProcess
         [TriggerActionContract("{CABFAC55-56F1-4863-84C2-29D01AADA834}", "Main action", "Main action description")]
         public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)
         {
-
             try
             {
                 using (new Impersonation(Domain, User, Password))
@@ -174,31 +177,25 @@ namespace GrabCaster.Framework.RunProcess
                                 null,
                                 Constant.LogLevelInformation);
                             process.WaitForExit();
-                            System.Threading.Thread.Sleep(1000);
+                            Thread.Sleep(1000);
                             //this.Context.BubblingConfiguration.Events[0].IdComponent
-
                         }
-
                     }
+                    process.Start();
+                    DataContext = Encoding.UTF8.GetBytes("nop");
+                    if (ExecuteEventAfterRun)
+                        actionTrigger(this, context);
                     else
-                    {
-                        process.Start();
-                        DataContext = Encoding.UTF8.GetBytes("nop");
-                        if (ExecuteEventAfterRun)
-                            actionTrigger(this, context);
-                        else
-                            actionTrigger(null, null);
+                        actionTrigger(null, null);
 
-                        LogEngine.WriteLog(ConfigurationBag.EngineName,
-                                            $"The process {ProcessPathFileName} started.",
-                                            Constant.LogLevelError,
-                                            Constant.TaskCategoriesError,
-                                            null,
-                                            Constant.LogLevelInformation);
+                    LogEngine.WriteLog(ConfigurationBag.EngineName,
+                        $"The process {ProcessPathFileName} started.",
+                        Constant.LogLevelError,
+                        Constant.TaskCategoriesError,
+                        null,
+                        Constant.LogLevelInformation);
 
-                        process.WaitForExit();
-
-                    }
+                    process.WaitForExit();
                 }
 
                 return null;
