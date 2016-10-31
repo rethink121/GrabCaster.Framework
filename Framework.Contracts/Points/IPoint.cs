@@ -1,6 +1,6 @@
 ﻿// IPoint.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -33,17 +33,17 @@ namespace GrabCaster.Framework.Contracts.Points
     public interface IPoint
     {
         /// <summary>
-        /// Gets or sets the point id.
+        ///     Gets or sets the point id.
         /// </summary>
         string PointId { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        ///     Gets or sets the name.
         /// </summary>
         string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         string Description { get; set; }
     }

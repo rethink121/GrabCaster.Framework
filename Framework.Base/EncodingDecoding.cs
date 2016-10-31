@@ -1,6 +1,6 @@
 ﻿// EncodingDecoding.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,8 +25,12 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
 using System;
 using System.Text;
+
+#endregion
 
 namespace GrabCaster.Framework.Base
 {
@@ -44,7 +48,7 @@ namespace GrabCaster.Framework.Base
     public static class EncodingDecoding
     {
         /// <summary>
-        /// The last error point
+        ///     The last error point
         /// </summary>
         public static string EncodingBytes2String(byte[] value)
         {
@@ -71,7 +75,7 @@ namespace GrabCaster.Framework.Base
         }
 
         /// <summary>
-        /// The last error point
+        ///     The last error point
         /// </summary>
         public static byte[] EncodingString2Bytes(string value)
         {

@@ -1,6 +1,6 @@
 ﻿// PageOneRestApi.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,14 +25,18 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using HMVN.OMS.Common.Utils;
-using Nito.AspNetBackgroundTasks;
+#region Usings
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 using System.Text;
+using HMVN.OMS.Common.Utils;
+using Nito.AspNetBackgroundTasks;
+
+#endregion
 
 namespace HM.OMS.PageOneMessageConsole
 {
@@ -40,20 +44,21 @@ namespace HM.OMS.PageOneMessageConsole
     {
         //readonly WebClientExecuter Executer;
         readonly string API = "https://www.oventus.com/rest/v1/";
-        readonly string Username = "HMOMSSMS";
         readonly string Password = "Fw6Hf3Ne6";
+        readonly string Username = "HMOMSSMS";
 
         /// <summary>
-        /// 
         /// </summary>
-        /// <returns>{"accountID":"[unique_account_id]","username":"[username]","status":{"@description":"User Authenticated","$":"200"}}</returns>
+        /// <returns>
+        ///     {"accountID":"[unique_account_id]","username":"[username]","status":{"@description":"User
+        ///     Authenticated","$":"200"}}
+        /// </returns>
         public string Authentication()
         {
             return ExecuteAPI(ApiObject.Authentication);
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="data"></param>
         /// <returns>{"@transactionID":"14024254","status":{"@description":"Accepted","$":"201"}}</returns>
@@ -63,7 +68,6 @@ namespace HM.OMS.PageOneMessageConsole
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns>Number of Credit</returns>
         public string Credit()
@@ -72,7 +76,6 @@ namespace HM.OMS.PageOneMessageConsole
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns>{"Msisdn":[{"msisdn":"44700000001","keyword":"*"},{"msisdn":"AlphaTag","keyword":"*"}]}</returns>
         public string MSISDN()
@@ -81,7 +84,6 @@ namespace HM.OMS.PageOneMessageConsole
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="data">radius, nMinutes, lat, longitude, maxResuls</param>
         /// <returns>location object</returns>
@@ -91,7 +93,6 @@ namespace HM.OMS.PageOneMessageConsole
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns>location object</returns>
         public string Locate(string deviceAddress)

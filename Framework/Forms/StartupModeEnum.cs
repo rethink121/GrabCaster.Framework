@@ -1,6 +1,6 @@
 // StartupModeEnum.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -28,23 +28,23 @@
 namespace GrabCaster.Framework.Forms
 {
     /// <summary>
-    /// Types of start-ups.
+    ///     Types of start-ups.
     /// </summary>
     public enum StartupModeEnum
     {
         /// <summary>
-        /// Start up as a console application.
+        ///     Start up as a console application.
         /// </summary>
         Console,
 
         /// <summary>
-        /// Start up as a Windows Service.
+        ///     Start up as a Windows Service.
         /// </summary>
         // ReSharper disable once InconsistentNaming
         NT,
 
         /// <summary>
-        /// Close or shut down.
+        ///     Close or shut down.
         /// </summary>
         Close
     } // StartupModeEnum

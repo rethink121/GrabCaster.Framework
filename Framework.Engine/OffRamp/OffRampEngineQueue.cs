@@ -1,6 +1,6 @@
 ﻿// OffRampEngineQueue.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,37 +25,40 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Bubbling;
+using GrabCaster.Framework.Contracts.Messaging;
 using GrabCaster.Framework.Contracts.Storage;
+using GrabCaster.Framework.Engine.OnRamp;
+using GrabCaster.Framework.Log;
+using GrabCaster.Framework.Serialization.Object;
+
+#endregion
 
 namespace GrabCaster.Framework.Engine.OffRamp
 {
-    using Base;
-    using Contracts.Attributes;
-    using Contracts.Bubbling;
-    using Contracts.Messaging;
-    using Log;
-    using OnRamp;
-    using Serialization.Object;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-
     /// <summary>
-    /// Internal messaging Queue
+    ///     Internal messaging Queue
     /// </summary>
     public sealed class OffRampEngineQueue : LockSlimQueueEngine<BubblingObject>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OffRampEngineQueue"/> class.
+        ///     Initializes a new instance of the <see cref="OffRampEngineQueue" /> class.
         /// </summary>
         /// <param name="capLimit">
-        /// TODO The cap limit.
+        ///     TODO The cap limit.
         /// </param>
         /// <param name="timeLimit">
-        /// TODO The time limit.
+        ///     TODO The time limit.
         /// </param>
         public OffRampEngineQueue(int capLimit, int timeLimit)
         {
@@ -66,19 +69,19 @@ namespace GrabCaster.Framework.Engine.OffRamp
     }
 
     /// <summary>
-    /// Last line of receiving and first before the message ingestor
+    ///     Last line of receiving and first before the message ingestor
     /// </summary>
     public static class OffRampEngineSending
     {
         //Performance counter
 
         /// <summary>
-        /// The off ramp engine.
+        ///     The off ramp engine.
         /// </summary>
         private static OffRampEngineQueue OffRampEngineQueue;
 
         /// <summary>
-        /// Off Ramp Component
+        ///     Off Ramp Component
         /// </summary>
         private static IOffRampStream OffRampStream;
 
@@ -89,13 +92,13 @@ namespace GrabCaster.Framework.Engine.OffRamp
         private static int secondaryPersistProviderByteSize;
 
         /// <summary>
-        /// Initialize the onramp engine the OffRampPatternComponent variable is for the next version
+        ///     Initialize the onramp engine the OffRampPatternComponent variable is for the next version
         /// </summary>
         /// <param name="offRampPatternComponent">
-        /// The Off Ramp Pattern Component.
+        ///     The Off Ramp Pattern Component.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool Init(string offRampPatternComponent)
         {
@@ -190,7 +193,7 @@ namespace GrabCaster.Framework.Engine.OffRamp
         }
 
         /// <summary>
-        /// Queue the message directly into the spool queue
+        ///     Queue the message directly into the spool queue
         /// </summary>
         /// <param name="bubblingObject"></param>
         public static void QueueMessage(BubblingObject bubblingObject)
@@ -199,22 +202,22 @@ namespace GrabCaster.Framework.Engine.OffRamp
         }
 
         /// <summary>
-        /// TODO The send message on ramp.
+        ///     TODO The send message on ramp.
         /// </summary>
         /// <param name="bubblingTriggerConfiguration">
-        /// TODO The bubbling trigger configuration.
+        ///     TODO The bubbling trigger configuration.
         /// </param>
         /// <param name="ehMessageType">
-        /// TODO The eh message type.
+        ///     TODO The eh message type.
         /// </param>
         /// <param name="channelId">
-        /// TODO The channel id.
+        ///     TODO The channel id.
         /// </param>
         /// <param name="pointId">
-        /// TODO The point id.
+        ///     TODO The point id.
         /// </param>
         /// <param name="properties">
-        /// TODO The properties.
+        ///     TODO The properties.
         /// </param>
         public static void SendMessageOffRamp(
             BubblingObject bubblingObject,
@@ -358,7 +361,7 @@ namespace GrabCaster.Framework.Engine.OffRamp
 
 
         /// <summary>
-        /// TODO The off ramp engine on publish.
+        ///     TODO The off ramp engine on publish.
         /// </summary>
         /// <param name="bubblingObjects"></param>
         private static void OffRampEngineQueueOnPublish(List<BubblingObject> bubblingObjects)

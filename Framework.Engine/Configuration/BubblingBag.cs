@@ -1,6 +1,6 @@
 ﻿// BubblingBag.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,18 +25,21 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Bubbling;
+using GrabCaster.Framework.Contracts.Configuration;
+
+#endregion
 
 namespace GrabCaster.Framework.Engine
 {
-    using Base;
-    using Contracts.Bubbling;
-    using Contracts.Configuration;
-    using System.Runtime.Serialization;
-
     /// <summary>
-    /// Contains the bubbling folder filse (trg, evn, and dlls)
+    ///     Contains the bubbling folder filse (trg, evn, and dlls)
     /// </summary>
     [Serializable, DataContract]
     public class BubblingBagObjet

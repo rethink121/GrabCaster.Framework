@@ -1,6 +1,6 @@
 ﻿// BubblingObject.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,31 +25,35 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using GrabCaster.Framework.Contracts.Configuration;
+using GrabCaster.Framework.Serialization.Object;
+
+#endregion
 
 namespace GrabCaster.Framework.Contracts.Bubbling
 {
-    using Configuration;
-    using System;
-    using System.Collections.Generic;
-    using System.Runtime.Serialization;
-
     /// <summary>
-    /// The bubbling event type.
+    ///     The bubbling event type.
     /// </summary>
     public enum BubblingEventType
     {
         /// <summary>
-        /// The trigger.
+        ///     The trigger.
         /// </summary>
         Trigger,
 
         /// <summary>
-        /// The event.
+        ///     The event.
         /// </summary>
         Event,
 
         /// <summary>
-        /// The component.
+        ///     The component.
         /// </summary>
         Component
     }
@@ -62,7 +66,7 @@ namespace GrabCaster.Framework.Contracts.Bubbling
     public class BubblingObject : IBubblingObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BubblingObject"/> class.
+        ///     Initializes a new instance of the <see cref="BubblingObject" /> class.
         /// </summary>
         public BubblingObject(byte[] data)
         {
@@ -73,139 +77,139 @@ namespace GrabCaster.Framework.Contracts.Bubbling
 
 
         /// <summary>
-        /// High Availability Group .
+        ///     High Availability Group .
         /// </summary>
         [DataMember]
         public string HAGroup { get; set; }
 
         /// <summary>
-        /// Gets or sets the version.
+        ///     Gets or sets the version.
         /// </summary>
         [DataMember]
         public Version Version { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether no operation.
+        ///     Gets or sets a value indicating whether no operation.
         /// </summary>
         [DataMember]
         public bool Nop { get; set; }
 
         /// <summary>
-        /// Gets or sets the correlation.
+        ///     Gets or sets the correlation.
         /// </summary>
         [DataMember]
         public Correlation Correlation { get; set; }
 
         /// <summary>
-        /// Gets or sets the correlation override.
+        ///     Gets or sets the correlation override.
         /// </summary>
         [DataMember]
         public Correlation CorrelationOverride { get; set; }
 
         /// <summary>
-        /// Gets or sets the bubbling event type.
-        /// </summary>
-        [DataMember]
-        public BubblingEventType BubblingEventType { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether is active.
-        /// </summary>
-        [DataMember]
-        public bool IsActive { get; set; }
-
-        /// <summary>
-        /// Gets or sets the id component.
-        /// </summary>
-        [DataMember]
-        public string IdComponent { get; set; }
-
-        /// <summary>
-        /// Gets or sets the id configuration.
-        /// </summary>
-        [DataMember]
-        public string IdConfiguration { get; set; }
-
-        /// <summary>
-        /// Gets or sets the id chains.
+        ///     Gets or sets the id chains.
         /// </summary>
         [DataMember]
         public List<Chain> Chains { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        ///     Gets or sets the properties.
+        /// </summary>
+        [DataMember]
+        public Dictionary<string, Property> PropertiesContextProperties { get; set; }
+
+        /// <summary>
+        ///     Define if the event is a local and not remotely, in that case the engine does not use the message provider
+        /// </summary>
+        [DataMember]
+        public bool LocalEvent { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the bubbling event type.
+        /// </summary>
+        [DataMember]
+        public BubblingEventType BubblingEventType { get; set; }
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether is active.
+        /// </summary>
+        [DataMember]
+        public bool IsActive { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the id component.
+        /// </summary>
+        [DataMember]
+        public string IdComponent { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the id configuration.
+        /// </summary>
+        [DataMember]
+        public string IdConfiguration { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the name.
         /// </summary>
         [DataMember]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         [DataMember]
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether shared.
+        ///     Gets or sets a value indicating whether shared.
         /// </summary>
         [DataMember]
         public bool Shared { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether polling required.
+        ///     Gets or sets a value indicating whether polling required.
         /// </summary>
         [DataMember]
         public bool PollingRequired { get; set; }
 
         public Dictionary<string, Property> Properties { get; set; }
 
-        /// <summary>
-        /// Gets or sets the properties.
-        /// </summary>
-        [DataMember]
-        public Dictionary<string, Property> PropertiesContextProperties { get; set; }
-
         public IDictionary<string, string> PropertiesContext { get; set; }
 
         /// <summary>
-        /// Gets or sets the events.
+        ///     Gets or sets the events.
         /// </summary>
         [DataMember]
         public List<Event> Events { get; set; }
 
         /// <summary>
-        /// Used to transport the raw data betwwen the source and the destination point
-        /// Just the raw data picked up by the trigger or event
+        ///     Used to transport the raw data betwwen the source and the destination point
+        ///     Just the raw data picked up by the trigger or event
         /// </summary>
         [DataMember]
         public byte[] DataContext { get; set; }
 
         //To manage the Sync Async behaviour
         /// <summary>
-        /// Used to notify that the request/response is syncronous
+        ///     Used to notify that the request/response is syncronous
         /// </summary>
         [DataMember]
         public bool Syncronous { get; set; }
 
         /// <summary>
-        /// Define if the event is a local and not remotely, in that case the engine does not use the message provider
-        /// </summary>
-        [DataMember]
-        public bool LocalEvent { get; set; }
-
-        /// <summary>
-        /// Token used to identify the delegate to search and execute when back to the source
+        ///     Token used to identify the delegate to search and execute when back to the source
         /// </summary>
         [DataMember]
         public string SyncronousToken { get; set; }
 
         /// <summary>
-        /// If it's a response syncronous from event
+        ///     If it's a response syncronous from event
         /// </summary>
         [DataMember]
         public bool SyncronousFromEvent { get; set; }
 
         /// <summary>
-        /// Gets or sets the body.
+        ///     Gets or sets the body.
         /// </summary>
         public byte[] Data { get; set; }
 
@@ -299,25 +303,25 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         public string ConsoleBubblingBagToSyncronize { get; set; }
 
         /// <summary>
-        /// The serialize message.
+        ///     The serialize message.
         /// </summary>
         /// <returns>
-        /// The <see cref="byte[]"/>.
+        ///     The <see cref="byte[]" />.
         /// </returns>
         public static byte[] SerializeMessage(BubblingObject bubblingObject)
         {
-            return Framework.Serialization.Object.SerializationEngine.ObjectToByteArray(bubblingObject);
+            return SerializationEngine.ObjectToByteArray(bubblingObject);
         }
 
         /// <summary>
-        /// The serialize message.
+        ///     The serialize message.
         /// </summary>
         /// <returns>
-        /// The <see cref="byte[]"/>.
+        ///     The <see cref="byte[]" />.
         /// </returns>
         public static BubblingObject DeserializeMessage(byte[] byteArray)
         {
-            return (BubblingObject) Framework.Serialization.Object.SerializationEngine.ByteArrayToObject(byteArray);
+            return (BubblingObject) SerializationEngine.ByteArrayToObject(byteArray);
         }
     }
 }

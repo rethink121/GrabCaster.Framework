@@ -1,6 +1,6 @@
 ﻿// ServiceFormSettingsCreationParameters.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -28,23 +28,23 @@
 namespace GrabCaster.Framework.Forms
 {
     /// <summary>
-    /// Holds the creation parameters.
+    ///     Holds the creation parameters.
     /// </summary>
     internal static class ServiceFormSettingsCreationParameters
     {
         /// <summary>
-        /// Gets or sets the startup mode.
+        ///     Gets or sets the startup mode.
         /// </summary>
         /// <value>
-        /// The startup mode.
+        ///     The startup mode.
         /// </value>
         public static StartupModeEnum StartupMode { get; set; }
 
         /// <summary>
-        /// Gets or sets the creation mode.
+        ///     Gets or sets the creation mode.
         /// </summary>
         /// <value>
-        /// The creation mode.
+        ///     The creation mode.
         /// </value>
         public static CreationModeEnum CreationMode { get; set; }
     } // ServiceFormSettingsCreationParameters

@@ -1,6 +1,6 @@
 ﻿// TwilioEvent.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,19 +25,22 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Diagnostics.CodeAnalysis;
 using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Events;
+using GrabCaster.Framework.Contracts.Globals;
+using Twilio;
+
+#endregion
 
 namespace GrabCaster.Framework.TwilioEvent
 {
-    using Contracts.Attributes;
-    using Contracts.Events;
-    using Contracts.Globals;
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using Twilio;
-
     /// <summary>
-    /// The twilio event.
+    ///     The twilio event.
     /// </summary>
     [EventContract("{A5765B22-4003-4463-AB93-EEB5C0C477FE}", "Twilio Event", "Twilio send text message", true)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
@@ -45,53 +48,53 @@ namespace GrabCaster.Framework.TwilioEvent
     public class TwilioEvent : IEventType
     {
         /// <summary>
-        /// Gets or sets the account sid.
+        ///     Gets or sets the account sid.
         /// </summary>
         [EventPropertyContract("AccountSid", "AccountSid")]
         public string AccountSid { get; set; }
 
         /// <summary>
-        /// Gets or sets the auth token.
+        ///     Gets or sets the auth token.
         /// </summary>
         [EventPropertyContract("AuthToken", "AuthToken")]
         public string AuthToken { get; set; }
 
         /// <summary>
-        /// Gets or sets the from.
+        ///     Gets or sets the from.
         /// </summary>
         [EventPropertyContract("From", "From")]
         public string From { get; set; }
 
         /// <summary>
-        /// Gets or sets the to.
+        ///     Gets or sets the to.
         /// </summary>
         [EventPropertyContract("To", "To")]
         public string To { get; set; }
 
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action event.
+        ///     Gets or sets the set event action event.
         /// </summary>
         public ActionEvent ActionEvent { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [EventPropertyContract("DataContext", "Event Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionEvent">
-        /// The set event action event.
+        ///     The set event action event.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         /// <exception cref="Exception">
         /// </exception>

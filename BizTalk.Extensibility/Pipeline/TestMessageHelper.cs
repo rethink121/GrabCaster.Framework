@@ -1,6 +1,6 @@
 // TestMessageHelper.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,17 +25,21 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
 using System.IO;
+
+#endregion
 
 namespace BTSG.TestPipeline
 {
     /// <summary>
-    /// Helper class for messages
+    ///     Helper class for messages
     /// </summary>
     internal class TestMessageHelper
     {
         /// <summary>
-        /// Saves a message to disk
+        ///     Saves a message to disk
         /// </summary>
         /// <param name="path"></param>
         /// <param name="data"></param>
@@ -50,7 +54,7 @@ namespace BTSG.TestPipeline
         }
 
         /// <summary>
-        /// Loads a message from disk
+        ///     Loads a message from disk
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>

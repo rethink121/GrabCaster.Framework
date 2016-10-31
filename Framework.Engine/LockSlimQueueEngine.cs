@@ -1,6 +1,6 @@
 ﻿// LockSlimQueueEngine.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,63 +25,66 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Log;
+using Timer = System.Timers.Timer;
+
+#endregion
 
 namespace GrabCaster.Framework.Engine
 {
-    using Base;
-    using Log;
-    using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Reflection;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Timer = System.Timers.Timer;
-
     public abstract class LockSlimQueueEngine<BubblingObject> : ConcurrentQueue<BubblingObject>
         where BubblingObject : class
     {
         /// <summary>
-        /// The cap limit.
+        ///     The cap limit.
         /// </summary>
         protected int CapLimit;
 
         /// <summary>
-        /// The locker.
-        /// </summary>
-        protected ReaderWriterLockSlim Locker;
-
-        /// <summary>
-        /// The on publish executed.
-        /// </summary>
-        protected int OnPublishExecuted;
-
-        /// <summary>
-        /// The time limit.
-        /// </summary>
-        protected int TimeLimit;
-
-        /// <summary>
-        /// The internal timer.
+        ///     The internal timer.
         /// </summary>
         protected Timer InternalTimer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LockSlimQueueEngine{T}"/> class.
+        ///     The locker.
+        /// </summary>
+        protected ReaderWriterLockSlim Locker;
+
+        /// <summary>
+        ///     The on publish executed.
+        /// </summary>
+        protected int OnPublishExecuted;
+
+        /// <summary>
+        ///     The time limit.
+        /// </summary>
+        protected int TimeLimit;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="LockSlimQueueEngine{T}" /> class.
         /// </summary>
         protected LockSlimQueueEngine()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LockSlimQueueEngine{T}"/> class.
+        ///     Initializes a new instance of the <see cref="LockSlimQueueEngine{T}" /> class.
         /// </summary>
         /// <param name="capLimit">
-        /// TODO The cap limit.
+        ///     TODO The cap limit.
         /// </param>
         /// <param name="timeLimit">
-        /// TODO The time limit.
+        ///     TODO The time limit.
         /// </param>
         protected LockSlimQueueEngine(int capLimit, int timeLimit)
         {
@@ -89,15 +92,15 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// TODO The on publish.
+        ///     TODO The on publish.
         /// </summary>
         public event Action<List<BubblingObject>> OnPublish = delegate { };
 
         /// <summary>
-        /// TODO The enqueue.
+        ///     TODO The enqueue.
         /// </summary>
         /// <param name="item">
-        /// TODO The item.
+        ///     TODO The item.
         /// </param>
         public new virtual void Enqueue(BubblingObject item)
         {
@@ -110,13 +113,13 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// TODO The init.
+        ///     TODO The init.
         /// </summary>
         /// <param name="capLimit">
-        /// TODO The cap limit.
+        ///     TODO The cap limit.
         /// </param>
         /// <param name="timeLimit">
-        /// TODO The time limit.
+        ///     TODO The time limit.
         /// </param>
         private void Init(int capLimit, int timeLimit)
         {
@@ -127,7 +130,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// TODO The init timer.
+        ///     TODO The init timer.
         /// </summary>
         protected virtual void InitTimer()
         {
@@ -141,7 +144,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// TODO The publish.
+        ///     TODO The publish.
         /// </summary>
         protected virtual void Publish()
         {
@@ -199,10 +202,10 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// TODO The is publishing.
+        ///     TODO The is publishing.
         /// </summary>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         private bool IsPublishing()
         {
@@ -210,7 +213,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// TODO The start publishing.
+        ///     TODO The start publishing.
         /// </summary>
         private void StartPublishing()
         {
@@ -218,7 +221,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// TODO The complete publishing.
+        ///     TODO The complete publishing.
         /// </summary>
         private void CompletePublishing()
         {

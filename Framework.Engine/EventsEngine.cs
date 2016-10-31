@@ -1,6 +1,6 @@
 ﻿// EventsEngine.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,40 +25,44 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using GrabCaster.Framework.Contracts;
-using GrabCaster.Framework.Contracts.Components;
-using GrabCaster.Framework.Serialization.Object;
+#region Usings
+
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.ServiceModel;
+using System.ServiceModel.Description;
+using System.ServiceModel.Web;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Bubbling;
+using GrabCaster.Framework.Contracts.Components;
+using GrabCaster.Framework.Contracts.Configuration;
+using GrabCaster.Framework.Contracts.Events;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Triggers;
+using GrabCaster.Framework.Engine.OffRamp;
+using GrabCaster.Framework.Log;
+using GrabCaster.Framework.Serialization.Object;
+using GrabCaster.Framework.Syncronization;
+using Microsoft.ServiceBus;
+using Microsoft.ServiceBus.Messaging;
+using Newtonsoft.Json;
+using Roslyn.Scripting.CSharp;
+
+#endregion
 
 namespace GrabCaster.Framework.Engine
 {
-    using Base;
-    using Contracts.Attributes;
-    using Contracts.Bubbling;
-    using Contracts.Configuration;
-    using Contracts.Events;
-    using Contracts.Globals;
-    using Contracts.Triggers;
-    using Log;
-    using Microsoft.ServiceBus;
-    using Microsoft.ServiceBus.Messaging;
-    using Newtonsoft.Json;
-    using OffRamp;
-    using Roslyn.Scripting.CSharp;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using System.ServiceModel;
-    using System.ServiceModel.Description;
-    using System.ServiceModel.Web;
-    using System.Text;
-    using System.Text.RegularExpressions;
-    using System.Threading;
-
     /// <summary>
     ///     This is engine class containing the most important methods
     /// </summary>
@@ -82,101 +86,96 @@ namespace GrabCaster.Framework.Engine
 
         // Global Action Triggers
         /// <summary>
-        /// The delegate action trigger.
+        ///     The delegate action trigger.
         /// </summary>
         private static ActionTrigger delegateActionTrigger;
 
         // Global Action Events
         /// <summary>
-        /// The delegate action event.
+        ///     The delegate action event.
         /// </summary>
         private static ActionEvent delegateActionEvent;
 
         /// <summary>
-        /// Triggers dll deployed in the bubbling folder
+        ///     Triggers dll deployed in the bubbling folder
         /// </summary>
         public static Dictionary<string, ITriggerAssembly> CacheTriggerComponents;
 
         /// <summary>
-        /// Events dll deployed in the bubbling folder
+        ///     Events dll deployed in the bubbling folder
         /// </summary>
         public static Dictionary<string, IEventAssembly> CacheEventComponents;
 
         /// <summary>
-        /// Chain components dll deployed in the bubbling folder
+        ///     Chain components dll deployed in the bubbling folder
         /// </summary>
         public static Dictionary<string, IChainComponentAssembly> CacheChainComponents;
 
         /// <summary>
-        /// Triggers dll deployed in the bubbling folder
+        ///     Triggers dll deployed in the bubbling folder
         /// </summary>
         public static Dictionary<string, Assembly> CacheEngineComponents;
 
 
         // Triggers and Triggers active and running
         /// <summary>
-        /// The bubbling triggers events active.
+        ///     The bubbling triggers events active.
         /// </summary>
         public static List<BubblingObject> BubblingTriggersEventsActive;
 
         // Triggers and Events configured and running
         /// <summary>
-        /// The bubbling trigger configurations polling.
+        ///     The bubbling trigger configurations polling.
         /// </summary>
         public static List<BubblingObject> BubblingTriggerConfigurationsPolling;
 
         /// <summary>
-        /// The bubbling trigger configurations single instance.
+        ///     The bubbling trigger configurations single instance.
         /// </summary>
         public static List<BubblingObject> BubblingTriggerConfigurationsSingleInstance;
 
 
         // Triggers and Events files configurations
         /// <summary>
-        /// The sync configuration file list.
+        ///     The sync configuration file list.
         /// </summary>
         public static List<SyncConfigurationFile> SyncronizationConfigurationFileList;
 
         // All trigger files configurations
         /// <summary>
-        /// The trigger configuration list.
+        ///     The trigger configuration list.
         /// </summary>
         public static List<TriggerConfiguration> ConfigurationJsonTriggerFileList;
 
         // All event files configurations
         /// <summary>
-        /// The event configuration list.
+        ///     The event configuration list.
         /// </summary>
         public static Dictionary<string, EventConfiguration> ConfigurationJsonEventFileList;
 
         /// <summary>
-        /// The component configuration list.
+        ///     The component configuration list.
         /// </summary>
         public static List<ChainConfiguration> ConfigurationJsonChainFileList;
 
         /// <summary>
-        /// The component configuration list.
+        ///     The component configuration list.
         /// </summary>
         public static List<ComponentConfiguration> ConfigurationJsonComponentList;
 
         /// <summary>
-        /// The connection string.
+        ///     The connection string.
         /// </summary>
         private static string connectionString = string.Empty;
 
         /// <summary>
-        /// The event hub name.
+        ///     The event hub name.
         /// </summary>
         private static string eventHubName = string.Empty;
 
-        /// <summary>
-        /// Gets the hub client.
-        /// </summary>
-        public static EventHubClient HubClient { get; private set; }
-
         // ***********REST*************
         /// <summary>
-        /// The engine host.
+        ///     The engine host.
         /// </summary>
         private static WebServiceHost engineHost;
 
@@ -184,9 +183,14 @@ namespace GrabCaster.Framework.Engine
         // ********************
         // Events Sync Watcher
         /// <summary>
-        /// The fsw event folder.
+        ///     The fsw event folder.
         /// </summary>
         private static readonly FileSystemWatcher FswEventFolder = new FileSystemWatcher();
+
+        /// <summary>
+        ///     Gets the hub client.
+        /// </summary>
+        public static EventHubClient HubClient { get; private set; }
 
         public static BubblingBagObjet bubblingBagObject { get; set; }
         public static BubblingBag bubblingBag { get; set; }
@@ -330,7 +334,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Return 
+        ///     Return
         /// </summary>
         /// <returns></returns>
         public static bool SyncAsyncEventsExecuteDelegate(string key, byte[] DataContext)
@@ -359,7 +363,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Return 
+        ///     Return
         /// </summary>
         /// <returns></returns>
         public static bool SyncAsyncEventsAddDelegate(string key, SyncAsyncEventAction syncAsyncEventAction)
@@ -382,7 +386,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Return 
+        ///     Return
         /// </summary>
         /// <returns></returns>
         public static bool SyncAsyncEventsRemoveDelegate(string key)
@@ -412,7 +416,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// The delegate event executed by a trigger
+        ///     The delegate event executed by a trigger
         /// </summary>
         /// <param name="trigger">
         /// </param>
@@ -542,12 +546,12 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// The delegate event executed by a event
+        ///     The delegate event executed by a event
         /// </summary>
         /// <param name="eventType">
         /// </param>
         /// <param name="context">
-        /// EventActionContext cosa deve essere esuito
+        ///     EventActionContext cosa deve essere esuito
         /// </param>
         public static void ActionEventReceived(IEventType eventType, ActionContext context)
         {
@@ -704,16 +708,16 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// The execute roslyn rule.
+        ///     The execute roslyn rule.
         /// </summary>
         /// <param name="dataContext">
-        /// The data context.
+        ///     The data context.
         /// </param>
         /// <param name="script">
-        /// The script.
+        ///     The script.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         private static bool ExecuteRoslynRule(object dataContext, string script)
         {
@@ -757,7 +761,7 @@ namespace GrabCaster.Framework.Engine
 
 
         /// <summary>
-        /// The check for file to update.
+        ///     The check for file to update.
         /// </summary>
         public static bool SyncronizePoint()
         {
@@ -776,7 +780,7 @@ namespace GrabCaster.Framework.Engine
                 String internalRootFolder =
                     internalRootFolderTemp.Substring(internalRootFolderTemp.LastIndexOf("\\") + 1);
 
-                if (Syncronization.Helpers.ToBeSyncronized(Path.Combine(currentSyncFolder, internalRootFolder),
+                if (Helpers.ToBeSyncronized(Path.Combine(currentSyncFolder, internalRootFolder),
                     ConfigurationBag.Configuration.DirectoryOperativeRootExeName, true))
                 {
                     //Clean sync folder
@@ -804,7 +808,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Create a bubbling event from DLL class
+        ///     Create a bubbling event from DLL class
         /// </summary>
         /// <param name="lastAssemblyFileLoaded"></param>
         /// <param name="numOfTriggers"></param>
@@ -883,7 +887,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Create a event bubbling from a event dll class
+        ///     Create a event bubbling from a event dll class
         /// </summary>
         /// <param name="lastAssemblyFileLoaded"></param>
         /// <param name="numOfEvents"></param>
@@ -960,7 +964,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Create a event bubbling from a event dll class
+        ///     Create a event bubbling from a event dll class
         /// </summary>
         /// <param name="lastAssemblyFileLoaded"></param>
         /// <param name="numOfEvents"></param>
@@ -1037,16 +1041,16 @@ namespace GrabCaster.Framework.Engine
 
 
         /// <summary>
-        /// Load the events list from the directory
+        ///     Load the events list from the directory
         /// </summary>
         /// <param name="numOfTriggers">
-        /// The num Of Triggers.
+        ///     The num Of Triggers.
         /// </param>
         /// <param name="numOfEvents">
-        /// The num Of Events.
+        ///     The num Of Events.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool LoadAssemblyComponents(ref int numOfTriggers, ref int numOfEvents, ref int numOfComponents)
         {
@@ -1403,8 +1407,8 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        ///  Create all bubbling object for trigger event and components
-        ///  to be used by the engine
+        ///     Create all bubbling object for trigger event and components
+        ///     to be used by the engine
         /// </summary>
         public static void RefreshBubblingSetting()
         {
@@ -1687,7 +1691,7 @@ namespace GrabCaster.Framework.Engine
                         bubblingObjectEvent.Chains = eventPropertyBag.Event.Chains;
                         bubblingObjectEvent.IsActive = true;
                         bubblingObjectEvent.Events = null;
-                            //todo optimization per quale ragione qui alvavo gli eventi dal bubbling? quando l'evento non ha sotto eventi?
+                        //todo optimization per quale ragione qui alvavo gli eventi dal bubbling? quando l'evento non ha sotto eventi?
                         bubblingObjectEvent.BubblingEventType = BubblingEventType.Event;
                         // Yes, so set all the properties
 
@@ -2081,11 +2085,11 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Execute a trigger and if the Execute method return != null then it set all return value in a action and excute the
+        ///     Execute a trigger and if the Execute method return != null then it set all return value in a action and excute the
         ///     action
         /// </summary>
         /// <param name="bubblingObject">
-        /// The bubbling Trigger Configuration.
+        ///     The bubbling Trigger Configuration.
         /// </param>
         public static void ExecuteTriggerConfigurationInPool(object objectState)
         {
@@ -2156,11 +2160,12 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Initialize a trigger and if the Execute method return != null then it set all return value in a action and excute the
+        ///     Initialize a trigger and if the Execute method return != null then it set all return value in a action and excute
+        ///     the
         ///     action
         /// </summary>
         /// <param name="bubblingTriggerConfiguration">
-        /// The bubbling Trigger Configuration.
+        ///     The bubbling Trigger Configuration.
         /// </param>
         public static TriggerEmbeddedBag InitializeEmbeddedTrigger(string configurationId, string componeId)
         {
@@ -2232,11 +2237,12 @@ namespace GrabCaster.Framework.Engine
 
 
         /// <summary>
-        /// Initialize a trigger and if the Execute method return != null then it set all return value in a action and excute the
+        ///     Initialize a trigger and if the Execute method return != null then it set all return value in a action and excute
+        ///     the
         ///     action
         /// </summary>
         /// <param name="bubblingTriggerConfiguration">
-        /// The bubbling Trigger Configuration.
+        ///     The bubbling Trigger Configuration.
         /// </param>
         public static byte[] EngineExecuteEmbeddedTrigger(TriggerEmbeddedBag triggerEmbeddedBag)
         {
@@ -2285,11 +2291,11 @@ namespace GrabCaster.Framework.Engine
 
 
         /// <summary>
-        /// Execute a trigger and if the Execute method return != null then it set all return value in a action and excute the
+        ///     Execute a trigger and if the Execute method return != null then it set all return value in a action and excute the
         ///     action
         /// </summary>
         /// <param name="bubblingTriggerConfiguration">
-        /// The bubbling Trigger Configuration.
+        ///     The bubbling Trigger Configuration.
         /// </param>
         public static object ExecuteComponentConfiguration(string IdComponent, byte[] Content)
         {
@@ -2412,7 +2418,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Execute all the action correlate to the trigger
+        ///     Execute all the action correlate to the trigger
         ///     it send the trigger event
         /// </summary>
         /// <param name="objectState"></param>
@@ -2587,10 +2593,10 @@ namespace GrabCaster.Framework.Engine
 
 
         /// <summary>
-        /// The create event up stream.
+        ///     The create event up stream.
         /// </summary>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool CreateEventUpStream()
         {
@@ -2666,13 +2672,13 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// The event folder changed.
+        ///     The event folder changed.
         /// </summary>
         /// <param name="source">
-        /// The source.
+        ///     The source.
         /// </param>
         /// <param name="e">
-        /// The e.
+        ///     The e.
         /// </param>
         private static void EventFolderChanged(object source, FileSystemEventArgs e)
         {
@@ -2697,12 +2703,12 @@ namespace GrabCaster.Framework.Engine
     }
 
     /// <summary>
-    /// The host context.
+    ///     The host context.
     /// </summary>
     public class HostContext
     {
         /// <summary>
-        /// The data context.
+        ///     The data context.
         /// </summary>
         public object DataContext;
     }

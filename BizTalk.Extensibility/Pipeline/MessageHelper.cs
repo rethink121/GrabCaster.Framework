@@ -1,6 +1,6 @@
 // MessageHelper.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,29 +25,32 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.BizTalk.Message.Interop;
-using Microsoft.Test.BizTalk.PipelineObjects;
+#region Usings
+
 using System;
 using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
+using Microsoft.BizTalk.Message.Interop;
+using Microsoft.Test.BizTalk.PipelineObjects;
 
+#endregion
 
 namespace GrabCaster.BizTalk.Extensibility
 {
     /// <summary>
-    /// Helper class you can use to create 
-    /// IBaseMessage instances to pass on
-    /// to the pipeline testing classes
+    ///     Helper class you can use to create
+    ///     IBaseMessage instances to pass on
+    ///     to the pipeline testing classes
     /// </summary>
     public static class MessageHelper
     {
         private static IBaseMessageFactory _factory = new MessageFactory();
 
         /// <summary>
-        /// Creates a new message with the specified string
-        /// as the body part.
+        ///     Creates a new message with the specified string
+        ///     as the body part.
         /// </summary>
         /// <param name="body">Content of the body</param>
         /// <returns>A new message</returns>
@@ -66,8 +69,8 @@ namespace GrabCaster.BizTalk.Extensibility
 
 
         /// <summary>
-        /// Create a new message with the specified stream as 
-        /// the body part.
+        ///     Create a new message with the specified stream as
+        ///     the body part.
         /// </summary>
         /// <param name="body">Body of the message</param>
         /// <returns>A new message object</returns>
@@ -87,7 +90,7 @@ namespace GrabCaster.BizTalk.Extensibility
         }
 
         /// <summary>
-        /// Creates a new message part with the specified data
+        ///     Creates a new message part with the specified data
         /// </summary>
         /// <param name="body">Data of the part</param>
         /// <returns>The new part</returns>
@@ -105,7 +108,7 @@ namespace GrabCaster.BizTalk.Extensibility
         }
 
         /// <summary>
-        /// Creates a new message part
+        ///     Creates a new message part
         /// </summary>
         /// <param name="body">Body of the part</param>
         /// <returns>The new part</returns>
@@ -120,9 +123,9 @@ namespace GrabCaster.BizTalk.Extensibility
         }
 
         /// <summary>
-        /// Creates a multi-part message from an array
-        /// of strings. The first string in the array will be marked
-        /// as the message body part
+        ///     Creates a multi-part message from an array
+        ///     of strings. The first string in the array will be marked
+        ///     as the message body part
         /// </summary>
         /// <param name="parts">One string for each part</param>
         /// <returns>The new message</returns>
@@ -138,9 +141,9 @@ namespace GrabCaster.BizTalk.Extensibility
         }
 
         /// <summary>
-        /// Creates a multi-part message from an array
-        /// of streams. The first stream in the array will be marked
-        /// as the message body part
+        ///     Creates a multi-part message from an array
+        ///     of streams. The first stream in the array will be marked
+        ///     as the message body part
         /// </summary>
         /// <param name="parts">One stream for each part</param>
         /// <returns>The new message</returns>
@@ -156,7 +159,7 @@ namespace GrabCaster.BizTalk.Extensibility
         }
 
         /// <summary>
-        /// Helper method to consume a stream
+        ///     Helper method to consume a stream
         /// </summary>
         /// <param name="stream">Stream to consume</param>
         public static void ConsumeStream(Stream stream)
@@ -170,7 +173,7 @@ namespace GrabCaster.BizTalk.Extensibility
         }
 
         /// <summary>
-        /// Helper method to consume the message body part stream
+        ///     Helper method to consume the message body part stream
         /// </summary>
         /// <param name="message">Message to consume</param>
         public static void ConsumeStream(IBaseMessage message)
@@ -181,7 +184,7 @@ namespace GrabCaster.BizTalk.Extensibility
         }
 
         /// <summary>
-        /// Helper method to consume the part stream
+        ///     Helper method to consume the part stream
         /// </summary>
         /// <param name="part">Part to consume</param>
         public static void ConsumeStream(IBaseMessagePart part)
@@ -192,7 +195,7 @@ namespace GrabCaster.BizTalk.Extensibility
         }
 
         /// <summary>
-        /// Helper method to read back a stream as a string
+        ///     Helper method to read back a stream as a string
         /// </summary>
         /// <param name="stream">Stream to consume</param>
         /// <param name="encoding">Expected encoding of the stream contents</param>
@@ -207,7 +210,7 @@ namespace GrabCaster.BizTalk.Extensibility
         }
 
         /// <summary>
-        /// Helper method to read back a stream as a string
+        ///     Helper method to read back a stream as a string
         /// </summary>
         /// <param name="message">Message to consume</param>
         public static string ReadString(IBaseMessage message)
@@ -218,7 +221,7 @@ namespace GrabCaster.BizTalk.Extensibility
         }
 
         /// <summary>
-        /// Helper method to read back a stream as a string
+        ///     Helper method to read back a stream as a string
         /// </summary>
         /// <param name="part">Part to consume</param>
         public static String ReadString(IBaseMessagePart part)
@@ -232,15 +235,15 @@ namespace GrabCaster.BizTalk.Extensibility
         }
 
         /// <summary>
-        /// Loads a BizTalk message from the set of files exported from
-        /// the BizTalk Admin Console or HAT
+        ///     Loads a BizTalk message from the set of files exported from
+        ///     the BizTalk Admin Console or HAT
         /// </summary>
         /// <param name="contextFile">Path to the *_context.xml file</param>
         /// <returns>The loaded message</returns>
         /// <remarks>
-        /// Context files have no type information for properties
-        /// in the message context, so all properties are 
-        /// added as strings to the context.
+        ///     Context files have no type information for properties
+        ///     in the message context, so all properties are
+        ///     added as strings to the context.
         /// </remarks>
         public static IBaseMessage LoadMessage(string contextFile)
         {

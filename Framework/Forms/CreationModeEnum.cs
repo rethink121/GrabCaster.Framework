@@ -1,6 +1,6 @@
 // CreationModeEnum.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -28,22 +28,22 @@
 namespace GrabCaster.Framework.Forms
 {
     /// <summary>
-    /// Types of creation modes.
+    ///     Types of creation modes.
     /// </summary>
     public enum CreationModeEnum
     {
         /// <summary>
-        /// The install the service.
+        ///     The install the service.
         /// </summary>
         Install,
 
         /// <summary>
-        /// The install and start the service.
+        ///     The install and start the service.
         /// </summary>
         InstallAndStart,
 
         /// <summary>
-        /// The uninstall the service.
+        ///     The uninstall the service.
         /// </summary>
         Uninstall
     } // CreationModeEnum

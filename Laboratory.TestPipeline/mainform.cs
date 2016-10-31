@@ -1,6 +1,6 @@
 ﻿// mainform.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,26 +25,25 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-//---------------------------------------------------------------------------------
-// Copyright (c) 2014, Nino Crudele
-//
-// Blog: http://ninocrudele.me
-//---------------------------------------------------------------------------------
-using GrabCaster.BizTalk.Extensibility;
-using GrabCaster.Framework.Base;
+#region Usings
+
 using System;
 using System.IO;
 using System.Windows.Forms;
+using GrabCaster.BizTalk.Extensibility;
+using GrabCaster.Framework.Base;
+
+#endregion
 
 namespace BTSG.TestPipeline
 {
     public partial class mainform : Form
     {
-        public string prpassemblyfile;
         public string prpassdirectory;
-        public string prppipetype;
-        public string prpinputinstance;
+        public string prpassemblyfile;
         public string prpfilename;
+        public string prpinputinstance;
+        public string prppipetype;
 
         public mainform(string commands)
         {

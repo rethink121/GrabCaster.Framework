@@ -23,6 +23,9 @@
             <Component Id="cmpBF100FD0F931A97CCE596EA07151FB80" Guid="*">
                 <File Id="fil6B8E7AD95F6DA059E96414879A71F68A" KeyPath="yes" Source="$(var.SourcePath)\GrabCaster.Framework.Contracts.dll" />
             </Component>
+            <Component Id="cmp0D91BF2C1817D45800962C3A99C0F1D7" Guid="*">
+                <File Id="filABA6B64992458F3F3713A70B54F5B92A" KeyPath="yes" Source="$(var.SourcePath)\GrabCaster.Framework.Deployment.dll" />
+            </Component>
             <Component Id="cmpE182DC5549A0496FB07D6FEF46E7414B" Guid="*">
                 <File Id="fil105FAB572D3A25AE3B3E6FFBB7FE593D" KeyPath="yes" Source="$(var.SourcePath)\GrabCaster.Framework.EmbeddedTrigger.dll" />
             </Component>
@@ -264,6 +267,9 @@
                 <Component Id="cmp01B17B199619965D97DAE9DAFFFD4042" Guid="*">
                     <File Id="fil01B0149AD65FFF838817FE7987787CB9" KeyPath="yes" Source="$(var.SourcePath)\Root_GrabCaster\GrabCaster.Framework.Dpp.Azure.dll" />
                 </Component>
+                <Component Id="cmp4C4A2DC15C5539DD8FC286BE5459DFDC" Guid="*">
+                    <File Id="fil0993962D7617A6C26C27F38EBD8109BF" KeyPath="yes" Source="$(var.SourcePath)\Root_GrabCaster\GrabCaster.Framework.Log.AzureTableStorage.dll" />
+                </Component>
                 <Component Id="cmpDFDD44701EED36E02F0A5239DB029F25" Guid="*">
                     <File Id="fil91F0652D045718C5BA41CECF8ABD8B6D" KeyPath="yes" Source="$(var.SourcePath)\Root_GrabCaster\GrabCaster.Framework.Log.EventHubs.dll" />
                 </Component>
@@ -468,6 +474,9 @@
                     </Component>
                     <Component Id="cmp1F42BF99522608CDBD3680865556D7F9" Guid="*">
                         <File Id="fil723209D115329CC67D774E735789BC29" KeyPath="yes" Source="$(var.SourcePath)\Root_GrabCaster\Events\GrabCaster.Framework.FileEvent.dll" />
+                    </Component>
+                    <Component Id="cmpBF3CEA2F37ECACFA1E75ABFF8762C2EC" Guid="*">
+                        <File Id="fil09DC898F0C38178BD124B819008EA3FB" KeyPath="yes" Source="$(var.SourcePath)\Root_GrabCaster\Events\GrabCaster.Framework.HTTPSendContentEvent.dll" />
                     </Component>
                     <Component Id="cmp2C10EF7792A6D9FA084148A53E5EF5AF" Guid="*">
                         <File Id="filA78864FDE89B9A6BB25DA3770A2CF525" KeyPath="yes" Source="$(var.SourcePath)\Root_GrabCaster\Events\GrabCaster.Framework.MessageBoxEvent.dll" />
@@ -1067,6 +1076,7 @@
             <ComponentRef Id="cmpFDEE9FF1A4DF8B7D199A145B2CD92CE8" />
             <ComponentRef Id="cmp578F05099659654B5098DCD0463DCF93" />
             <ComponentRef Id="cmpBF100FD0F931A97CCE596EA07151FB80" />
+            <ComponentRef Id="cmp0D91BF2C1817D45800962C3A99C0F1D7" />
             <ComponentRef Id="cmpE182DC5549A0496FB07D6FEF46E7414B" />
             <ComponentRef Id="cmp2ECE5057995A3AC2B546E6C4C10175F1" />
             <ComponentRef Id="cmp069535F337755C58EC76605D72D7F9E1" />
@@ -1139,6 +1149,7 @@
             <ComponentRef Id="cmp8840765D1A3B5913F44A30D8BDE7A8D6" />
             <ComponentRef Id="cmpC5158289DC6BBDAA47FE54339681FF98" />
             <ComponentRef Id="cmp01B17B199619965D97DAE9DAFFFD4042" />
+            <ComponentRef Id="cmp4C4A2DC15C5539DD8FC286BE5459DFDC" />
             <ComponentRef Id="cmpDFDD44701EED36E02F0A5239DB029F25" />
             <ComponentRef Id="cmp2C819207A6C09E940762F3888F0AE7CD" />
             <ComponentRef Id="cmp152D31359AEF0FF23141C4336AE96E02" />
@@ -1199,6 +1210,7 @@
             <ComponentRef Id="cmp86E32E1240E9570BEAA9F9261437A4FD" />
             <ComponentRef Id="cmpB664BA9A45A7ABCA32C6D764306691A5" />
             <ComponentRef Id="cmp1F42BF99522608CDBD3680865556D7F9" />
+            <ComponentRef Id="cmpBF3CEA2F37ECACFA1E75ABFF8762C2EC" />
             <ComponentRef Id="cmp2C10EF7792A6D9FA084148A53E5EF5AF" />
             <ComponentRef Id="cmp7119A7AB3487EBE1AC3437521753E6C0" />
             <ComponentRef Id="cmpD829267C74CD824FBD274D4403077995" />

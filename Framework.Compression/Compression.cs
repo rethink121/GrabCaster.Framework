@@ -1,6 +1,6 @@
 ﻿// Compression.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,20 +25,23 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
 using System;
+using System.IO;
+using System.IO.Compression;
+using System.Reflection;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Log;
+
+#endregion
 
 namespace GrabCaster.Framework.CompressionLibrary
 {
-    using Base;
-    using Log;
-    using System.IO;
-    using System.IO.Compression;
-    using System.Reflection;
-
     public static class Helpers
     {
         /// <summary>
-        /// Compress a folder
+        ///     Compress a folder
         /// </summary>
         /// <param name="directoryPath"></param>
         /// <returns>a byte array</returns>
@@ -66,7 +69,7 @@ namespace GrabCaster.Framework.CompressionLibrary
         }
 
         /// <summary>
-        /// Decompress byte stream
+        ///     Decompress byte stream
         /// </summary>
         /// <param name="fileContent"></param>
         public static void CreateFromBytearray(byte[] fileContent, string unzipFolder)

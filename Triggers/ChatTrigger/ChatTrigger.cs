@@ -1,6 +1,6 @@
 ﻿// ChatTrigger.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,29 +25,32 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Windows.Forms;
 using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Triggers;
+
+#endregion
 
 namespace GrabCaster.Framework.ChatTrigger
 {
-    using Contracts.Attributes;
-    using Contracts.Globals;
-    using Contracts.Triggers;
-    using System;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.InteropServices;
-    using System.Text;
-    using System.Windows.Forms;
-
     /// <summary>
-    /// The chat trigger.
+    ///     The chat trigger.
     /// </summary>
     [TriggerContract("{B515A376-B91E-495C-ADEE-2AD3DC54C2B3}", "ChatTrigger", "Create a P2P chat bridge.", false, true,
          false)]
     public class ChatTrigger : ITriggerType
     {
         /// <summary>
-        /// The w h_ keyboar d_ ll.
+        ///     The w h_ keyboar d_ ll.
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
              Justification = "Reviewed. Suppression is OK here.")] [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore",
@@ -56,7 +59,7 @@ namespace GrabCaster.Framework.ChatTrigger
         private const int WH_KEYBOARD_LL = 13;
 
         /// <summary>
-        /// The w m_ keydown.
+        ///     The w m_ keydown.
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
              Justification = "Reviewed. Suppression is OK here.")] [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1310:FieldNamesMustNotContainUnderscore",
@@ -65,53 +68,91 @@ namespace GrabCaster.Framework.ChatTrigger
         private const int WM_KEYDOWN = 0x0100;
 
         /// <summary>
-        /// The line chat.
+        ///     The line chat.
         /// </summary>
         private static readonly StringBuilder LineChat = new StringBuilder();
 
         /// <summary>
-        /// The _proc.
+        ///     The _proc.
         /// </summary>
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
              Justification = "Reviewed. Suppression is OK here.")] private static readonly LowLevelKeyboardProc Proc =
             HookCallback;
 
         /// <summary>
-        /// The hook id.
+        ///     The hook id.
         /// </summary>
         private static IntPtr hookId = IntPtr.Zero;
 
         /// <summary>
-        /// The _ trigger.
+        ///     The _ trigger.
         /// </summary>
         private static ITriggerType trigger;
 
         /// <summary>
-        /// The low level keyboard proc.
+        ///     Gets or sets the _context.
         /// </summary>
-        /// <param name="nCode">
-        /// The n code.
-        /// </param>
-        /// <param name="wParam">
-        /// The w param.
-        /// </param>
-        /// <param name="lParam">
-        /// The l param.
-        /// </param>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1615:ElementReturnValueMustBeDocumented",
-             Justification = "Reviewed. Suppression is OK here.")]
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
-             Justification = "Reviewed. Suppression is OK here.")]
-        private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
+        public static ActionContext InternalContext { get; set; }
 
         /// <summary>
-        /// The set hook.
+        ///     Gets or sets the _ set event action trigger.
+        /// </summary>
+        public static ActionTrigger InternalActionTrigger { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the _ data context.
+        /// </summary>
+        public static byte[] InternalDataContext { get; set; }
+
+        public string SupportBag { get; set; }
+
+        [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
+        public bool Syncronous { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the context.
+        /// </summary>
+        public ActionContext Context { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the set event action trigger.
+        /// </summary>
+        public ActionTrigger ActionTrigger { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the data context.
+        /// </summary>
+        [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
+        public byte[] DataContext { get; set; }
+
+        /// <summary>
+        ///     The execute.
+        /// </summary>
+        /// <param name="actionTrigger">
+        ///     The set event action trigger.
+        /// </param>
+        /// <param name="context">
+        ///     The context.
+        /// </param>
+        [TriggerActionContract("{26FB94BE-ABC6-4EEA-A94C-ECA6FFDB4704}", "Main action", "Main action description")]
+        public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)
+        {
+            trigger = this;
+            InternalContext = context;
+            InternalActionTrigger = actionTrigger;
+            InternalDataContext = DataContext;
+            StartHooking();
+            return null;
+        }
+
+        /// <summary>
+        ///     The set hook.
         /// </summary>
         /// <param name="proc">
-        /// The proc.
+        ///     The proc.
         /// </param>
         /// <returns>
-        /// The <see cref="IntPtr"/>.
+        ///     The <see cref="IntPtr" />.
         /// </returns>
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
              Justification = "Reviewed. Suppression is OK here.")]
@@ -125,19 +166,19 @@ namespace GrabCaster.Framework.ChatTrigger
         }
 
         /// <summary>
-        /// The hook callback.
+        ///     The hook callback.
         /// </summary>
         /// <param name="nCode">
-        /// The n code.
+        ///     The n code.
         /// </param>
         /// <param name="wParam">
-        /// The w param.
+        ///     The w param.
         /// </param>
         /// <param name="lParam">
-        /// The l param.
+        ///     The l param.
         /// </param>
         /// <returns>
-        /// The <see cref="IntPtr"/>.
+        ///     The <see cref="IntPtr" />.
         /// </returns>
         [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation",
              Justification = "Reviewed. Suppression is OK here.")]
@@ -208,7 +249,7 @@ namespace GrabCaster.Framework.ChatTrigger
         private static extern IntPtr GetModuleHandle(string lpModuleName);
 
         /// <summary>
-        /// The start hooking.
+        ///     The start hooking.
         /// </summary>
         public static void StartHooking()
         {
@@ -218,59 +259,21 @@ namespace GrabCaster.Framework.ChatTrigger
         }
 
         /// <summary>
-        /// Gets or sets the _context.
+        ///     The low level keyboard proc.
         /// </summary>
-        public static ActionContext InternalContext { get; set; }
-
-        /// <summary>
-        /// Gets or sets the _ set event action trigger.
-        /// </summary>
-        public static ActionTrigger InternalActionTrigger { get; set; }
-
-        /// <summary>
-        /// Gets or sets the _ data context.
-        /// </summary>
-        public static byte[] InternalDataContext { get; set; }
-
-        [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
-        public bool Syncronous { get; set; }
-
-        public string SupportBag { get; set; }
-
-        /// <summary>
-        /// Gets or sets the context.
-        /// </summary>
-        public ActionContext Context { get; set; }
-
-        /// <summary>
-        /// Gets or sets the set event action trigger.
-        /// </summary>
-        public ActionTrigger ActionTrigger { get; set; }
-
-        /// <summary>
-        /// Gets or sets the data context.
-        /// </summary>
-        [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
-        public byte[] DataContext { get; set; }
-
-        /// <summary>
-        /// The execute.
-        /// </summary>
-        /// <param name="actionTrigger">
-        /// The set event action trigger.
+        /// <param name="nCode">
+        ///     The n code.
         /// </param>
-        /// <param name="context">
-        /// The context.
+        /// <param name="wParam">
+        ///     The w param.
         /// </param>
-        [TriggerActionContract("{26FB94BE-ABC6-4EEA-A94C-ECA6FFDB4704}", "Main action", "Main action description")]
-        public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)
-        {
-            trigger = this;
-            InternalContext = context;
-            InternalActionTrigger = actionTrigger;
-            InternalDataContext = DataContext;
-            StartHooking();
-            return null;
-        }
+        /// <param name="lParam">
+        ///     The l param.
+        /// </param>
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1615:ElementReturnValueMustBeDocumented",
+             Justification = "Reviewed. Suppression is OK here.")]
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
+             Justification = "Reviewed. Suppression is OK here.")]
+        private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
     }
 }

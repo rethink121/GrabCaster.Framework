@@ -1,6 +1,6 @@
 ﻿// MessageIngestor.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,17 +25,23 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Reflection;
+using GrabCaster.Framework.Contracts.Bubbling;
+
+#endregion
+
 namespace GrabCaster.Framework.Library.Azure
 {
-    using Contracts.Bubbling;
-    using System;
-    using System.Reflection;
-
     /// <summary>
-    /// Engine main message ingestor
+    ///     Engine main message ingestor
     /// </summary>
     public static class MessageIngestor
     {
+        public delegate void SetEventActionEventEmbedded(byte[] message);
+
         public static string GroupEventHubsStorageAccountName { get; set; }
 
         public static string GroupEventHubsStorageAccountKey { get; set; }
@@ -45,10 +51,8 @@ namespace GrabCaster.Framework.Library.Azure
         public static string ChannelId { get; set; }
         public static string PointId { get; set; }
 
-        public delegate void SetEventActionEventEmbedded(byte[] message);
-
         /// <summary>
-        /// Used internally by the embedded
+        ///     Used internally by the embedded
         /// </summary>
         public static SetEventActionEventEmbedded setEventActionEventEmbedded { get; set; }
 

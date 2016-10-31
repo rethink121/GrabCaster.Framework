@@ -1,6 +1,6 @@
 ﻿// TriggerAssembly.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,11 +25,15 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using GrabCaster.Framework.Contracts.AssemblyFile;
-using GrabCaster.Framework.Contracts.Bubbling;
+#region Usings
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using GrabCaster.Framework.Contracts.AssemblyFile;
+using GrabCaster.Framework.Contracts.Bubbling;
+
+#endregion
 
 namespace GrabCaster.Framework.Contracts.Triggers
 {
@@ -43,11 +47,11 @@ namespace GrabCaster.Framework.Contracts.Triggers
         public string Nop { get; set; }
         public Version Version { get; set; }
         public byte[] AssemblyContent { get; set; }
-        public ITriggerType TriggerType { get; set; }
         public Assembly AssemblyObject { get; set; }
         public Type AssemblyClassType { get; set; }
         public string AssemblyFile { get; set; }
         public List<BaseAction> BaseActions { get; set; }
         public Dictionary<string, Property> Properties { get; set; }
+        public ITriggerType TriggerType { get; set; }
     }
 }

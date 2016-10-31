@@ -1,6 +1,6 @@
 ﻿// ComponentAttributes.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,13 +25,17 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Runtime.Serialization;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Attributes
 {
-    using System;
-    using System.Runtime.Serialization;
-
     /// <summary>
-    /// The component contract.
+    ///     The component contract.
     /// </summary>
     [DataContract]
     [Serializable]
@@ -46,26 +50,26 @@ namespace GrabCaster.Framework.Contracts.Attributes
         }
 
         /// <summary>
-        /// Gets or sets the id.
+        ///     Gets or sets the id.
         /// </summary>
         [DataMember]
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        ///     Gets or sets the name.
         /// </summary>
         [DataMember]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         [DataMember]
         public string Description { get; set; }
     }
 
     /// <summary>
-    /// The component property property contract.
+    ///     The component property property contract.
     /// </summary>
     [DataContract]
     [Serializable]
@@ -73,13 +77,13 @@ namespace GrabCaster.Framework.Contracts.Attributes
     public class ComponentPropertyContract : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TriggerPropertyContract"/> class.
+        ///     Initializes a new instance of the <see cref="TriggerPropertyContract" /> class.
         /// </summary>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="description">
-        /// The description.
+        ///     The description.
         /// </param>
         public ComponentPropertyContract(string name, string description)
         {
@@ -94,29 +98,29 @@ namespace GrabCaster.Framework.Contracts.Attributes
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         [DataMember]
         public string Description { get; set; }
     }
 
     /// <summary>
-    /// The event action contract.
+    ///     The event action contract.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
     public class ComponentActionContract : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventActionContract"/> class.
+        ///     Initializes a new instance of the <see cref="EventActionContract" /> class.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        ///     The id.
         /// </param>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="description">
-        /// The description.
+        ///     The description.
         /// </param>
         public ComponentActionContract(string id, string name, string description)
         {
@@ -136,7 +140,7 @@ namespace GrabCaster.Framework.Contracts.Attributes
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         public string Description { get; set; }
     }

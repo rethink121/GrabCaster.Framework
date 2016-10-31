@@ -1,6 +1,6 @@
 ﻿// ConsoleSyncEventList.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,33 +25,37 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using GrabCaster.Framework.Contracts.Configuration;
+using GrabCaster.Framework.Contracts.Points;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Shell
 {
-    using Configuration;
-    using Points;
-    using System.Collections.Generic;
-    using System.Runtime.Serialization;
-
     /// <summary>
-    /// The console sync event list.
+    ///     The console sync event list.
     /// </summary>
     [DataContract]
     public class ConsoleSyncEventList
     {
         /// <summary>
-        /// Gets or sets the point.
+        ///     Gets or sets the point.
         /// </summary>
         [DataMember]
         public Point Point { get; set; }
 
         /// <summary>
-        /// Gets or sets the trigger configuration list.
+        ///     Gets or sets the trigger configuration list.
         /// </summary>
         [DataMember]
         public List<TriggerConfiguration> TriggerConfigurationList { get; set; }
 
         /// <summary>
-        /// Gets or sets the event configuration list.
+        ///     Gets or sets the event configuration list.
         /// </summary>
         [DataMember]
         public List<EventConfiguration> EventConfigurationList { get; set; }

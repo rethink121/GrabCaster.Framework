@@ -1,6 +1,6 @@
 ﻿// Program.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,10 +25,15 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using GrabCaster.Framework.Base;
+#region Usings
+
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Deployment;
+
+#endregion
 
 namespace ConsoleApplicationLab
 {
@@ -51,7 +56,7 @@ namespace ConsoleApplicationLab
             {
                 string projectName = Path.GetFileNameWithoutExtension(publishingFolder + file);
                 string projectType = Path.GetExtension(publishingFolder + file).Replace(".", "");
-                GrabCaster.Framework.Deployment.Jit.CompilePublishing(projectType, projectName, "Release", "AnyCpu");
+                Jit.CompilePublishing(projectType, projectName, "Release", "AnyCpu");
             }
         }
     }

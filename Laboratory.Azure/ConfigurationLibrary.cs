@@ -1,6 +1,6 @@
 ﻿// ConfigurationLibrary.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,11 +25,14 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using Microsoft.Azure;
+
+#endregion
 
 namespace GrabCaster.Framework.Library.Azure
 {
-    using Microsoft.Azure;
-
     public enum EventHubsCheckPointPattern
     {
         CheckPoint,
@@ -48,15 +51,15 @@ namespace GrabCaster.Framework.Library.Azure
     }
 
     /// <summary>
-    /// The configuration.
+    ///     The configuration.
     /// </summary>
     public static class ConfigurationLibrary
     {
         /// <summary>
-        /// The azure name space connection string.
+        ///     The azure name space connection string.
         /// </summary>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         public static string AzureNameSpaceConnectionString()
         {
@@ -64,10 +67,10 @@ namespace GrabCaster.Framework.Library.Azure
         }
 
         /// <summary>
-        /// The group event hubs storage account name.
+        ///     The group event hubs storage account name.
         /// </summary>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         public static string GroupEventHubsStorageAccountName()
         {
@@ -75,10 +78,10 @@ namespace GrabCaster.Framework.Library.Azure
         }
 
         /// <summary>
-        /// The group event hubs storage account key.
+        ///     The group event hubs storage account key.
         /// </summary>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         public static string GroupEventHubsStorageAccountKey()
         {
@@ -86,10 +89,10 @@ namespace GrabCaster.Framework.Library.Azure
         }
 
         /// <summary>
-        /// The group event hubs name.
+        ///     The group event hubs name.
         /// </summary>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         public static string GroupEventHubsName()
         {
@@ -97,10 +100,10 @@ namespace GrabCaster.Framework.Library.Azure
         }
 
         /// <summary>
-        /// The engine name.
+        ///     The engine name.
         /// </summary>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         public static string EngineName()
         {
@@ -108,10 +111,10 @@ namespace GrabCaster.Framework.Library.Azure
         }
 
         /// <summary>
-        /// The point id.
+        ///     The point id.
         /// </summary>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         public static string PointId()
         {
@@ -119,10 +122,10 @@ namespace GrabCaster.Framework.Library.Azure
         }
 
         /// <summary>
-        /// The point name.
+        ///     The point name.
         /// </summary>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         public static string PointName()
         {
@@ -130,10 +133,10 @@ namespace GrabCaster.Framework.Library.Azure
         }
 
         /// <summary>
-        /// The channel id.
+        ///     The channel id.
         /// </summary>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         public static string ChannelId()
         {
@@ -141,10 +144,10 @@ namespace GrabCaster.Framework.Library.Azure
         }
 
         /// <summary>
-        /// The channel name.
+        ///     The channel name.
         /// </summary>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         public static string ChannelName()
         {

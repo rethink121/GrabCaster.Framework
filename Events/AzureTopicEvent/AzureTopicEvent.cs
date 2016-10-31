@@ -1,6 +1,6 @@
 ﻿// AzureTopicEvent.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,63 +25,67 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Events;
+using GrabCaster.Framework.Contracts.Globals;
+using Microsoft.ServiceBus;
+using Microsoft.ServiceBus.Messaging;
+
+#endregion
+
 namespace GrabCaster.Framework.AzureTopicEvent
 {
-    using Contracts.Attributes;
-    using Contracts.Events;
-    using Contracts.Globals;
-    using Microsoft.ServiceBus;
-    using Microsoft.ServiceBus.Messaging;
-    using System;
-
     /// <summary>
-    /// The azure topic event.
+    ///     The azure topic event.
     /// </summary>
     [EventContract("{B2311010-B505-4F9F-A927-2035A7640BCB}", "AzureTopicEvent", "Send message to Azure Topic", true)]
     public class AzureTopicEvent : IEventType
     {
         /// <summary>
-        /// Gets or sets the connection string.
+        ///     Gets or sets the connection string.
         /// </summary>
         [EventPropertyContract("ConnectionString", "Azure ConnectionString")]
         public string ConnectionString { get; set; }
 
         /// <summary>
-        /// Gets or sets the topic path.
+        ///     Gets or sets the topic path.
         /// </summary>
         [EventPropertyContract("TopicPath", "TopicPath")]
         public string TopicPath { get; set; }
 
         /// <summary>
-        /// Gets or sets the message context properties.
+        ///     Gets or sets the message context properties.
         /// </summary>
         [EventPropertyContract("MessageContextProperties", "MessageContextProperties")]
         public string MessageContextProperties { get; set; }
 
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action event.
+        ///     Gets or sets the set event action event.
         /// </summary>
         public ActionEvent ActionEvent { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [EventPropertyContract("DataContext", "Event Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionEvent">
-        /// The set event action event.
+        ///     The set event action event.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [EventActionContract("{D33251EF-7638-4C34-AD6B-B5CBE32F7056}", "Main action", "Main action description")]
         public byte[] Execute(ActionEvent actionEvent, ActionContext context)

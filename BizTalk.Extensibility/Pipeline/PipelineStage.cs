@@ -1,6 +1,6 @@
 // PipelineStage.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,59 +25,21 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.BizTalk.Component.Interop;
-using Microsoft.Test.BizTalk.PipelineObjects;
+#region Usings
+
 using System;
 using System.Collections.Generic;
+using Microsoft.BizTalk.Component.Interop;
+using Microsoft.Test.BizTalk.PipelineObjects;
 
+#endregion
 
 namespace GrabCaster.BizTalk.Extensibility
 {
     public sealed class PpStage
     {
-        private Guid _id;
-        private string _name;
-        private ExecuteMethod _executeMethod;
-        private bool _isReceiveStage;
-
         private static IDictionary<Guid, PpStage> _stages =
             new Dictionary<Guid, PpStage>();
-
-
-        public Guid StageID
-        {
-            get { return _id; }
-        }
-
-        public string StageName
-        {
-            get { return _name; }
-        }
-
-        public ExecuteMethod ExecuteMethod
-        {
-            get { return _executeMethod; }
-        }
-
-        public bool IsReceiveStage
-        {
-            get { return _isReceiveStage; }
-        }
-
-
-        private PpStage(string id, string name, ExecuteMethod method, bool isReceiveStage)
-        {
-            _id = new Guid(id);
-            _name = name;
-            _executeMethod = method;
-            _isReceiveStage = isReceiveStage;
-            _stages.Add(_id, this);
-        }
-
-        internal static PpStage LookupStage(Guid stageId)
-        {
-            return _stages[stageId];
-        }
 
 
         public static readonly PpStage DecodeStage = new PpStage(CategoryTypes.CATID_Decoder, "Decode",
@@ -101,5 +63,46 @@ namespace GrabCaster.BizTalk.Extensibility
 
         public static readonly PpStage EncodeStage = new PpStage(CategoryTypes.CATID_Encoder, "Encode",
             ExecuteMethod.All, false);
+
+        private ExecuteMethod _executeMethod;
+        private Guid _id;
+        private bool _isReceiveStage;
+        private string _name;
+
+
+        private PpStage(string id, string name, ExecuteMethod method, bool isReceiveStage)
+        {
+            _id = new Guid(id);
+            _name = name;
+            _executeMethod = method;
+            _isReceiveStage = isReceiveStage;
+            _stages.Add(_id, this);
+        }
+
+
+        public Guid StageID
+        {
+            get { return _id; }
+        }
+
+        public string StageName
+        {
+            get { return _name; }
+        }
+
+        public ExecuteMethod ExecuteMethod
+        {
+            get { return _executeMethod; }
+        }
+
+        public bool IsReceiveStage
+        {
+            get { return _isReceiveStage; }
+        }
+
+        internal static PpStage LookupStage(Guid stageId)
+        {
+            return _stages[stageId];
+        }
     }
 } // namespace BTSGBizTalkAddins

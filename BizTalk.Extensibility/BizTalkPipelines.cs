@@ -1,6 +1,6 @@
 ﻿// BizTalkPipelines.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,13 +25,18 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using GrabCaster.Framework.Base;
-using Microsoft.BizTalk.Message.Interop;
+#region Usings
+
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Xml;
+using GrabCaster.Framework.Base;
+using Microsoft.BizTalk.Message.Interop;
+
+#endregion
 
 namespace GrabCaster.BizTalk.Extensibility
 {
@@ -134,7 +139,7 @@ namespace GrabCaster.BizTalk.Extensibility
                 string fileresult = assdirectory + Path.GetFileNameWithoutExtension(inputinstance) + "_" +
                                     Guid.NewGuid() + "txt";
                 File.WriteAllText(fileresult, "Error: " + ex.Message + "\r\n\r\n" + ex.StackTrace);
-                System.Diagnostics.Process.Start("IExplore.exe", fileresult);
+                Process.Start("IExplore.exe", fileresult);
                 return returnContent;
             }
         }
@@ -227,7 +232,7 @@ namespace GrabCaster.BizTalk.Extensibility
         }
 
         /// <summary>
-        /// Saves a message to disk
+        ///     Saves a message to disk
         /// </summary>
         /// <param name="path"></param>
         /// <param name="data"></param>
@@ -237,7 +242,7 @@ namespace GrabCaster.BizTalk.Extensibility
         }
 
         /// <summary>
-        /// Loads a message from disk
+        ///     Loads a message from disk
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>

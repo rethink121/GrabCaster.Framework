@@ -1,6 +1,6 @@
 ﻿// NTWindowsService.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,25 +25,29 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Diagnostics;
+using System.Reflection;
+using System.ServiceProcess;
+using System.Threading;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Engine;
+using GrabCaster.Framework.Log;
+
+#endregion
+
 namespace GrabCaster.Framework.NTService
 {
-    using Base;
-    using Engine;
-    using Log;
-    using System;
-    using System.Diagnostics;
-    using System.Reflection;
-    using System.ServiceProcess;
-    using System.Threading;
-
     /// <summary>
-    /// Component that represents the Windows Service.
+    ///     Component that represents the Windows Service.
     /// </summary>
     // ReSharper disable once InconsistentNaming
     public partial class NTWindowsService : ServiceBase
     {
         /// <summary>
-        /// Starts the core Engine.
+        ///     Starts the core Engine.
         /// </summary>
         public static void StartEngine()
         {
@@ -73,10 +77,10 @@ namespace GrabCaster.Framework.NTService
         // StartEngine
 
         /// <summary>
-        /// Called when the Windows Service starts.
+        ///     Called when the Windows Service starts.
         /// </summary>
         /// <param name="args">
-        /// The arguments.
+        ///     The arguments.
         /// </param>
         protected override void OnStart(string[] args)
         {
@@ -120,7 +124,7 @@ namespace GrabCaster.Framework.NTService
         // OnStart
 
         /// <summary>
-        /// Called when Windows Service stops.
+        ///     Called when Windows Service stops.
         /// </summary>
         protected override void OnStop()
         {

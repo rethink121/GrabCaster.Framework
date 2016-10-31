@@ -1,6 +1,6 @@
 ﻿// SerializtionaEngine.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,26 +25,29 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using GrabCaster.Framework.Base;
+
+#endregion
 
 namespace GrabCaster.Framework.Serialization.Object
 {
-    using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
-
     /// <summary>
     ///     Serialization engine class
     /// </summary>
     public static class SerializationEngine
     {
         /// <summary>
-        /// serialize object to Array
+        ///     serialize object to Array
         /// </summary>
         /// <param name="objectData">
-        /// Object to serialize
+        ///     Object to serialize
         /// </param>
         /// <returns>
-        /// Return a byte array
+        ///     Return a byte array
         /// </returns>
         public static byte[] ObjectToByteArray(object objectData)
         {
@@ -60,13 +63,13 @@ namespace GrabCaster.Framework.Serialization.Object
         }
 
         /// <summary>
-        /// Serialize Array to Object
+        ///     Serialize Array to Object
         /// </summary>
         /// <param name="arrayBytes">
-        /// Array byte to deserialize
+        ///     Array byte to deserialize
         /// </param>
         /// <returns>
-        /// Object deserialized
+        ///     Object deserialized
         /// </returns>
         public static object ByteArrayToObject(byte[] arrayBytes)
         {

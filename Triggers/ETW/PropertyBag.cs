@@ -1,6 +1,6 @@
 ﻿// PropertyBag.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,20 +25,24 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+
+#endregion
+
 namespace GrabCaster.Framework.ETW
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Runtime.Serialization;
-
     /// <summary>
-    /// The property bag.
+    ///     The property bag.
     /// </summary>
     [Serializable]
     public sealed class PropertyBag : Dictionary<string, object>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyBag"/> class.
+        ///     Initializes a new instance of the <see cref="PropertyBag" /> class.
         /// </summary>
         public PropertyBag()
             : base(StringComparer.OrdinalIgnoreCase)
@@ -46,10 +50,10 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyBag"/> class.
+        ///     Initializes a new instance of the <see cref="PropertyBag" /> class.
         /// </summary>
         /// <param name="capacity">
-        /// The capacity.
+        ///     The capacity.
         /// </param>
         public PropertyBag(int capacity)
             : base(capacity, StringComparer.Ordinal)
@@ -57,13 +61,13 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PropertyBag"/> class.
+        ///     Initializes a new instance of the <see cref="PropertyBag" /> class.
         /// </summary>
         /// <param name="info">
-        /// The info.
+        ///     The info.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         private PropertyBag(SerializationInfo info, StreamingContext context)
             : base(info, context)

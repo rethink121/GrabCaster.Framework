@@ -1,6 +1,6 @@
 ﻿// EventHubsTrigger.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,64 +25,68 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Threading;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Triggers;
+using Microsoft.ServiceBus;
+using Microsoft.ServiceBus.Messaging;
+
+#endregion
+
 namespace GrabCaster.Framework.EventHubsTrigger
 {
-    using Contracts.Attributes;
-    using Contracts.Globals;
-    using Contracts.Triggers;
-    using Microsoft.ServiceBus;
-    using Microsoft.ServiceBus.Messaging;
-    using System;
-    using System.Threading;
-
     /// <summary>
-    /// The event hubs trigger.
+    ///     The event hubs trigger.
     /// </summary>
     [TriggerContract("{AD270984-5695-4D1F-AB78-1E960AFBEE9D}", "Event Hubs Trigger", "Get messages from Event Hubs",
          false, true, false)]
     public class EventHubsTrigger : ITriggerType
     {
         /// <summary>
-        /// Gets or sets the event hubs connection string.
+        ///     Gets or sets the event hubs connection string.
         /// </summary>
         [TriggerPropertyContract("EventHubsConnectionString", "Event Hubs Connection String")]
         public string EventHubsConnectionString { get; set; }
 
         /// <summary>
-        /// Gets or sets the event hubs name.
+        ///     Gets or sets the event hubs name.
         /// </summary>
         [TriggerPropertyContract("EventHubsName", "Event Hubs Name")]
         public string EventHubsName { get; set; }
 
+        public string SupportBag { get; set; }
+
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
 
-        public string SupportBag { get; set; }
-
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action trigger.
+        ///     Gets or sets the set event action trigger.
         /// </summary>
         public ActionTrigger ActionTrigger { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionTrigger">
-        /// The set event action trigger.
+        ///     The set event action trigger.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [TriggerActionContract("{90EA497E-61AE-4664-A957-41AC588106FB}", "Main action", "Main action description")]
         public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)
@@ -123,13 +127,13 @@ namespace GrabCaster.Framework.EventHubsTrigger
         }
 
         /// <summary>
-        /// The receive direct from partition.
+        ///     The receive direct from partition.
         /// </summary>
         /// <param name="eventHubClient">
-        /// The event hub client.
+        ///     The event hub client.
         /// </param>
         /// <param name="partitionId">
-        /// The partition id.
+        ///     The partition id.
         /// </param>
         private void ReceiveDirectFromPartition(EventHubClient eventHubClient, string partitionId)
         {

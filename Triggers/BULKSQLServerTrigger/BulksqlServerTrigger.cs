@@ -1,6 +1,6 @@
 ﻿// BulksqlServerTrigger.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,20 +25,23 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Serialization;
+using GrabCaster.Framework.Contracts.Triggers;
+
+#endregion
 
 namespace GrabCaster.Framework.BulksqlServerTrigger
 {
-    using Contracts.Attributes;
-    using Contracts.Globals;
-    using Contracts.Serialization;
-    using Contracts.Triggers;
-    using System;
-    using System.Data;
-    using System.Data.SqlClient;
-    using System.Diagnostics.CodeAnalysis;
-
     /// <summary>
-    /// The bulksql server trigger.
+    ///     The bulksql server trigger.
     /// </summary>
     [TriggerContract("{9A989BD1-C8DE-4FC1-B4BA-02E7D8A4AD76}", "SQL Server Bulk Trigger",
          "Execute a bulk insert between databases.", false,
@@ -48,52 +51,52 @@ namespace GrabCaster.Framework.BulksqlServerTrigger
     public class BulksqlServerTrigger : ITriggerType
     {
         /// <summary>
-        /// Gets or sets the table name.
+        ///     Gets or sets the table name.
         /// </summary>
         [TriggerPropertyContract("TableName", "TableName")]
         public string TableName { get; set; }
 
         /// <summary>
-        /// Gets or sets the bulk select query.
+        ///     Gets or sets the bulk select query.
         /// </summary>
         [TriggerPropertyContract("BulkSelectQuery", "BulkSelectQuery")]
         public string BulkSelectQuery { get; set; }
 
         /// <summary>
-        /// Gets or sets the connection string.
+        ///     Gets or sets the connection string.
         /// </summary>
         [TriggerPropertyContract("ConnectionString", "ConnectionString")]
         public string ConnectionString { get; set; }
 
+        public string SupportBag { get; set; }
+
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
 
-        public string SupportBag { get; set; }
-
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action trigger.
+        ///     Gets or sets the set event action trigger.
         /// </summary>
         public ActionTrigger ActionTrigger { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionTrigger">
-        /// The set event action trigger.
+        ///     The set event action trigger.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [TriggerActionContract("{C55D1D0A-B4B4-4FF0-B41F-38CE0C7A522C}", "Main action", "Main action description")]
         public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)

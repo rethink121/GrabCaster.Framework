@@ -1,6 +1,6 @@
 ﻿// IDevicePersistentProvider.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -28,18 +28,18 @@
 namespace GrabCaster.Framework.Contracts.Storage
 {
     /// <summary>
-    /// The EventsUpStream interface.
+    ///     The EventsUpStream interface.
     /// </summary>
     public interface IDevicePersistentProvider
     {
         /// <summary>
-        /// The persist event to blob.
+        ///     The persist event to blob.
         /// </summary>
         /// <param name="messageBody">
-        /// The message body.
+        ///     The message body.
         /// </param>
         /// <param name="messageId">
-        /// The message id.
+        ///     The message id.
         /// </param>
         void PersistEventToStorage(byte[] messageBody, string messageId);
 

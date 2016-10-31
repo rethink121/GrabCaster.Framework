@@ -1,6 +1,6 @@
 ﻿// IBubblingObject.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,13 +25,17 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System.Collections.Generic;
+using GrabCaster.Framework.Contracts.Configuration;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Bubbling
 {
-    using Configuration;
-    using System.Collections.Generic;
-
     /// <summary>
-    /// The BubblingEvent interface.
+    ///     The BubblingEvent interface.
     /// </summary>
     public interface IBubblingObject
     {
@@ -53,65 +57,65 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         string IdComponent { get; set; }
 
         /// <summary>
-        /// Gets or sets the id configuration.
+        ///     Gets or sets the id configuration.
         /// </summary>
         string IdConfiguration { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        ///     Gets or sets the name.
         /// </summary>
         string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether shared.
+        ///     Gets or sets a value indicating whether shared.
         /// </summary>
         bool Shared { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether polling required.
+        ///     Gets or sets a value indicating whether polling required.
         /// </summary>
         bool PollingRequired { get; set; }
 
         /// <summary>
-        /// Gets or sets the properties.
+        ///     Gets or sets the properties.
         /// </summary>
         Dictionary<string, Property> Properties { get; set; }
 
         /// <summary>
-        /// Gets or sets the properties.
+        ///     Gets or sets the properties.
         /// </summary>
         IDictionary<string, string> PropertiesContext { get; set; }
 
 
         /// <summary>
-        /// Gets or sets the events.
+        ///     Gets or sets the events.
         /// </summary>
         List<Event> Events { get; set; }
 
         /// <summary>
-        /// Used to transport the raw data betwwen the source and the destination point
-        /// Just the raw data picked up by the trigger or event
+        ///     Used to transport the raw data betwwen the source and the destination point
+        ///     Just the raw data picked up by the trigger or event
         /// </summary>
         byte[] DataContext { get; set; }
 
         //To manage the Sync Async behaviour
         /// <summary>
-        /// Used to notify that the request/response is syncronous
+        ///     Used to notify that the request/response is syncronous
         /// </summary>
         bool Syncronous { get; set; }
 
         /// <summary>
-        /// Token used to identify the delegate to search and execute when back to the source
+        ///     Token used to identify the delegate to search and execute when back to the source
         /// </summary>
         string SyncronousToken { get; set; }
 
         /// <summary>
-        /// If it's a response syncronous from event
+        ///     If it's a response syncronous from event
         /// </summary>
         bool SyncronousFromEvent { get; set; }
 

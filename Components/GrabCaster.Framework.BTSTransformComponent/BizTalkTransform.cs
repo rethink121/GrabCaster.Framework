@@ -1,6 +1,6 @@
 ﻿// BizTalkTransform.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,19 +25,22 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using GrabCaster.Framework.Base;
-using GrabCaster.Framework.Contracts.Components;
-using GrabCaster.Framework.Log;
+#region Usings
+
 using System;
 using System.IO;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Xsl;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Components;
+using GrabCaster.Framework.Log;
+
+#endregion
 
 namespace GrabCaster.Framework.BTSTransformComponent
 {
-    using Contracts.Attributes;
-
     [ComponentContract("{EFA41557-6AE0-4880-B8B2-EE3DF2C1E48E}", "BizTalk Transform Executor",
          "Execute a BizTalk Transform")]
     public class BizTalkTransform : IChainComponentType
@@ -49,10 +52,10 @@ namespace GrabCaster.Framework.BTSTransformComponent
         public string TransformTypeName { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         /// <value>
-        /// The data context.
+        ///     The data context.
         /// </value>
         [ComponentPropertyContract("DataContext", "Event Default Main Data")]
         public byte[] DataContext { get; set; }

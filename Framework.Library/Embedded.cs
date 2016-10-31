@@ -1,6 +1,6 @@
 ﻿// Embedded.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,50 +25,57 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Threading;
+using GrabCaster.Framework.Base;
 using GrabCaster.Framework.Contracts;
+using GrabCaster.Framework.Contracts.Events;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Engine;
+using GrabCaster.Framework.Log;
+
+#endregion
 
 namespace GrabCaster.Framework.Library
 {
-    using Base;
-    using Contracts.Events;
-    using Contracts.Globals;
-    using Engine;
-    using Log;
-    using System;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Reflection;
-    using System.Threading;
-
     /// <summary>
-    /// The embedded point.
+    ///     The embedded point.
     /// </summary>
     public class Embedded
     {
         public delegate void SetEventActionEventEmbedded(IEventType _this, ActionContext context);
 
         /// <summary>
-        /// Used internally by the embedded
-        /// </summary>
-        public static SetEventActionEventEmbedded setEventActionEventEmbedded { get; set; }
-
-        /// <summary>
-        /// 
         /// </summary>
         public static bool engineLoaded;
 
         // Global Action Events
         /// <summary>
-        /// The delegate action event.
+        ///     The delegate action event.
         /// </summary>
         private static ActionEvent _delegate;
 
+        private static byte[] _syncronousDataContext;
 
         /// <summary>
-        /// Handles the ProcessExit event of the CurrentDomain control.
+        ///     Used internally by the embedded
+        /// </summary>
+        public static SetEventActionEventEmbedded setEventActionEventEmbedded { get; set; }
+
+        public static AutoResetEvent eventStop { get; set; }
+        public static SyncAsyncEventAction SyncAsyncEventAction { get; set; }
+
+
+        /// <summary>
+        ///     Handles the ProcessExit event of the CurrentDomain control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void CurrentDomainProcessExit(object sender, EventArgs e)
         {
             CoreEngine.StopEventEngine();
@@ -226,12 +233,12 @@ namespace GrabCaster.Framework.Library
         }
 
         /// <summary>
-        /// The delegate event executed by a event
+        ///     The delegate event executed by a event
         /// </summary>
         /// <param name="eventType">
         /// </param>
         /// <param name="context">
-        /// EventActionContext cosa deve essere restituito
+        ///     EventActionContext cosa deve essere restituito
         /// </param>
         private static void delegateActionEventEmbedded(IEventType eventType, ActionContext context)
         {
@@ -258,7 +265,7 @@ namespace GrabCaster.Framework.Library
         }
 
         /// <summary>
-        /// Load the bubbling settings
+        ///     Load the bubbling settings
         /// </summary>
         public static void InitializeOffRampEmbedded(ActionEvent delegateEmbedded)
         {
@@ -297,13 +304,13 @@ namespace GrabCaster.Framework.Library
         }
 
         /// <summary>
-        /// Execute an internal trigger, this is used to execute a configured trigger
-        /// To use: configure a trigger and call it by 
+        ///     Execute an internal trigger, this is used to execute a configured trigger
+        ///     To use: configure a trigger and call it by
         /// </summary>
         /// <param name="componeId">
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         /// http://localhost:8000/GrabCaster/ExecuteTrigger?TriggerID={3C62B951-C353-4899-8670-C6687B6EAEFC}
         public static bool ExecuteTrigger(string configurationId, string componeId, byte[] data)
@@ -331,14 +338,14 @@ namespace GrabCaster.Framework.Library
 
 
         /// <summary>
-        /// Initialize an embedded trigger 
+        ///     Initialize an embedded trigger
         /// </summary>
         /// <param name="componeId">
         /// </param>
         /// <param name="configurationId"></param>
         /// <param name="componentId"></param>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         public static TriggerEmbeddedBag InitializeEmbeddedTrigger(string configurationId, string componentId)
         {
@@ -359,18 +366,14 @@ namespace GrabCaster.Framework.Library
             }
         }
 
-        public static AutoResetEvent eventStop { get; set; }
-        public static SyncAsyncEventAction SyncAsyncEventAction { get; set; }
-        private static byte[] _syncronousDataContext;
-
         /// <summary>
-        /// Execute an embedded trigger 
+        ///     Execute an embedded trigger
         /// </summary>
         /// <param name="componeId">
         /// </param>
         /// <param name="triggerEmbeddedBag"></param>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         public static byte[] ExecuteEmbeddedTrigger(TriggerEmbeddedBag triggerEmbeddedBag)
         {

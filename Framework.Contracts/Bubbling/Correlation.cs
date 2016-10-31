@@ -1,6 +1,6 @@
 ﻿// Correlation.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,31 +25,35 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using GrabCaster.Framework.Contracts.Configuration;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Bubbling
 {
-    using Configuration;
-    using System;
-    using System.Collections.Generic;
-    using System.Runtime.Serialization;
-
     /// <summary>
-    /// The correlation.
+    ///     The correlation.
     /// </summary>
     [DataContract]
     [Serializable]
     public class Correlation
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Correlation"/> class.
+        ///     Initializes a new instance of the <see cref="Correlation" /> class.
         /// </summary>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="scriptRule">
-        /// The script rule.
+        ///     The script rule.
         /// </param>
         /// <param name="events">
-        /// The events.
+        ///     The events.
         /// </param>
         public Correlation(string name, string scriptRule, List<Event> events)
         {
@@ -59,19 +63,19 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         }
 
         /// <summary>
-        /// Gets or sets the name.
+        ///     Gets or sets the name.
         /// </summary>
         [DataMember]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the script rule.
+        ///     Gets or sets the script rule.
         /// </summary>
         [DataMember]
         public string ScriptRule { get; set; }
 
         /// <summary>
-        /// Gets or sets the events.
+        ///     Gets or sets the events.
         /// </summary>
         [DataMember]
         public List<Event> Events { get; set; }

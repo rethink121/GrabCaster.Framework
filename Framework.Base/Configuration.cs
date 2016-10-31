@@ -1,6 +1,6 @@
 ﻿// Configuration.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,17 +25,20 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Text;
+using Microsoft.ServiceBus;
+using Newtonsoft.Json;
+
+#endregion
 
 namespace GrabCaster.Framework.Base
 {
-    using Microsoft.ServiceBus;
-    using Newtonsoft.Json;
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Runtime.Serialization;
-    using System.Text;
-
     public enum EhReceivePatternType
     {
         Direct,
@@ -517,7 +520,7 @@ namespace GrabCaster.Framework.Base
 
         /// <returns></returns>
         /// <summary>
-        ///     Group Azure Storage Account name 
+        ///     Group Azure Storage Account name
         /// </summary>
         /// <returns></returns>
         [DataMember]
@@ -601,7 +604,7 @@ namespace GrabCaster.Framework.Base
         public bool LoggingEngineEnabled { get; set; }
 
         /// <summary>
-        ///    EncodingType
+        ///     EncodingType
         /// </summary>
         /// <returns></returns>
         [DataMember]

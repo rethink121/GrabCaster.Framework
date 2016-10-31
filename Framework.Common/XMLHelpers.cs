@@ -1,6 +1,6 @@
 ﻿// XMLHelpers.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,29 +25,33 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System.Xml;
+
+#endregion
+
 namespace GrabCaster.Framework.Common
 {
-    using System.Xml;
-
     /// <summary>
-    /// TODO The xml helpers.
+    ///     TODO The xml helpers.
     /// </summary>
     public static class XmlHelpers
     {
         /// <summary>
-        /// The add attribute.
+        ///     The add attribute.
         /// </summary>
         /// <param name="xmlDocument">
-        /// The xml document.
+        ///     The xml document.
         /// </param>
         /// <param name="xmlElement">
-        /// The xml element.
+        ///     The xml element.
         /// </param>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="value">
-        /// The value.
+        ///     The value.
         /// </param>
         public static void AddAttribute(XmlDocument xmlDocument, XmlElement xmlElement, string name, string value)
         {

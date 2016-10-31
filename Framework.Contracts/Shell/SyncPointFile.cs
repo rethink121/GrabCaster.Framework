@@ -1,6 +1,6 @@
 ﻿// SyncPointFile.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,83 +25,87 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using GrabCaster.Framework.Contracts.Bubbling;
+using GrabCaster.Framework.Contracts.Configuration;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Shell
 {
-    using Bubbling;
-    using Configuration;
-    using System;
-    using System.Collections.Generic;
-    using System.Runtime.Serialization;
-
     /// <summary>
-    /// The sync point file.
+    ///     The sync point file.
     /// </summary>
     [DataContract]
     [Serializable]
     public class SyncPointFile
     {
         /// <summary>
-        /// Gets or sets the bubbling event type.
+        ///     Gets or sets the bubbling event type.
         /// </summary>
         [DataMember]
         public BubblingEventType BubblingEventType { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether is active.
+        ///     Gets or sets a value indicating whether is active.
         /// </summary>
         [DataMember]
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// Gets or sets the id.
+        ///     Gets or sets the id.
         /// </summary>
         [DataMember]
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the version.
+        ///     Gets or sets the version.
         /// </summary>
         [DataMember]
         public Version Version { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        ///     Gets or sets the name.
         /// </summary>
         [DataMember]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         [DataMember]
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether shared.
+        ///     Gets or sets a value indicating whether shared.
         /// </summary>
         [DataMember]
         public bool Shared { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether polling required.
+        ///     Gets or sets a value indicating whether polling required.
         /// </summary>
         [DataMember]
         public bool PollingRequired { get; set; }
 
         /// <summary>
-        /// Gets or sets the properties.
+        ///     Gets or sets the properties.
         /// </summary>
         [DataMember]
         public List<Property> Properties { get; set; }
 
         /// <summary>
-        /// Gets or sets the base actions.
+        ///     Gets or sets the base actions.
         /// </summary>
         [DataMember]
         public List<BaseAction> BaseActions { get; set; }
 
         /// <summary>
-        /// Gets or sets the events.
+        ///     Gets or sets the events.
         /// </summary>
         [DataMember]
         public List<Event> Events { get; set; }

@@ -1,6 +1,6 @@
 ﻿// OffRampStream.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,18 +25,21 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Reflection;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
 using GrabCaster.Framework.Contracts.Bubbling;
+using GrabCaster.Framework.Contracts.Messaging;
+using GrabCaster.Framework.Log;
+using StackExchange.Redis;
+
+#endregion
 
 namespace GrabCaster.Framework.Dcp.Redis
 {
-    using Base;
-    using Contracts.Attributes;
-    using Contracts.Messaging;
-    using Log;
-    using StackExchange.Redis;
-    using System;
-    using System.Reflection;
-
     [EventsOffRampContract("{A51FA36B-7778-47A1-B6DF-5CEC4B8F36B1}", "EventUpStream", "Redis EventUpStream")]
     class OffRampStream : IOffRampStream
     {

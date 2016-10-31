@@ -1,6 +1,6 @@
 ﻿// CSharpEvent.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,64 +25,68 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System.Collections.Generic;
+using System.IO;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Events;
+using GrabCaster.Framework.Contracts.Globals;
+using Roslyn.Compilers;
+using Roslyn.Scripting.CSharp;
+
+#endregion
+
 namespace GrabCaster.Framework.CSharpEvent
 {
-    using Contracts.Attributes;
-    using Contracts.Events;
-    using Contracts.Globals;
-    using Roslyn.Compilers;
-    using Roslyn.Scripting.CSharp;
-    using System.Collections.Generic;
-    using System.IO;
-
     /// <summary>
-    /// The c sharp event.
+    ///     The c sharp event.
     /// </summary>
     [EventContract("{A54EDF55-52E9-4D03-B14B-F5D438AF43F1}", "Execute a CSharp Event", "Execute a CSharp Event", true)]
     public class CSharpEvent : IEventType
     {
         /// <summary>
-        /// Gets or sets the script.
+        ///     Gets or sets the script.
         /// </summary>
         [EventPropertyContract("Script", "Script to execute")]
         public string Script { get; set; }
 
         /// <summary>
-        /// Gets or sets the script file.
+        ///     Gets or sets the script file.
         /// </summary>
         [EventPropertyContract("ScriptFile", "Script from file")]
         public string ScriptFile { get; set; }
 
         /// <summary>
-        /// Gets or sets the message properties.
+        ///     Gets or sets the message properties.
         /// </summary>
         [EventPropertyContract("MessageProperties", "MessageProperties")]
         public Dictionary<string, object> MessageProperties { get; set; }
 
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action event.
+        ///     Gets or sets the set event action event.
         /// </summary>
         public ActionEvent ActionEvent { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [EventPropertyContract("DataContext", "Event Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionEvent">
-        /// The set event action event.
+        ///     The set event action event.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [EventActionContract("{3855F421-9451-45BD-8379-980F93FBB587}", "Main action", "Main action description")]
         public byte[] Execute(ActionEvent actionEvent, ActionContext context)

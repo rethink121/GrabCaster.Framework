@@ -1,6 +1,6 @@
 ﻿// FileEvent.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,53 +25,57 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Diagnostics;
+using System.IO;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Events;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Serialization;
+
+#endregion
+
 namespace GrabCaster.Framework.FileEvent
 {
-    using Contracts.Attributes;
-    using Contracts.Events;
-    using Contracts.Globals;
-    using Contracts.Serialization;
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-
     /// <summary>
-    /// The file event.
+    ///     The file event.
     /// </summary>
     [EventContract("{D438C746-5E75-4D59-B595-8300138FB1EA}", "Write File",
          "Write the content in a file in a specific folder.", true)]
     public class FileEvent : IEventType
     {
         /// <summary>
-        /// Gets or sets the output directory.
+        ///     Gets or sets the output directory.
         /// </summary>
         [EventPropertyContract("OutputDirectory", "When the file has to be created")]
         public string OutputDirectory { get; set; }
 
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action event.
+        ///     Gets or sets the set event action event.
         /// </summary>
         public ActionEvent ActionEvent { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [EventPropertyContract("DataContext", "Event Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionEvent">
-        /// The set event action event.
+        ///     The set event action event.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [EventActionContract("{1FBD0C6E-1A49-4BEF-8876-33A21B23C933}", "Main action", "Main action description")]
         public byte[] Execute(ActionEvent actionEvent, ActionContext context)

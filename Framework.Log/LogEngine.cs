@@ -1,6 +1,6 @@
 ﻿// LogEngine.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,20 +25,24 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Log;
+
+#endregion
+
 namespace GrabCaster.Framework.Log
 {
-    using Base;
-    using Contracts.Attributes;
-    using Contracts.Log;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-
     /// <summary>
-    /// Class to manage the console messages
+    ///     Class to manage the console messages
     /// </summary>
     public class ConsoleMessage
     {
@@ -54,7 +58,7 @@ namespace GrabCaster.Framework.Log
     }
 
     /// <summary>
-    /// Log engine master class
+    ///     Log engine master class
     /// </summary>
     public static class LogEngine
     {
@@ -208,7 +212,7 @@ namespace GrabCaster.Framework.Log
         }
 
         /// <summary>
-        /// Write in eventviewer
+        ///     Write in eventviewer
         /// </summary>
         /// <param name="message"></param>
         /// <param name="eventLogEntryType"></param>
@@ -220,7 +224,7 @@ namespace GrabCaster.Framework.Log
         #region MAIN LOG ABSTRACTED ENGINE
 
         /// <summary>
-        /// Lock slim class for console messages
+        ///     Lock slim class for console messages
         /// </summary>
         public sealed class LogQueueAbstractMessage : LockSlimQueueLog<LogMessage>
         {
@@ -254,7 +258,7 @@ namespace GrabCaster.Framework.Log
         #region INTERNAL CONSOLE LOG
 
         /// <summary>
-        /// Lock slim class for console messages
+        ///     Lock slim class for console messages
         /// </summary>
         public sealed class LogQueueConsoleMessage : LockSlimQueueLog<ConsoleMessage>
         {

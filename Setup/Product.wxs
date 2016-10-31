@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*" Name="GrabCaster" Language="1033" Version="1.0.0.0" Manufacturer="GrabCaster Ltd"
@@ -12,26 +12,30 @@
     <!-- Upper banner image: 493px x 58px -->
     <WixVariable Id="WixUIBannerBmp" Value=".\Images\Banner.bmp" />
     <!-- Background images: 493px x 312px -->
-      <WixVariable Id="WixUIDialogBmp" Value=".\Images\Background.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value=".\Images\Background.bmp" />
     <!-- <WixVariable Id="WixUILicenseRtf" Value="C:\Users\Ninoc\Documents\GrabCaster\GrabCaster.Framework\DefaultFiles\license.rtf" /> -->
-      <UI Id="UserInterface">
+    <UI Id="UserInterface">
       <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR_GRABCASTER" />
-        <UIRef Id="WixUI_InstallDir" />
+      <UIRef Id="WixUI_InstallDir" />
 
-        <Publish Dialog="WelcomeDlg"
-                 Control="Next"
-                 Event="NewDialog"
-                 Value="InstallDirDlg"
-                 Order="5">1</Publish>
+      <Publish Dialog="WelcomeDlg"
+               Control="Next"
+               Event="NewDialog"
+               Value="InstallDirDlg"
+               Order="5">
+        1
+      </Publish>
 
-        <Publish Dialog="InstallDirDlg"
-                 Control="Back"
-                 Event="NewDialog"
-                 Value="WelcomeDlg"
-                 Order="5">1</Publish>
+      <Publish Dialog="InstallDirDlg"
+               Control="Back"
+               Event="NewDialog"
+               Value="WelcomeDlg"
+               Order="5">
+        1
+      </Publish>
     </UI>
 
-      <Feature Id="ProductFeature" Title="GrabCaster Setup" Level="1">
+    <Feature Id="ProductFeature" Title="GrabCaster Setup" Level="1">
       <ComponentGroupRef Id="SourceComponentGroup" />
       <ComponentRef Id="ApplicationShortcut" />
     </Feature>

@@ -1,6 +1,6 @@
 // SendPipelineWrapper.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,14 +25,18 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.BizTalk.Message.Interop;
+#region Usings
+
 using System;
-using IPipeline = Microsoft.Test.BizTalk.PipelineObjects.IPipeline;
+using Microsoft.BizTalk.Message.Interop;
+using Microsoft.Test.BizTalk.PipelineObjects;
+
+#endregion
 
 namespace GrabCaster.BizTalk.Extensibility
 {
     /// <summary>
-    /// Wrapper around a send pipeline you can execute
+    ///     Wrapper around a send pipeline you can execute
     /// </summary>
     public class SWPipeline : BWPipeline
     {
@@ -46,7 +50,7 @@ namespace GrabCaster.BizTalk.Extensibility
 
 
         /// <summary>
-        /// Execute the send pipeline
+        ///     Execute the send pipeline
         /// </summary>
         /// <param name="inputMessages">Set of input messages to feed to the pipeline</param>
         /// <returns>The output message</returns>
@@ -70,8 +74,8 @@ namespace GrabCaster.BizTalk.Extensibility
         }
 
         /// <summary>
-        /// Executes the send pipeline with all messages
-        /// provided as inputs
+        ///     Executes the send pipeline with all messages
+        ///     provided as inputs
         /// </summary>
         /// <param name="inputMessages">One or more input messages to the pipeline</param>
         /// <returns>The single output message</returns>

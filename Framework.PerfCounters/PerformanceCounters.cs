@@ -1,6 +1,6 @@
 ﻿// PerformanceCounters.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,12 +25,16 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System.Diagnostics;
+
+#endregion
+
 namespace GrabCaster.Framework.PerfCounters
 {
-    using System.Diagnostics;
-
     /// <summary>
-    /// The performance counters.
+    ///     The performance counters.
     /// </summary>
     public class PerformanceCounters
     {
@@ -40,7 +44,7 @@ namespace GrabCaster.Framework.PerfCounters
         private readonly PerformanceCounter counterTotalTriggerCalls;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PerformanceCounters"/> class. 
+        ///     Initializes a new instance of the <see cref="PerformanceCounters" /> class.
         ///     Creates a new performance counter category "MyCategory" if it does not already exists and adds some counters to it.
         /// </summary>
         public PerformanceCounters()
@@ -75,7 +79,7 @@ namespace GrabCaster.Framework.PerfCounters
         }
 
         /// <summary>
-        /// Increments counters.
+        ///     Increments counters.
         /// </summary>
         public void DoSomeProcessing()
         {

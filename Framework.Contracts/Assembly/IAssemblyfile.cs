@@ -1,6 +1,6 @@
 ﻿// IAssemblyfile.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,9 +25,14 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using GrabCaster.Framework.Contracts.Bubbling;
+#region Usings
+
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using GrabCaster.Framework.Contracts.Bubbling;
+
+#endregion
 
 namespace GrabCaster.Framework.Contracts.AssemblyFile
 {
@@ -43,14 +48,14 @@ namespace GrabCaster.Framework.Contracts.AssemblyFile
         Version Version { get; set; }
 
         /// <summary>
-        /// Gets or sets the assembly content.
+        ///     Gets or sets the assembly content.
         /// </summary>
         byte[] AssemblyContent { get; set; }
 
         /// <summary>
         ///     Assembly object ready to invoke (performances)
         /// </summary>
-        System.Reflection.Assembly AssemblyObject { get; set; }
+        Assembly AssemblyObject { get; set; }
 
         /// <summary>
         ///     Internal class type to invoke
@@ -58,12 +63,12 @@ namespace GrabCaster.Framework.Contracts.AssemblyFile
         Type AssemblyClassType { get; set; }
 
         /// <summary>
-        /// Gets or sets the assembly file.
+        ///     Gets or sets the assembly file.
         /// </summary>
         string AssemblyFile { get; set; }
 
         /// <summary>
-        /// Gets or sets the base actions.
+        ///     Gets or sets the base actions.
         /// </summary>
         List<BaseAction> BaseActions { get; set; }
 

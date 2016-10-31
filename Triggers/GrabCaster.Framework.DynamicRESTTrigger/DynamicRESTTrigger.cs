@@ -1,6 +1,6 @@
 ﻿// DynamicRESTTrigger.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,28 +25,33 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Diagnostics;
+using System.Threading;
 using GrabCaster.Framework.Base;
 using GrabCaster.Framework.Contracts.Attributes;
 using GrabCaster.Framework.Contracts.Globals;
 using GrabCaster.Framework.Contracts.Triggers;
-using System;
-using System.Diagnostics;
-using System.Threading;
+
+#endregion
 
 namespace GrabCaster.Framework.DynamicRESTTrigger
 {
     /// <summary>
-    /// The file trigger.
+    ///     The file trigger.
     /// </summary>
     [TriggerContract("{95C6319B-35B6-4AB0-88F8-49A6E332D270}", "PageOneMessageTrigger",
          "PageOneMessageTrigger is the OMS service to send mails", false, true, false)]
     public class DynamicRESTTrigger : ITriggerType
     {
-        [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
-        public bool Syncronous { get; set; }
+        //questo puoi metterlo in interfaccia
+        public delegate byte[] SetGetDataTrigger(
+            ActionTrigger actionTrigger, ActionContext context);
 
         /// <summary>
-        /// WebApiEndPoint used by the service
+        ///     WebApiEndPoint used by the service
         /// </summary>
         [TriggerPropertyContract("WebApiEndPoint", "WebApiEndPoint used by the service")]
         public string WebApiEndPoint { get; set; }
@@ -58,35 +63,34 @@ namespace GrabCaster.Framework.DynamicRESTTrigger
 
         public string SupportBag { get; set; }
 
+        [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
+        public bool Syncronous { get; set; }
+
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action trigger.
+        ///     Gets or sets the set event action trigger.
         /// </summary>
         public ActionTrigger ActionTrigger { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
         public byte[] DataContext { get; set; }
 
-        //questo puoi metterlo in interfaccia
-        public delegate byte[] SetGetDataTrigger(
-            ActionTrigger actionTrigger, ActionContext context);
-
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionTrigger">
-        /// The set event action trigger.
+        ///     The set event action trigger.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [TriggerActionContract("{62DD5BB1-C27B-4341-A277-FE7023775AC3}", "Main action", "Main action description")]
         public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)

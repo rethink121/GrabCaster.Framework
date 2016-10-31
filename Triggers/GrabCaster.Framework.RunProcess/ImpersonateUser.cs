@@ -1,6 +1,6 @@
 ﻿// ImpersonateUser.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,23 +25,26 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.Win32.SafeHandles;
+#region Usings
+
 using System;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Security.Permissions;
 using System.Security.Principal;
+using Microsoft.Win32.SafeHandles;
+
+#endregion
 
 namespace GrabCaster.Framework.RunProcess
 {
     [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
     public class Impersonation : IDisposable
     {
-        private readonly SafeTokenHandle _handle;
-        private readonly WindowsImpersonationContext _context;
-
         const int LOGON32_LOGON_NEW_CREDENTIALS = 9;
+        private readonly WindowsImpersonationContext _context;
+        private readonly SafeTokenHandle _handle;
 
         public Impersonation(string domain, string username, string password)
         {

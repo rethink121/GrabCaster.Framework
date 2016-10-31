@@ -1,6 +1,6 @@
 ﻿// AzureBlobTrigger.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,79 +25,78 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using GrabCaster.Framework.Base;
+#region Usings
+
+using System;
+using System.Diagnostics;
 using System.Threading;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Triggers;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+
+#endregion
 
 namespace GrabCaster.Framework.AzureBlobTrigger
 {
-    using Contracts.Attributes;
-    using Contracts.Globals;
-    using Contracts.Triggers;
-    using Microsoft.WindowsAzure.Storage;
-    using Microsoft.WindowsAzure.Storage.Blob;
-    using System.Diagnostics;
-
     /// <summary>
-    /// The azure blob trigger.
+    ///     The azure blob trigger.
     /// </summary>
     [TriggerContract("{3BADD8A0-211B-4C57-806B-8C0453EB637B}", "Azure Blob Trigger", "Azure Blob Trigger", true, true,
          false)]
     public class AzureBlobTrigger : ITriggerType
     {
         /// <summary>
-        /// Gets or sets the storage account.
+        ///     Gets or sets the storage account.
         /// </summary>
         [TriggerPropertyContract("StorageAccount", "Azure StorageAccount")]
         public string StorageAccount { get; set; }
 
         /// <summary>
-        /// Gets or sets the blob container.
+        ///     Gets or sets the blob container.
         /// </summary>
         [TriggerPropertyContract("BlobContainer", "Azure Blob Container")]
         public string BlobContainer { get; set; }
 
         /// <summary>
-        /// Gets or sets the blob block reference.
+        ///     Gets or sets the blob block reference.
         /// </summary>
         [TriggerPropertyContract("BlobBlockReference", "Azure Blob BlockReference")]
         public string BlobBlockReference { get; set; }
 
-        [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
-        public bool Syncronous { get; set; }
-
         public AutoResetEvent WaitHandle { get; set; }
-
-        public void SyncAsyncActionReceived(byte[] content)
-        {
-            throw new System.NotImplementedException();
-        }
 
         public string SupportBag { get; set; }
 
+        [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
+        public bool Syncronous { get; set; }
+
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action trigger.
+        ///     Gets or sets the set event action trigger.
         /// </summary>
         public ActionTrigger ActionTrigger { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionTrigger">
-        /// The set event action trigger.
+        ///     The set event action trigger.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [TriggerActionContract("{1FE5C5DA-F856-458C-8D67-0BF3F5997583}", "Main action", "Main action description")]
         public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)
@@ -145,14 +144,19 @@ namespace GrabCaster.Framework.AzureBlobTrigger
             }
         }
 
+        public void SyncAsyncActionReceived(byte[] content)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
-        /// The my on entry written.
+        ///     The my on entry written.
         /// </summary>
         /// <param name="source">
-        /// The source.
+        ///     The source.
         /// </param>
         /// <param name="e">
-        /// The e.
+        ///     The e.
         /// </param>
         public void MyOnEntryWritten(object source, EntryWrittenEventArgs e)
         {

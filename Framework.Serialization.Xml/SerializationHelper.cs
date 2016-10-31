@@ -1,6 +1,6 @@
 ﻿// SerializationHelper.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,32 +25,35 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Generic;
+using GrabCaster.Framework.Contracts.Bubbling;
+using GrabCaster.Framework.Contracts.Channels;
+using GrabCaster.Framework.Contracts.Configuration;
 using GrabCaster.Framework.Contracts.Events;
+using GrabCaster.Framework.Contracts.Points;
 using GrabCaster.Framework.Contracts.Triggers;
+using Newtonsoft.Json;
+
+#endregion
 
 namespace GrabCaster.Framework.Serialization.Xml
 {
-    using Contracts.Bubbling;
-    using Contracts.Channels;
-    using Contracts.Configuration;
-    using Contracts.Points;
-    using Newtonsoft.Json;
-    using System;
-    using System.Collections.Generic;
-
     /// <summary>
-    /// TODO The serialization helper.
+    ///     TODO The serialization helper.
     /// </summary>
     public static class SerializationHelper
     {
         /// <summary>
-        /// TODO The crete json trigger configuration template.
+        ///     TODO The crete json trigger configuration template.
         /// </summary>
         /// <param name="triggerObject">
-        /// TODO The bubbling event.
+        ///     TODO The bubbling event.
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         public static string CreteJsonTriggerConfigurationTemplate(ITriggerAssembly triggerObject)
         {
@@ -118,13 +121,13 @@ namespace GrabCaster.Framework.Serialization.Xml
         }
 
         /// <summary>
-        /// TODO The crete json event configuration template.
+        ///     TODO The crete json event configuration template.
         /// </summary>
         /// <param name="eventObject">
-        /// TODO The bubbling event.
+        ///     TODO The bubbling event.
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         public static string CreteJsonEventConfigurationTemplate(IEventAssembly eventObject)
         {

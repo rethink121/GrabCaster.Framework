@@ -1,6 +1,6 @@
 ﻿// PageOneMessageEvent.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,70 +25,73 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
 using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Events;
+using GrabCaster.Framework.Contracts.Globals;
+
+#endregion
 
 namespace HM.OMS.PageOneMessageEvent
 {
-    using GrabCaster.Framework.Contracts.Attributes;
-    using GrabCaster.Framework.Contracts.Events;
-    using GrabCaster.Framework.Contracts.Globals;
-    using System;
-
     /// <summary>
-    /// The file event.
+    ///     The file event.
     /// </summary>
     [EventContract("{BC76EEB8-369E-4B0B-BC52-4DFBD4FA33B1}", "PageOneMessageEvent",
          "PageOneMessageEvent is the OMS service to send mails", true)]
     public class PageOneMessageEvent : IEventType
     {
         /// <summary>
-        /// [message] to send an email - [auth] to check the authentication
+        ///     [message] to send an email - [auth] to check the authentication
         /// </summary>
         [EventPropertyContract("input", "[message] to send an email - [auth] to check the authentication")]
         public string input { get; set; }
 
         /// <summary>
-        /// [message] to send an email - [auth] to check the authentication
+        ///     [message] to send an email - [auth] to check the authentication
         /// </summary>
         [EventPropertyContract("From", "The mail from")]
         public string From { get; set; }
 
         /// <summary>
-        /// [message] to send an email - [auth] to check the authentication
+        ///     [message] to send an email - [auth] to check the authentication
         /// </summary>
         [EventPropertyContract("To", "The mail to")]
         public string To { get; set; }
 
         /// <summary>
-        /// [message] to send an email - [auth] to check the authentication
+        ///     [message] to send an email - [auth] to check the authentication
         /// </summary>
         [EventPropertyContract("Message", "Body message")]
         public string Message { get; set; }
 
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action event.
+        ///     Gets or sets the set event action event.
         /// </summary>
         public ActionEvent ActionEvent { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [EventPropertyContract("DataContext", "Event Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionEvent">
-        /// The set event action event.
+        ///     The set event action event.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [EventActionContract("{E4FD267F-92B2-45F3-B198-0F1581E2EBBA}", "Main action", "Main action description")]
         public byte[] Execute(ActionEvent actionEvent, ActionContext context)

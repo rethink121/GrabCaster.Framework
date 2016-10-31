@@ -1,6 +1,6 @@
 ﻿// PersistentProvider.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,20 +25,24 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Bubbling;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Log;
+using Newtonsoft.Json;
+
+#endregion
+
 namespace GrabCaster.Framework.Storage
 {
-    using Base;
-    using Contracts.Bubbling;
-    using Contracts.Globals;
-    using Log;
-    using Newtonsoft.Json;
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Reflection;
-
     /// <summary>
-    /// Main persistent provider.
+    ///     Main persistent provider.
     /// </summary>
     public static class PersistentProvider
     {
@@ -60,16 +64,16 @@ namespace GrabCaster.Framework.Storage
         }
 
         /// <summary>
-        /// Persist the message in local file system
+        ///     Persist the message in local file system
         /// </summary>
         /// <param name="bubblingEvent">
         /// </param>
         /// <param name="actionContext"></param>
         /// <param name="communicationDiretion">
-        /// The communication Diretion.
+        ///     The communication Diretion.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool PersistMessage(ActionContext actionContext, CommunicationDiretion communicationDiretion)
         {
@@ -127,16 +131,16 @@ namespace GrabCaster.Framework.Storage
         }
 
         /// <summary>
-        /// Persist the message in local file system
+        ///     Persist the message in local file system
         /// </summary>
         /// <param name="bubblingObject">
         /// </param>
         /// <param name="eventActionContext"></param>
         /// <param name="communicationDiretion">
-        /// The communication Diretion.
+        ///     The communication Diretion.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public static bool PersistMessage(BubblingObject bubblingObject, string MessageId,
             CommunicationDiretion communicationDiretion)

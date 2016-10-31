@@ -1,6 +1,6 @@
 ﻿// SqlServerTrigger.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,19 +25,22 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Data.SqlClient;
+using System.Xml;
 using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Triggers;
+
+#endregion
 
 namespace GrabCaster.Framework.SqlServerTrigger
 {
-    using Contracts.Attributes;
-    using Contracts.Globals;
-    using Contracts.Triggers;
-    using System;
-    using System.Data.SqlClient;
-    using System.Xml;
-
     /// <summary>
-    /// The SQL server trigger.
+    ///     The SQL server trigger.
     /// </summary>
     [TriggerContract("{7920EE0F-CAC8-4ABB-82C2-1C69351EDD28}", "Sql Server Trigger",
          "Execute a Sql query or stored procedure.",
@@ -45,46 +48,46 @@ namespace GrabCaster.Framework.SqlServerTrigger
     public class SqlServerTrigger : ITriggerType
     {
         /// <summary>
-        /// Gets or sets the SQL query.
+        ///     Gets or sets the SQL query.
         /// </summary>
         [TriggerPropertyContract("SqlQuery", "Select Command [Select * from or EXEC Stored precedure name]")]
         public string SqlQuery { get; set; }
 
         /// <summary>
-        /// Gets or sets the connection string.
+        ///     Gets or sets the connection string.
         /// </summary>
         [TriggerPropertyContract("ConnectionString", "ConnectionString")]
         public string ConnectionString { get; set; }
 
+        public string SupportBag { get; set; }
+
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
 
-        public string SupportBag { get; set; }
-
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action trigger.
+        ///     Gets or sets the set event action trigger.
         /// </summary>
         public ActionTrigger ActionTrigger { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionTrigger">
-        /// The set event action trigger.
+        ///     The set event action trigger.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [TriggerActionContract("{7BA7B689-6A1D-4FF6-87B3-720F9A723FB8}", "Main action", "Main action description")]
         public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)

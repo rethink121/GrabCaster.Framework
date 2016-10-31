@@ -1,6 +1,6 @@
 ﻿// RESTEventsEngine.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,20 +25,24 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.ServiceModel.Web;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Deployment;
+using GrabCaster.Framework.Log;
+
+#endregion
 
 namespace GrabCaster.Framework.Engine
 {
-    using Base;
-    using Log;
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using System.ServiceModel.Web;
-    using System.Text;
-    using System.Xml;
-
     public class RestEventsEngine : IRestEventsEngine
     {
         //http://localhost:8000/GrabCaster/Deploy?Configuration=Release&Platform=AnyCpu
@@ -62,7 +66,7 @@ namespace GrabCaster.Framework.Engine
                 {
                     string projectName = Path.GetFileNameWithoutExtension(publishingFolder + file);
                     string projectType = Path.GetExtension(publishingFolder + file).Replace(".", "");
-                    bool resultOk = Deployment.Jit.CompilePublishing(projectType, projectName,
+                    bool resultOk = Jit.CompilePublishing(projectType, projectName,
                         configuration, platform);
                     if (resultOk)
                     {
@@ -110,10 +114,10 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Refresh the internal bubbling setting
+        ///     Refresh the internal bubbling setting
         /// </summary>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         /// http://localhost:8000/GrabCaster/RefreshBubblingSetting
         public string RefreshBubblingSetting()
@@ -137,15 +141,15 @@ namespace GrabCaster.Framework.Engine
             return $"Syncronization Executed at {DateTime.Now}.";
         }
 
-        
+
         /// <summary>
-        /// Execute an internal trigger
+        ///     Execute an internal trigger
         /// </summary>
         /// <param name="triggerId">
         /// </param>
         /// <param name="configurationId"></param>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         /// http://localhost:8000/GrabCaster/ExecuteTrigger?ConfigurationID={5D793BC4-B111-4BF4-BAAF-196F661E13E2}&TriggerID={9A989BD1-C8DE-4FC1-B4BA-02E7D8A4AD76}&value=text
         public string ExecuteTrigger(string configurationId, string triggerId, string value)
@@ -172,10 +176,10 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Return the complete configuration
+        ///     Return the complete configuration
         /// </summary>
         /// <returns>
-        /// The <see cref="Stream"/>.
+        ///     The <see cref="Stream" />.
         /// </returns>
         /// http://localhost:8000/GrabCaster/Configuration
         public Stream Configuration()

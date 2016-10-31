@@ -1,6 +1,6 @@
 ﻿// FileTrigger.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,82 +25,86 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Triggers;
+
+#endregion
+
 namespace GrabCaster.Framework.FileTrigger
 {
-    using Contracts.Attributes;
-    using Contracts.Globals;
-    using Contracts.Triggers;
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Threading;
-
     /// <summary>
-    /// The file trigger.
+    ///     The file trigger.
     /// </summary>
     [TriggerContract("{3C62B951-C353-4899-8670-C6687B6EAEFC}", "FileTrigger",
          "Get the content from file in a specific directory or shared forlder.", false, true, false)]
     public class FileTrigger : ITriggerType
     {
         /// <summary>
-        /// Gets or sets the regex file pattern.
+        ///     Gets or sets the regex file pattern.
         /// </summary>
         [TriggerPropertyContract("RegexFilePattern", "File pattern, could be a reular expression")]
         public string RegexFilePattern { get; set; }
 
         /// <summary>
-        /// Gets or sets the polling time.
+        ///     Gets or sets the polling time.
         /// </summary>
         [TriggerPropertyContract("BatchFilesSize", "Number of file to receive fro each batch.")]
         public int BatchFilesSize { get; set; }
 
         /// <summary>
-        /// Gets or sets the polling time.
+        ///     Gets or sets the polling time.
         /// </summary>
         [TriggerPropertyContract("PollingTime", "Polling time.")]
         public int PollingTime { get; set; }
 
         /// <summary>
-        /// Gets or sets the done extension name.
+        ///     Gets or sets the done extension name.
         /// </summary>
         [TriggerPropertyContract("DoneExtensionName", "Rename extension file received.")]
         public string DoneExtensionName { get; set; }
 
         /// <summary>
-        /// Gets or sets the input directory.
+        ///     Gets or sets the input directory.
         /// </summary>
         [TriggerPropertyContract("InputDirectory", "Input Directory location")]
         public string InputDirectory { get; set; }
 
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action trigger.
+        ///     Gets or sets the set event action trigger.
         /// </summary>
         public ActionTrigger ActionTrigger { get; set; }
 
         /// <summary>
-        /// If must be syncronous
+        ///     If must be syncronous
         /// </summary>
         public bool Syncronous { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionTrigger">
-        /// The set event action trigger.
+        ///     The set event action trigger.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [TriggerActionContract("{58EEAFEF-CF6A-44C3-9BB9-81EFD680CA36}", "Main action", "Main action description")]
         public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)
@@ -146,9 +150,10 @@ namespace GrabCaster.Framework.FileTrigger
             }
         }
 
-        //private void SyncAsyncActionReceived(byte[] DataContext)
-        //{
-        //    string s = "I got it!";
         //}
+        //    string s = "I got it!";
+        //{
+
+        //private void SyncAsyncActionReceived(byte[] DataContext)
     }
 }

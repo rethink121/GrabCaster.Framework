@@ -1,6 +1,6 @@
 ﻿// Demos.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,20 +25,24 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Diagnostics;
+using System.Globalization;
+using System.Windows.Forms;
+
+#endregion
+
 namespace Laboratory
 {
-    using System;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.Windows.Forms;
-
     /// <summary>
-    /// The demos.
+    ///     The demos.
     /// </summary>
     public partial class Demos : Form
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Demos"/> class.
+        ///     Initializes a new instance of the <see cref="Demos" /> class.
         /// </summary>
         public Demos()
         {
@@ -46,13 +50,13 @@ namespace Laboratory
         }
 
         /// <summary>
-        /// The button power json_ click.
+        ///     The button power json_ click.
         /// </summary>
         /// <param name="sender">
-        /// The sender.
+        ///     The sender.
         /// </param>
         /// <param name="e">
-        /// The e.
+        ///     The e.
         /// </param>
         private void ButtonPowerJsonClick(object sender, EventArgs e)
         {
@@ -75,13 +79,13 @@ namespace Laboratory
         }
 
         /// <summary>
-        /// The demos_ load.
+        ///     The demos_ load.
         /// </summary>
         /// <param name="sender">
-        /// The sender.
+        ///     The sender.
         /// </param>
         /// <param name="e">
-        /// The e.
+        ///     The e.
         /// </param>
         private void DemosLoad(object sender, EventArgs e)
         {
@@ -89,13 +93,13 @@ namespace Laboratory
         }
 
         /// <summary>
-        /// The label 2_ click.
+        ///     The label 2_ click.
         /// </summary>
         /// <param name="sender">
-        /// The sender.
+        ///     The sender.
         /// </param>
         /// <param name="e">
-        /// The e.
+        ///     The e.
         /// </param>
         private void Label2Click(object sender, EventArgs e)
         {

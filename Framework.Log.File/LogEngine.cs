@@ -1,6 +1,6 @@
 ﻿// LogEngine.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,46 +25,50 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.IO;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Log;
+
+#endregion
+
 namespace GrabCaster.Framework.Log.File
 {
-    using Base;
-    using Contracts.Attributes;
-    using Contracts.Log;
-    using System;
-    using System.IO;
-
     /// <summary>
-    /// The log engine, simple version.
+    ///     The log engine, simple version.
     /// </summary>
     [LogContract("{4DACE829-1462-4A3D-ACC9-1EE41B3C2D53}", "LogEngine", "File Log System")]
     public class LogEngine : ILogEngine
     {
-        private string PathFile = "";
         StreamWriter logFile;
+        private string PathFile = "";
 
         /// <summary>
-        /// Initialize log.
+        ///     Initialize log.
         /// </summary>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public bool InitLog()
         {
             Directory.CreateDirectory(ConfigurationBag.DirectoryLog());
             PathFile = Path.Combine(ConfigurationBag.DirectoryLog(),
                 $"{DateTime.Now.Month}{DateTime.Now.Day}{DateTime.Now.Year}-{Guid.NewGuid()}.txt");
-            logFile = File.AppendText(PathFile);
+            logFile = System.IO.File.AppendText(PathFile);
             return true;
         }
 
         /// <summary>
-        /// The write log.
+        ///     The write log.
         /// </summary>
         /// <param name="logMessage">
-        /// The log message.
+        ///     The log message.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public bool WriteLog(LogMessage logMessage)
         {

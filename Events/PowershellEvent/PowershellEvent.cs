@@ -1,6 +1,6 @@
 ﻿// PowershellEvent.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,60 +25,63 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.IO;
+using System.Management.Automation;
 using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Events;
+using GrabCaster.Framework.Contracts.Globals;
+
+#endregion
 
 namespace GrabCaster.Framework.PowershellEvent
 {
-    using Contracts.Attributes;
-    using Contracts.Events;
-    using Contracts.Globals;
-    using System;
-    using System.IO;
-    using System.Management.Automation;
-
     /// <summary>
-    /// The PowerShell event.
+    ///     The PowerShell event.
     /// </summary>
     [EventContract("{F9A0B69C-64D3-4120-A52D-09D2E014EA91}", "Execute a Powershell Event", "Execute a Powershell Event",
          true)]
     public class PowershellEvent : IEventType
     {
         /// <summary>
-        /// Gets or sets the script event.
+        ///     Gets or sets the script event.
         /// </summary>
         [EventPropertyContract("ScriptEvent", "Script to execute")]
         public string ScriptEvent { get; set; }
 
         /// <summary>
-        /// Gets or sets the script file event.
+        ///     Gets or sets the script file event.
         /// </summary>
         [EventPropertyContract("ScriptFileEvent", "Script from file")]
         public string ScriptFileEvent { get; set; }
 
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action event.
+        ///     Gets or sets the set event action event.
         /// </summary>
         public ActionEvent ActionEvent { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [EventPropertyContract("DataContext", "Event Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionEvent">
-        /// The set event action event.
+        ///     The set event action event.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [EventActionContract("{979A5EE0-C029-4518-98C2-CFB4526F2C86}", "Main action", "Main action description")]
         public byte[] Execute(ActionEvent actionEvent, ActionContext context)

@@ -1,6 +1,6 @@
 ﻿// Property.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,12 +25,16 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Reflection;
+using System.Runtime.Serialization;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Bubbling
 {
-    using System;
-    using System.Reflection;
-    using System.Runtime.Serialization;
-
     /// <summary>
     ///     The Lower receive layer, this receive the raw data
     /// </summary>
@@ -39,22 +43,22 @@ namespace GrabCaster.Framework.Contracts.Bubbling
     public class Property : IProperty
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Property"/> class.
+        ///     Initializes a new instance of the <see cref="Property" /> class.
         /// </summary>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="description">
-        /// The description.
+        ///     The description.
         /// </param>
         /// <param name="assemblyPropertyInfo">
-        /// The assembly property info.
+        ///     The assembly property info.
         /// </param>
         /// <param name="type">
-        /// The type.
+        ///     The type.
         /// </param>
         /// <param name="value">
-        /// The value.
+        ///     The value.
         /// </param>
         public Property(string name, string description, PropertyInfo assemblyPropertyInfo, Type type, object value)
         {
@@ -66,7 +70,7 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         }
 
         /// <summary>
-        /// Description of method
+        ///     Description of method
         /// </summary>
         [DataMember]
         public string Description { get; set; }

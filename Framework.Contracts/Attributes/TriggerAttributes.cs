@@ -1,6 +1,6 @@
 ﻿// TriggerAttributes.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,13 +25,17 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Runtime.Serialization;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Attributes
 {
-    using System;
-    using System.Runtime.Serialization;
-
     /// <summary>
-    /// The trigger contract.
+    ///     The trigger contract.
     /// </summary>
     [DataContract]
     [Serializable]
@@ -39,25 +43,25 @@ namespace GrabCaster.Framework.Contracts.Attributes
     public class TriggerContract : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TriggerContract"/> class.
+        ///     Initializes a new instance of the <see cref="TriggerContract" /> class.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        ///     The id.
         /// </param>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="description">
-        /// The description.
+        ///     The description.
         /// </param>
         /// <param name="pollingRequired">
-        /// The polling required.
+        ///     The polling required.
         /// </param>
         /// <param name="shared">
-        /// The shared.
+        ///     The shared.
         /// </param>
         /// <param name="nop">
-        /// The no operation.
+        ///     The no operation.
         /// </param>
         public TriggerContract(string id, string name, string description, bool pollingRequired, bool shared, bool nop)
         {
@@ -70,44 +74,44 @@ namespace GrabCaster.Framework.Contracts.Attributes
         }
 
         /// <summary>
-        /// Gets or sets the id.
+        ///     Gets or sets the id.
         /// </summary>
         [DataMember]
         public string Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        ///     Gets or sets the name.
         /// </summary>
         [DataMember]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         [DataMember]
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether shared.
+        ///     Gets or sets a value indicating whether shared.
         /// </summary>
         [DataMember]
         public bool Shared { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether polling required.
+        ///     Gets or sets a value indicating whether polling required.
         /// </summary>
         [DataMember]
         public bool PollingRequired { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether no operation.
+        ///     Gets or sets a value indicating whether no operation.
         /// </summary>
         [DataMember]
         public bool Nop { get; set; }
     }
 
     /// <summary>
-    /// The trigger property contract.
+    ///     The trigger property contract.
     /// </summary>
     [DataContract]
     [Serializable]
@@ -115,13 +119,13 @@ namespace GrabCaster.Framework.Contracts.Attributes
     public class TriggerPropertyContract : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TriggerPropertyContract"/> class.
+        ///     Initializes a new instance of the <see cref="TriggerPropertyContract" /> class.
         /// </summary>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="description">
-        /// The description.
+        ///     The description.
         /// </param>
         public TriggerPropertyContract(string name, string description)
         {
@@ -136,14 +140,14 @@ namespace GrabCaster.Framework.Contracts.Attributes
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         [DataMember]
         public string Description { get; set; }
     }
 
     /// <summary>
-    /// The trigger action contract.
+    ///     The trigger action contract.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
     [DataContract]
@@ -151,16 +155,16 @@ namespace GrabCaster.Framework.Contracts.Attributes
     public class TriggerActionContract : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TriggerActionContract"/> class.
+        ///     Initializes a new instance of the <see cref="TriggerActionContract" /> class.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        ///     The id.
         /// </param>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="description">
-        /// The description.
+        ///     The description.
         /// </param>
         public TriggerActionContract(string id, string name, string description)
         {
@@ -182,7 +186,7 @@ namespace GrabCaster.Framework.Contracts.Attributes
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         [DataMember]
         public string Description { get; set; }

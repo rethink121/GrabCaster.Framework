@@ -1,6 +1,6 @@
 // InstConfigPropertyBag.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,17 +25,21 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.BizTalk.Component.Interop;
+#region Usings
+
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Xml;
+using Microsoft.BizTalk.Component.Interop;
+
+#endregion
 
 namespace GrabCaster.BizTalk.Extensibility
 {
     /// <summary>
-    /// IPropertyBag implementation for per-instance
-    /// pipeline config
+    ///     IPropertyBag implementation for per-instance
+    ///     pipeline config
     /// </summary>
     /// <example><![CDATA[
     /// <Properties>
@@ -48,7 +52,7 @@ namespace GrabCaster.BizTalk.Extensibility
         private Hashtable _values = new Hashtable();
 
         /// <summary>
-        /// Creates a new instance from the config XML
+        ///     Creates a new instance from the config XML
         /// </summary>
         /// <param name="reader">The Xml reader to read from</param>
         public InstConfigPropertyBag(XmlReader reader)
@@ -65,8 +69,18 @@ namespace GrabCaster.BizTalk.Extensibility
             }
         }
 
+        void IPropertyBag.Read(string propName, out object ptrVar, int errorLog)
+        {
+            ptrVar = _values[propName];
+        }
+
+        void IPropertyBag.Write(string propName, ref object ptrVar)
+        {
+            _values[propName] = ptrVar;
+        }
+
         /// <summary>
-        /// Helper function to read an property (used by tests)
+        ///     Helper function to read an property (used by tests)
         /// </summary>
         /// <param name="propname">Name of the property to read</param>
         /// <returns>The property value, or null if not found</returns>
@@ -121,16 +135,6 @@ namespace GrabCaster.BizTalk.Extensibility
                 default:
                     return value;
             }
-        }
-
-        void IPropertyBag.Read(string propName, out object ptrVar, int errorLog)
-        {
-            ptrVar = _values[propName];
-        }
-
-        void IPropertyBag.Write(string propName, ref object ptrVar)
-        {
-            _values[propName] = ptrVar;
         }
     }
 }

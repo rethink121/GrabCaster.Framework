@@ -1,6 +1,6 @@
 // PipelineFactory.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,10 +25,15 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using Microsoft.BizTalk.PipelineOM;
+#region Usings
+
 using System;
-using IPipeline = Microsoft.Test.BizTalk.PipelineObjects.IPipeline;
+using Microsoft.Test.BizTalk.PipelineObjects;
 using PipelineHelper = Microsoft.Test.BizTalk.PipelineObjects.PipelineFactory;
+using ReceivePipeline = Microsoft.BizTalk.PipelineOM.ReceivePipeline;
+using SendPipeline = Microsoft.BizTalk.PipelineOM.SendPipeline;
+
+#endregion
 
 namespace GrabCaster.BizTalk.Extensibility
 {

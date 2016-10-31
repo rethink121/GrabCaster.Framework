@@ -1,6 +1,6 @@
 ﻿// ObjectHelper.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -28,18 +28,18 @@
 namespace GrabCaster.Framework.Serialization.Object
 {
     /// <summary>
-    /// The object helper.
+    ///     The object helper.
     /// </summary>
     public static class ObjectHelper
     {
         /// <summary>
-        /// The clone object.
+        ///     The clone object.
         /// </summary>
         /// <param name="clonedObject">
-        /// The cloned object.
+        ///     The cloned object.
         /// </param>
         /// <returns>
-        /// The <see cref="object"/>.
+        ///     The <see cref="object" />.
         /// </returns>
         public static object CloneObject(object clonedObject)
         {

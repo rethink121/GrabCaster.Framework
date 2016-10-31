@@ -1,6 +1,6 @@
 ﻿// Program.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,41 +25,45 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.ServiceProcess;
+using System.Windows.Forms;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Engine;
+using GrabCaster.Framework.Log;
+using GrabCaster.Framework.NTService;
+
+#endregion
+
 namespace GrabCaster.Framework
 {
-    using Base;
-    using Engine;
-    using Log;
-    using NTService;
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using System.ServiceProcess;
-    using System.Windows.Forms;
-
     /// <summary>
-    /// Class containing the main entry to the program.
+    ///     Class containing the main entry to the program.
     /// </summary>
     public class Program
     {
         /// <summary>
-        /// Handles the ProcessExit event of the CurrentDomain control.
+        ///     Handles the ProcessExit event of the CurrentDomain control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void CurrentDomainProcessExit(object sender, EventArgs e)
         {
             CoreEngine.StopEventEngine();
         } // CurrentDomain_ProcessExit
 
         /// <summary>
-        /// Mains the main entry to the program.
+        ///     Mains the main entry to the program.
         /// </summary>
         /// <param name="args">The arguments to the program.</param>
         /// <exception cref="System.NotImplementedException">
-        /// Exception thrown if incorrect parameters are passed to the command-line.
+        ///     Exception thrown if incorrect parameters are passed to the command-line.
         /// </exception>
         public static void Main(string[] args)
         {
@@ -136,8 +140,6 @@ namespace GrabCaster.Framework
                         Console.WriteLine(@"[C] Configure GrabCaster Point.");
                         Console.WriteLine(@"[I] Install GrabCaster Windows NT Service.");
                         Console.WriteLine(@"[U] Uninstall GrabCaster Windows NT Service.");
-                        Console.WriteLine(@"[S] Install GrabCaster Service Fabric.");
-                        Console.WriteLine(@"[B] Install and update GrabCaster BizTalk Adapter.");
                         Console.WriteLine(@"[O] Clone a new GrabCaster Point.");
                         Console.WriteLine(@"[Ctrl + C] Exit.");
                         Console.ForegroundColor = ConsoleColor.White;

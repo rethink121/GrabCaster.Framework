@@ -1,6 +1,6 @@
 ﻿// Globals.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,68 +25,71 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using GrabCaster.Framework.Contracts.Bubbling;
+using GrabCaster.Framework.Contracts.Events;
+using GrabCaster.Framework.Contracts.Triggers;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Globals
 {
-    using Bubbling;
-    using Events;
-    using Triggers;
-
-
     /// <summary>
-    /// Action that will be executed by the event in SyncAsync scenarios
+    ///     Action that will be executed by the event in SyncAsync scenarios
     /// </summary>
     /// <param name="dataContext"></param>
     public delegate void SyncAsyncEventAction(byte[] dataContext);
 
     /// <summary>
-    /// Global Action Trigger Delegate used by triggers.
+    ///     Global Action Trigger Delegate used by triggers.
     /// </summary>
     /// <param name="_this">
-    /// The _this.
+    ///     The _this.
     /// </param>
     /// <param name="context">
-    /// The context.
+    ///     The context.
     /// </param>
     public delegate void ActionTrigger(ITriggerType _this, ActionContext context);
 
     /// <summary>
-    /// Global Action Event Delegate used by events.
+    ///     Global Action Event Delegate used by events.
     /// </summary>
     /// <param name="_this">
-    /// The _this.
+    ///     The _this.
     /// </param>
     /// <param name="context">
-    /// The context.
+    ///     The context.
     /// </param>
     public delegate void ActionEvent(IEventType _this, ActionContext context);
 
     /// <summary>
-    /// Global On Ramp Delegate used by on ramp receiver.
+    ///     Global On Ramp Delegate used by on ramp receiver.
     /// </summary>
     /// <param name="message">
-    /// The message.
+    ///     The message.
     /// </param>
     public delegate void SetEventOnRampMessageReceived(BubblingObject message);
 
     /// <summary>
-    /// Global Off Ramp Delegate used by on ramp sender.
+    ///     Global Off Ramp Delegate used by on ramp sender.
     /// </summary>
     /// <param name="message">
-    /// The message.
+    ///     The message.
     /// </param>
     public delegate void SetEventOnRampMessageSent(object message);
 
 
     /// <summary>
-    /// Context exchanged between triggers and events
+    ///     Context exchanged between triggers and events
     /// </summary>
     public class ActionContext
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ActionContext"/> class.
+        ///     Initializes a new instance of the <see cref="ActionContext" /> class.
         /// </summary>
         /// <param name="bubblingObjectBag">
-        /// The bubbling configuration.
+        ///     The bubbling configuration.
         /// </param>
         public ActionContext(BubblingObject bubblingObjectBag)
         {
@@ -94,12 +97,12 @@ namespace GrabCaster.Framework.Contracts.Globals
         }
 
         /// <summary>
-        /// Bag used to transport the triggers and events
+        ///     Bag used to transport the triggers and events
         /// </summary>
         public BubblingObject BubblingObjectBag { get; set; }
 
         /// <summary>
-        /// MessageId sent across the points
+        ///     MessageId sent across the points
         /// </summary>
         public string MessageId { get; set; }
     }

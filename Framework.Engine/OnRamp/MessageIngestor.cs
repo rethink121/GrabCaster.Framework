@@ -1,6 +1,6 @@
 ﻿// MessageIngestor.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,41 +25,44 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.CompressionLibrary;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Bubbling;
 using GrabCaster.Framework.Contracts.Storage;
+using GrabCaster.Framework.Engine.OffRamp;
+using GrabCaster.Framework.Log;
+using GrabCaster.Framework.Serialization.Object;
+
+#endregion
 
 namespace GrabCaster.Framework.Engine.OnRamp
 {
-    using Base;
-    using Contracts.Attributes;
-    using Contracts.Bubbling;
-    using Engine;
-    using Log;
-    using OffRamp;
-    using Serialization.Object;
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using System.Text;
-
     /// <summary>
-    /// Engine main message ingestor
+    ///     Engine main message ingestor
     /// </summary>
     public static class MessageIngestor
     {
         public delegate void SetConsoleActionEventEmbedded(
             string DestinationConsolePointId, IBubblingObject bubblingObject);
 
-        /// <summary>
-        /// Used internally by the embedded
-        /// </summary>
-        public static SetConsoleActionEventEmbedded setConsoleActionEventEmbedded { get; set; }
-
 
         private static bool secondaryPersistProviderEnabled;
         private static int secondaryPersistProviderByteSize;
         private static IDevicePersistentProvider DevicePersistentProvider;
         private static readonly object[] ParametersPersistEventFromBlob = {null};
+
+        /// <summary>
+        ///     Used internally by the embedded
+        /// </summary>
+        public static SetConsoleActionEventEmbedded setConsoleActionEventEmbedded { get; set; }
 
         public static void InitSecondaryPersistProvider()
         {
@@ -259,7 +262,7 @@ namespace GrabCaster.Framework.Engine.OnRamp
                 if (bubblingObject.MessageType == "SyncPull")
                 {
                     byte[] content =
-                        CompressionLibrary.Helpers.CreateFromDirectory(
+                        Helpers.CreateFromDirectory(
                             ConfigurationBag.Configuration.DirectoryOperativeRootExeName);
 
                     BubblingObject bubblingObjectToSync = new BubblingObject(content);
@@ -280,7 +283,7 @@ namespace GrabCaster.Framework.Engine.OnRamp
                     {
                         byte[] bubblingContent = SerializationEngine.ObjectToByteArray(bubblingObject.Data);
                         string currentSyncFolder = ConfigurationBag.SyncDirectorySyncIn();
-                        CompressionLibrary.Helpers.CreateFromBytearray(bubblingObject.Data, currentSyncFolder);
+                        Helpers.CreateFromBytearray(bubblingObject.Data, currentSyncFolder);
                     }
                 }
 

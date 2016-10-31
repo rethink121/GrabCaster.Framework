@@ -1,6 +1,6 @@
 ﻿// CoreServiceStates.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -28,17 +28,17 @@
 namespace GrabCaster.Framework.Engine
 {
     /// <summary>
-    /// The service states.
+    ///     The service states.
     /// </summary>
     public static class ServiceStates
     {
         /// <summary>
-        /// Gets or sets a value indicating whether run polling.
+        ///     Gets or sets a value indicating whether run polling.
         /// </summary>
         public static bool RunPolling { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether restart needed.
+        ///     Gets or sets a value indicating whether restart needed.
         /// </summary>
         public static bool RestartNeeded { get; set; }
     }

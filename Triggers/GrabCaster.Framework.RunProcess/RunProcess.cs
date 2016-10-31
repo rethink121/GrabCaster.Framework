@@ -1,6 +1,6 @@
 ﻿// RunProcess.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,99 +25,103 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Security;
+using System.Text;
+using System.Threading;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Triggers;
+using GrabCaster.Framework.Log;
+
+#endregion
+
 namespace GrabCaster.Framework.RunProcess
 {
-    using Base;
-    using Contracts.Attributes;
-    using Contracts.Globals;
-    using Contracts.Triggers;
-    using Log;
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Security;
-    using System.Text;
-    using System.Threading;
-
     /// <summary>
-    /// The Run Process trigger.
+    ///     The Run Process trigger.
     /// </summary>
     [TriggerContract("{B7226137-DFF7-44BD-9E48-42B5AC7AF730}", "RunProcess", "Run a specific application or batch.",
          false, true, false)]
     public class RunProcess : ITriggerType
     {
         /// <summary>
-        /// Gets or sets the process file to execute.
+        ///     Gets or sets the process file to execute.
         /// </summary>
         [TriggerPropertyContract("ProcessPathFileName", "Gets or sets the process file to execute.")]
         public string ProcessPathFileName { get; set; }
 
         /// <summary>
-        /// Gets or sets how the process nee to start.
+        ///     Gets or sets how the process nee to start.
         /// </summary>
         [TriggerPropertyContract("ProcessStyle",
              "Process style behaviour, look for ProcessWindowStyle in system.Process.")]
         public string ProcessStyle { get; set; }
 
         /// <summary>
-        /// Gets or sets the polling time.
+        ///     Gets or sets the polling time.
         /// </summary>
         [TriggerPropertyContract("ExecuteEventAfterRun", "If need to execute the event after run the process.")]
         public bool ExecuteEventAfterRun { get; set; }
 
         /// <summary>
-        /// Gets or sets the polling time.
+        ///     Gets or sets the polling time.
         /// </summary>
         [TriggerPropertyContract("AlwaysRun", "Run again in case of unexpected shutdown.")]
         public bool AlwaysRun { get; set; }
 
         /// <summary>
-        /// Gets or sets the Domain.
+        ///     Gets or sets the Domain.
         /// </summary>
         [TriggerPropertyContract("Domain", "Domain to run the process.")]
         public string Domain { get; set; }
 
         /// <summary>
-        /// Gets or sets the polling time.
+        ///     Gets or sets the polling time.
         /// </summary>
         [TriggerPropertyContract("User", "Username to run the process.")]
         public string User { get; set; }
 
         /// <summary>
-        /// Gets or sets the polling time.
+        ///     Gets or sets the polling time.
         /// </summary>
         [TriggerPropertyContract("Password", "Password to run the process.")]
         public string Password { get; set; }
 
+        public string SupportBag { get; set; }
+
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
 
-        public string SupportBag { get; set; }
-
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action trigger.
+        ///     Gets or sets the set event action trigger.
         /// </summary>
         public ActionTrigger ActionTrigger { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionTrigger">
-        /// The set event action trigger.
+        ///     The set event action trigger.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [TriggerActionContract("{CABFAC55-56F1-4863-84C2-29D01AADA834}", "Main action", "Main action description")]
         public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)

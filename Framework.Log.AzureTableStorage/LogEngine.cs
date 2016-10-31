@@ -1,6 +1,6 @@
 ﻿// LogEngine.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,18 +25,21 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Log;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
+#endregion
+
 namespace GrabCaster.Framework.Log.AzureTableStorage
 {
-    using Base;
-    using Contracts.Attributes;
-    using Contracts.Log;
-    using System;
-
     /// <summary>
-    /// The log engine, simple version.
+    ///     The log engine, simple version.
     /// </summary>
     [LogContract("{CE541CB7-94CD-4421-B6C4-26FBC3088FF9}", "LogEngine", "Azure Table Storage Log System")]
     public class LogEngine : ILogEngine
@@ -45,10 +48,10 @@ namespace GrabCaster.Framework.Log.AzureTableStorage
         private CloudTable tableGlobal;
 
         /// <summary>
-        /// Initialize log.
+        ///     Initialize log.
         /// </summary>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public bool InitLog()
         {
@@ -67,13 +70,13 @@ namespace GrabCaster.Framework.Log.AzureTableStorage
         }
 
         /// <summary>
-        /// The write log.
+        ///     The write log.
         /// </summary>
         /// <param name="logMessage">
-        /// The log message.
+        ///     The log message.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public bool WriteLog(LogMessage logMessage)
         {

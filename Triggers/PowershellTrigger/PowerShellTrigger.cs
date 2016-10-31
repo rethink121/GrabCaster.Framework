@@ -1,6 +1,6 @@
 ﻿// PowerShellTrigger.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,73 +25,76 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Management.Automation;
+using System.Text;
 using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Triggers;
+
+#endregion
 
 namespace GrabCaster.Framework.PowerShellTrigger
 {
-    using Contracts.Attributes;
-    using Contracts.Globals;
-    using Contracts.Triggers;
-    using System;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Management.Automation;
-    using System.Text;
-
     /// <summary>
-    /// TODO The power shell trigger.
+    ///     TODO The power shell trigger.
     /// </summary>
     [TriggerContract("{18BB5E65-23A2-4743-8773-32F039AA3D16}", "PowerShell Trigger",
          "Execute a trigger write in Powerhell script", true, true, false)]
     public class PowerShellTrigger : ITriggerType
     {
         /// <summary>
-        /// Gets or sets the script.
+        ///     Gets or sets the script.
         /// </summary>
         [TriggerPropertyContract("Script", "Script to execute")]
         public string Script { get; set; }
 
         /// <summary>
-        /// Gets or sets the script file.
+        ///     Gets or sets the script file.
         /// </summary>
         [TriggerPropertyContract("ScriptFile", "Script from file")]
         public string ScriptFile { get; set; }
 
         /// <summary>
-        /// Gets or sets the message properties.
+        ///     Gets or sets the message properties.
         /// </summary>
         [EventPropertyContract("MessageProperties", "MessageProperties")]
         public string MessageProperties { get; set; }
 
+        public string SupportBag { get; set; }
+
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
 
-        public string SupportBag { get; set; }
-
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action trigger.
+        ///     Gets or sets the set event action trigger.
         /// </summary>
         public ActionTrigger ActionTrigger { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionTrigger">
-        /// The set event action trigger.
+        ///     The set event action trigger.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         /// <exception cref="Exception">
         /// </exception>

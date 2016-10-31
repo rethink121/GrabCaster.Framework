@@ -1,6 +1,6 @@
 ﻿// IChannel.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,33 +25,37 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System.Collections.Generic;
+using GrabCaster.Framework.Contracts.Points;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Channels
 {
-    using Points;
-    using System.Collections.Generic;
-
     /// <summary>
-    /// The Channel interface.
+    ///     The Channel interface.
     /// </summary>
     internal interface IChannel
     {
         /// <summary>
-        /// Gets or sets the channel id.
+        ///     Gets or sets the channel id.
         /// </summary>
         string ChannelId { get; set; }
 
         /// <summary>
-        /// Gets or sets the channel name.
+        ///     Gets or sets the channel name.
         /// </summary>
         string ChannelName { get; set; }
 
         /// <summary>
-        /// Gets or sets the channel description.
+        ///     Gets or sets the channel description.
         /// </summary>
         string ChannelDescription { get; set; }
 
         /// <summary>
-        /// Gets or sets the points.
+        ///     Gets or sets the points.
         /// </summary>
         List<Point> Points { get; set; }
     }

@@ -1,6 +1,6 @@
 ﻿// BulksqlServerEvent.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,18 +25,22 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Data;
+using System.Data.SqlClient;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Events;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Serialization;
+
+#endregion
+
 namespace GrabCaster.Framework.BulksqlServerEvent
 {
-    using Contracts.Attributes;
-    using Contracts.Events;
-    using Contracts.Globals;
-    using Contracts.Serialization;
-    using System;
-    using System.Data;
-    using System.Data.SqlClient;
-
     /// <summary>
-    /// The bulksql server event.
+    ///     The bulksql server event.
     /// </summary>
     [EventContract("{767D579B-986B-47B1-ACDF-46738434043F}", "BulksqlServerEvent Event",
          "Receive a Sql Server recordset to perform a bulk insert.",
@@ -44,47 +48,47 @@ namespace GrabCaster.Framework.BulksqlServerEvent
     public class BulksqlServerEvent : IEventType
     {
         /// <summary>
-        /// Gets or sets the table name destination.
+        ///     Gets or sets the table name destination.
         /// </summary>
         [EventPropertyContract("TableNameDestination", "TableName")]
         public string TableNameDestination { get; set; }
 
         /// <summary>
-        /// Gets or sets the bulk select query destination.
+        ///     Gets or sets the bulk select query destination.
         /// </summary>
         [EventPropertyContract("BulkSelectQueryDestination", "BulkSelectQueryDestination")]
         public string BulkSelectQueryDestination { get; set; }
 
         /// <summary>
-        /// Gets or sets the connection string.
+        ///     Gets or sets the connection string.
         /// </summary>
         [EventPropertyContract("ConnectionString", "ConnectionString")]
         public string ConnectionString { get; set; }
 
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action event.
+        ///     Gets or sets the set event action event.
         /// </summary>
         public ActionEvent ActionEvent { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [EventPropertyContract("DataContext", "Event Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionEvent">
-        /// The set event action event.
+        ///     The set event action event.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [EventActionContract("{F469BD5B-B352-40D6-BD33-591EF96E8F6C}", "Main action", "Main action description")]
         public byte[] Execute(ActionEvent actionEvent, ActionContext context)

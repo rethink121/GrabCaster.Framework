@@ -1,6 +1,6 @@
 ﻿// Serialization.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,29 +25,33 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System.Data;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.IO.Compression;
+using System.Runtime.Serialization.Formatters.Binary;
 using GrabCaster.Framework.Base;
+
+#endregion
 
 namespace GrabCaster.Framework.Contracts.Serialization
 {
-    using System.Data;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-    using System.IO.Compression;
-    using System.Runtime.Serialization.Formatters.Binary;
-
     /// <summary>
     ///     Serialization engine class
     /// </summary>
     public static class Serialization
     {
         /// <summary>
-        /// The object to byte array no compressed.
+        ///     The object to byte array no compressed.
         /// </summary>
         /// <param name="objectData">
-        /// The object data.
+        ///     The object data.
         /// </param>
         /// <returns>
-        /// The <see>
+        ///     The
+        ///     <see>
         ///         <cref>byte[]</cref>
         ///     </see>
         ///     .
@@ -66,13 +70,13 @@ namespace GrabCaster.Framework.Contracts.Serialization
         }
 
         /// <summary>
-        /// The byte array to objectold.
+        ///     The byte array to objectold.
         /// </summary>
         /// <param name="bytesArray">
-        /// The bytes array.
+        ///     The bytes array.
         /// </param>
         /// <returns>
-        /// The <see cref="object"/>.
+        ///     The <see cref="object" />.
         /// </returns>
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
              Justification = "Reviewed. Suppression is OK here.")]
@@ -92,13 +96,14 @@ namespace GrabCaster.Framework.Contracts.Serialization
         }
 
         /// <summary>
-        /// The object to byte array.
+        ///     The object to byte array.
         /// </summary>
         /// <param name="objectData">
-        /// The object data.
+        ///     The object data.
         /// </param>
         /// <returns>
-        /// The <see>
+        ///     The
+        ///     <see>
         ///         <cref>byte[]</cref>
         ///     </see>
         ///     .
@@ -123,13 +128,13 @@ namespace GrabCaster.Framework.Contracts.Serialization
         }
 
         /// <summary>
-        /// The byte array to object.
+        ///     The byte array to object.
         /// </summary>
         /// <param name="byteArray">
-        /// The byte array.
+        ///     The byte array.
         /// </param>
         /// <returns>
-        /// The <see cref="object"/>.
+        ///     The <see cref="object" />.
         /// </returns>
         public static object ByteArrayToObject(byte[] byteArray)
         {
@@ -152,13 +157,14 @@ namespace GrabCaster.Framework.Contracts.Serialization
         }
 
         /// <summary>
-        /// The data table to byte array.
+        ///     The data table to byte array.
         /// </summary>
         /// <param name="dataTable">
-        /// The data table.
+        ///     The data table.
         /// </param>
         /// <returns>
-        /// The <see>
+        ///     The
+        ///     <see>
         ///         <cref>byte[]</cref>
         ///     </see>
         ///     .
@@ -184,13 +190,13 @@ namespace GrabCaster.Framework.Contracts.Serialization
         }
 
         /// <summary>
-        /// The byte array to data table.
+        ///     The byte array to data table.
         /// </summary>
         /// <param name="byteDataTable">
-        /// The byte data table.
+        ///     The byte data table.
         /// </param>
         /// <returns>
-        /// The <see cref="DataTable"/>.
+        ///     The <see cref="DataTable" />.
         /// </returns>
         public static DataTable ByteArrayToDataTable(byte[] byteDataTable)
         {
@@ -215,13 +221,14 @@ namespace GrabCaster.Framework.Contracts.Serialization
         }
 
         /// <summary>
-        /// The read full stream.
+        ///     The read full stream.
         /// </summary>
         /// <param name="stream">
-        /// The stream.
+        ///     The stream.
         /// </param>
         /// <returns>
-        /// The <see>
+        ///     The
+        ///     <see>
         ///         <cref>byte[]</cref>
         ///     </see>
         ///     .

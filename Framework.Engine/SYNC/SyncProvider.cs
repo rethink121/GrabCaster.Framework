@@ -1,6 +1,6 @@
 ﻿// SyncProvider.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,31 +25,36 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.ServiceModel.Web;
+using System.Xml;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Common;
+using GrabCaster.Framework.CompressionLibrary;
+using GrabCaster.Framework.Contracts.Bubbling;
+using GrabCaster.Framework.Engine.OffRamp;
+using GrabCaster.Framework.Log;
+using GrabCaster.Framework.Serialization.Xml;
+using Newtonsoft.Json;
+using Formatting = Newtonsoft.Json.Formatting;
+
+#endregion
+
 namespace GrabCaster.Framework.Engine
 {
-    using Base;
-    using Common;
-    using Contracts.Bubbling;
-    using Log;
-    using Newtonsoft.Json;
-    using OffRamp;
-    using Serialization.Xml;
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Reflection;
-    using System.ServiceModel.Web;
-    using System.Xml;
-    using Formatting = Newtonsoft.Json.Formatting;
-
     /// <summary>
     ///     class concerning the syncronization engine
     /// </summary>
     public static class SyncProvider
     {
         /// <summary>
-        /// The on syncronization.
+        ///     The on syncronization.
         /// </summary>
         public static bool OnSyncronization;
 
@@ -63,14 +68,14 @@ namespace GrabCaster.Framework.Engine
 
 
         /// <summary>
-        /// Method execute by REST to push the syncronization bag out to other points
+        ///     Method execute by REST to push the syncronization bag out to other points
         /// </summary>
         public static void SendSyncPush(string destinationChannelId, string destinationPointId)
         {
             try
             {
                 byte[] content =
-                    CompressionLibrary.Helpers.CreateFromDirectory(
+                    Helpers.CreateFromDirectory(
                         ConfigurationBag.Configuration.DirectoryOperativeRootExeName);
 
                 BubblingObject bubblingObject = new BubblingObject(content);
@@ -93,7 +98,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Method execute by REST to push the syncronization bag out to other points
+        ///     Method execute by REST to push the syncronization bag out to other points
         /// </summary>
         public static void SendSyncPull(string destinationChannelId, string destinationPointId)
         {
@@ -119,16 +124,16 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// The sync write configuration.
+        ///     The sync write configuration.
         /// </summary>
         /// <param name="channelId">
-        /// The channel id.
+        ///     The channel id.
         /// </param>
         /// <param name="pointId">
-        /// The point id.
+        ///     The point id.
         /// </param>
         /// <param name="configurationFile">
-        /// The configuration file.
+        ///     The configuration file.
         /// </param>
         public static void SyncWriteConfiguration(string channelId, string pointId, byte[] configurationFile)
         {
@@ -158,10 +163,10 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// The sync local bubbling configuration file.
+        ///     The sync local bubbling configuration file.
         /// </summary>
         /// <param name="syncConfigurationFile">
-        /// The sync configuration file.
+        ///     The sync configuration file.
         /// </param>
         public static void SyncLocalBubblingConfigurationFile(SyncConfigurationFile syncConfigurationFile)
         {
@@ -193,31 +198,31 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Sync a single configuration file
+        ///     Sync a single configuration file
         /// </summary>
         /// <param name="syncConfigurationFile">
-        /// The sync Configuration File.
+        ///     The sync Configuration File.
         /// </param>
         /// <param name="messageType">
-        /// The Message Type.
+        ///     The Message Type.
         /// </param>
         /// <param name="senderId">
-        /// The Sender ID.
+        ///     The Sender ID.
         /// </param>
         /// <param name="senderName">
-        /// The Sender Name.
+        ///     The Sender Name.
         /// </param>
         /// <param name="senderDescriprion">
-        /// The Sender Descriprion.
+        ///     The Sender Descriprion.
         /// </param>
         /// <param name="channelId">
-        /// The Channel ID.
+        ///     The Channel ID.
         /// </param>
         /// <param name="channelName">
-        /// The Channel Name.
+        ///     The Channel Name.
         /// </param>
         /// <param name="channelDescription">
-        /// The Channel Description.
+        ///     The Channel Description.
         /// </param>
         public static void SyncBubblingConfigurationFile(
             SyncConfigurationFile syncConfigurationFile,
@@ -303,31 +308,31 @@ namespace GrabCaster.Framework.Engine
 
         // Sync all the configuration  event and triggers files
         /// <summary>
-        /// TODO The sync bubbling configuration file list.
+        ///     TODO The sync bubbling configuration file list.
         /// </summary>
         /// <param name="syncConfigurationFileList">
-        /// TODO The sync configuration file list.
+        ///     TODO The sync configuration file list.
         /// </param>
         /// <param name="messageType">
-        /// TODO The message type.
+        ///     TODO The message type.
         /// </param>
         /// <param name="senderId">
-        /// TODO The sender id.
+        ///     TODO The sender id.
         /// </param>
         /// <param name="senderName">
-        /// TODO The sender name.
+        ///     TODO The sender name.
         /// </param>
         /// <param name="senderDescriprion">
-        /// TODO The sender descriprion.
+        ///     TODO The sender descriprion.
         /// </param>
         /// <param name="channelId">
-        /// TODO The channel id.
+        ///     TODO The channel id.
         /// </param>
         /// <param name="channelName">
-        /// TODO The channel name.
+        ///     TODO The channel name.
         /// </param>
         /// <param name="channelDescription">
-        /// TODO The channel description.
+        ///     TODO The channel description.
         /// </param>
         public static void SyncBubblingConfigurationFileList(
             List<SyncConfigurationFile> syncConfigurationFileList,
@@ -368,10 +373,10 @@ namespace GrabCaster.Framework.Engine
 
         // Sync all the configuration  event and triggers files
         /// <summary>
-        /// TODO The sync local bubbling configuration file.
+        ///     TODO The sync local bubbling configuration file.
         /// </summary>
         /// <param name="syncConfigurationFileList">
-        /// TODO The sync configuration file list.
+        ///     TODO The sync configuration file list.
         /// </param>
         public static void SyncLocalBubblingConfigurationFile(List<SyncConfigurationFile> syncConfigurationFileList)
         {
@@ -395,13 +400,13 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Send all Bubbling configuration
+        ///     Send all Bubbling configuration
         /// </summary>
         /// <param name="channelId">
-        /// The Channel ID.
+        ///     The Channel ID.
         /// </param>
         /// <param name="pointId">
-        /// The Point ID.
+        ///     The Point ID.
         /// </param>
         public static void SyncSendBubblingConfiguration(string channelId, string pointId)
         {
@@ -444,13 +449,13 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Send all configuration
+        ///     Send all configuration
         /// </summary>
         /// <param name="channelId">
-        /// The Channel ID.
+        ///     The Channel ID.
         /// </param>
         /// <param name="pointId">
-        /// The Point ID.
+        ///     The Point ID.
         /// </param>
         public static void SyncSendConfiguration(string channelId, string pointId)
         {
@@ -501,19 +506,19 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// TODO The sync send file bubbling configuration.
+        ///     TODO The sync send file bubbling configuration.
         /// </summary>
         /// <param name="channelId">
-        /// TODO The channel id.
+        ///     TODO The channel id.
         /// </param>
         /// <param name="pointId">
-        /// TODO The point id.
+        ///     TODO The point id.
         /// </param>
         /// <param name="fileName">
-        /// TODO The file name.
+        ///     TODO The file name.
         /// </param>
         /// <param name="messageType">
-        /// TODO The message type.
+        ///     TODO The message type.
         /// </param>
         public static void SyncSendFileBubblingConfiguration(
             string channelId,
@@ -590,7 +595,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Request all the bubbling configuration
+        ///     Request all the bubbling configuration
         /// </summary>
         /// <param name="channelId">
         /// </param>
@@ -624,7 +629,7 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Request all the configuration
+        ///     Request all the configuration
         /// </summary>
         /// <param name="channelId">
         /// </param>
@@ -658,16 +663,16 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// The sync update component.
+        ///     The sync update component.
         /// </summary>
         /// <param name="channelId">
-        /// The channel id.
+        ///     The channel id.
         /// </param>
         /// <param name="pointId">
-        /// The point id.
+        ///     The point id.
         /// </param>
         /// <param name="bubblingObject">
-        /// The bubbling event.
+        ///     The bubbling event.
         /// </param>
         public static void SyncUpdateComponent(string channelId, string pointId, BubblingObject bubblingObject)
         {
@@ -708,19 +713,19 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// The sync send component.
+        ///     The sync send component.
         /// </summary>
         /// <param name="channelId">
-        /// The channel id.
+        ///     The channel id.
         /// </param>
         /// <param name="pointId">
-        /// The point id.
+        ///     The point id.
         /// </param>
         /// <param name="idComponent">
-        /// The id component.
+        ///     The id component.
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         public static string SyncSendComponent(string channelId, string pointId, string idComponent)
         {
@@ -768,14 +773,14 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Request all the bubbling configuration
+        ///     Request all the bubbling configuration
         /// </summary>
         /// <param name="channelId">
         /// </param>
         /// <param name="pointId">
         /// </param>
         /// <param name="idComponent">
-        /// The ID Component.
+        ///     The ID Component.
         /// </param>
         public static void SyncSendRequestComponent(string channelId, string pointId, string idComponent)
         {
@@ -805,10 +810,10 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Return the complete configuration
+        ///     Return the complete configuration
         /// </summary>
         /// <returns>
-        /// The <see cref="Stream"/>.
+        ///     The <see cref="Stream" />.
         /// </returns>
         public static Stream GetConfiguration()
         {
@@ -1212,7 +1217,7 @@ namespace GrabCaster.Framework.Engine
         // Configuration files AREA
         // *********************************************************************************************
         /// <summary>
-        /// TODO The refresh bubbling setting.
+        ///     TODO The refresh bubbling setting.
         /// </summary>
         public static void RefreshBubblingSetting()
         {

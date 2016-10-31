@@ -1,6 +1,6 @@
 ﻿// HttpHelper.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,8 +25,8 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using Newtonsoft.Json;
-using NLog;
+#region Usings
+
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -34,6 +34,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using Newtonsoft.Json;
+using NLog;
+
+#endregion
 
 namespace HMVN.OMS.Common.Utils
 {
@@ -118,50 +122,6 @@ namespace HMVN.OMS.Common.Utils
             return UrlPathCombine(string.Concat(left, curRight), right.Skip(1).ToArray());
         }
 
-        #region Logs
-
-        public static void WriteLogError(Exception ex)
-        {
-            string message = CursiveExceptionMessage(ex);
-            WriteLogError(message);
-        }
-
-        public static void WriteLogError(string message)
-        {
-            log.Error(message);
-        }
-
-        public static string CursiveExceptionMessage(Exception ex)
-        {
-            string message = ex.Message + " --------------------- " + ex.StackTrace;
-            while (ex.InnerException != null)
-            {
-                message += "\r\n\n" + ex.InnerException.Message + " --------------------- " +
-                           ex.InnerException.StackTrace;
-                ex = ex.InnerException;
-            }
-            return message;
-        }
-
-        public static void WriteLogMessage(Exception ex)
-        {
-            string message = ex.Message + " --------------------- " + ex.StackTrace;
-            while (ex.InnerException != null)
-            {
-                message += "\r\n\n" + ex.InnerException.Message + " --------------------- " +
-                           ex.InnerException.StackTrace;
-                ex = ex.InnerException;
-            }
-            WriteLogMessage(message);
-        }
-
-        public static void WriteLogMessage(string message)
-        {
-            log.Info(message);
-        }
-
-        #endregion
-
         public static string CatchWebRequestException(WebException wexc)
         {
             string msg = wexc.Message ?? "Response is null!.";
@@ -208,5 +168,49 @@ namespace HMVN.OMS.Common.Utils
                 return default(T);
             }
         }
+
+        #region Logs
+
+        public static void WriteLogError(Exception ex)
+        {
+            string message = CursiveExceptionMessage(ex);
+            WriteLogError(message);
+        }
+
+        public static void WriteLogError(string message)
+        {
+            log.Error(message);
+        }
+
+        public static string CursiveExceptionMessage(Exception ex)
+        {
+            string message = ex.Message + " --------------------- " + ex.StackTrace;
+            while (ex.InnerException != null)
+            {
+                message += "\r\n\n" + ex.InnerException.Message + " --------------------- " +
+                           ex.InnerException.StackTrace;
+                ex = ex.InnerException;
+            }
+            return message;
+        }
+
+        public static void WriteLogMessage(Exception ex)
+        {
+            string message = ex.Message + " --------------------- " + ex.StackTrace;
+            while (ex.InnerException != null)
+            {
+                message += "\r\n\n" + ex.InnerException.Message + " --------------------- " +
+                           ex.InnerException.StackTrace;
+                ex = ex.InnerException;
+            }
+            WriteLogMessage(message);
+        }
+
+        public static void WriteLogMessage(string message)
+        {
+            log.Info(message);
+        }
+
+        #endregion
     }
 }

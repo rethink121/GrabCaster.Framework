@@ -1,6 +1,6 @@
 ﻿// EventArrivedEventArgs.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,18 +25,22 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+
+#endregion
+
 namespace GrabCaster.Framework.ETW
 {
-    using System;
-
     public sealed class EventArrivedEventArgs : EventArgs
     {
         // Keep this event small.
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventArrivedEventArgs"/> class.
+        ///     Initializes a new instance of the <see cref="EventArrivedEventArgs" /> class.
         /// </summary>
         /// <param name="error">
-        /// The error.
+        ///     The error.
         /// </param>
         internal EventArrivedEventArgs(Exception error)
             : this(0 /*eventId*/, new PropertyBag())
@@ -45,13 +49,13 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventArrivedEventArgs"/> class.
+        ///     Initializes a new instance of the <see cref="EventArrivedEventArgs" /> class.
         /// </summary>
         /// <param name="eventId">
-        /// The event id.
+        ///     The event id.
         /// </param>
         /// <param name="properties">
-        /// The properties.
+        ///     The properties.
         /// </param>
         internal EventArrivedEventArgs(ushort eventId, PropertyBag properties)
         {
@@ -60,17 +64,17 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// Gets the event id.
+        ///     Gets the event id.
         /// </summary>
         public ushort EventId { get; }
 
         /// <summary>
-        /// Gets the properties.
+        ///     Gets the properties.
         /// </summary>
         public PropertyBag Properties { get; }
 
         /// <summary>
-        /// Gets the error.
+        ///     Gets the error.
         /// </summary>
         public Exception Error { get; }
     }

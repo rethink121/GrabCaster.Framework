@@ -1,6 +1,6 @@
 ﻿// PageOneMessageTrigger.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,20 +25,24 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using GrabCaster.Framework.Base;
-using GrabCaster.Framework.Contracts.Attributes;
-using GrabCaster.Framework.Contracts.Globals;
-using GrabCaster.Framework.Contracts.Triggers;
+#region Usings
+
 using System;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.ServiceModel.Web;
 using System.Threading;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Triggers;
+
+#endregion
 
 namespace HM.OMS.PageOneMessageRESTTrigger
 {
     /// <summary>
-    /// The file trigger.
+    ///     The file trigger.
     /// </summary>
     [TriggerContract("{22F27D62-7D66-4947-9F08-D57E4E5FCC94}", "PageOneMessageTrigger",
          "PageOneMessageTrigger is the OMS service to send mails", false, true, false)]
@@ -47,35 +51,32 @@ namespace HM.OMS.PageOneMessageRESTTrigger
         readonly static AutoResetEvent waitHandle = new AutoResetEvent(false);
         public static PageOneMessageTriggerWebServiceHost engineHost;
 
-        [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
-        public bool Syncronous { get; set; }
-
         /// <summary>
-        /// [message] to send an email - [auth] to check the authentication
+        ///     [message] to send an email - [auth] to check the authentication
         /// </summary>
         [TriggerPropertyContract("input", "[message] to send an email - [auth] to check the authentication")]
         public string input { get; set; }
 
         /// <summary>
-        /// [message] to send an email - [auth] to check the authentication
+        ///     [message] to send an email - [auth] to check the authentication
         /// </summary>
         [TriggerPropertyContract("From", "The mail from")]
         public string From { get; set; }
 
         /// <summary>
-        /// [message] to send an email - [auth] to check the authentication
+        ///     [message] to send an email - [auth] to check the authentication
         /// </summary>
         [TriggerPropertyContract("To", "The mail to")]
         public string To { get; set; }
 
         /// <summary>
-        /// [message] to send an email - [auth] to check the authentication
+        ///     [message] to send an email - [auth] to check the authentication
         /// </summary>
         [TriggerPropertyContract("Message", "Body message")]
         public string Message { get; set; }
 
         /// <summary>
-        /// WebApiEndPoint used by the service
+        ///     WebApiEndPoint used by the service
         /// </summary>
         [TriggerPropertyContract("WebApiEndPoint", "WebApiEndPoint used by the service")]
         public string WebApiEndPoint { get; set; }
@@ -83,31 +84,57 @@ namespace HM.OMS.PageOneMessageRESTTrigger
 
         public string SupportBag { get; set; }
 
+
+        public string SendMessage(iPageOneMessage pageOneMessage)
+        {
+            ActionTrigger(this, Context);
+            //Wait for sync
+            waitHandle.WaitOne();
+            return EncodingDecoding.EncodingBytes2String(DataContext);
+        }
+
+        public bool ServiceAvailable()
+        {
+            return true;
+        }
+
+        public string Auth()
+        {
+            object s = engineHost;
+            engineHost.ActionTrigger(engineHost.This, engineHost.Context);
+            //Wait for sync
+            waitHandle.WaitOne();
+            return EncodingDecoding.EncodingBytes2String(engineHost.DataContext);
+        }
+
+        [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
+        public bool Syncronous { get; set; }
+
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action trigger.
+        ///     Gets or sets the set event action trigger.
         /// </summary>
         public ActionTrigger ActionTrigger { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
         public byte[] DataContext { get; set; }
 
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionTrigger">
-        /// The set event action trigger.
+        ///     The set event action trigger.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [TriggerActionContract("{4C60AEF9-7F37-456D-91E3-179E275F694B}", "Main action", "Main action description")]
         public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)
@@ -140,29 +167,6 @@ namespace HM.OMS.PageOneMessageRESTTrigger
                 return EncodingDecoding.EncodingString2Bytes(ex.Message);
             }
         }
-
-
-        public string SendMessage(iPageOneMessage pageOneMessage)
-        {
-            ActionTrigger(this, Context);
-            //Wait for sync
-            waitHandle.WaitOne();
-            return EncodingDecoding.EncodingBytes2String(DataContext);
-        }
-
-        public bool ServiceAvailable()
-        {
-            return true;
-        }
-
-        public string Auth()
-        {
-            object s = engineHost;
-            engineHost.ActionTrigger(engineHost.This, engineHost.Context);
-            //Wait for sync
-            waitHandle.WaitOne();
-            return EncodingDecoding.EncodingBytes2String(engineHost.DataContext);
-        }
     }
 
     public class PageOneMessageTriggerWebServiceHost : WebServiceHost
@@ -173,22 +177,22 @@ namespace HM.OMS.PageOneMessageRESTTrigger
         }
 
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ITriggerType This { get; set; }
 
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action trigger.
+        ///     Gets or sets the set event action trigger.
         /// </summary>
         public ActionTrigger ActionTrigger { get; set; }
     }

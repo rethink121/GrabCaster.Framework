@@ -1,6 +1,6 @@
 ﻿// NTService.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,28 +25,32 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections;
+using System.Configuration.Install;
+using System.Reflection;
+using System.ServiceProcess;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Log;
+
+#endregion
+
 namespace GrabCaster.Framework.NTService
 {
-    using Base;
-    using Log;
-    using System;
-    using System.Collections;
-    using System.Configuration.Install;
-    using System.Reflection;
-    using System.ServiceProcess;
-
     /// <summary>
-    /// Contains helper methods to start, stop and (un)install service.
+    ///     Contains helper methods to start, stop and (un)install service.
     /// </summary>
     internal static class CoreNtService
     {
         /// <summary>
-        /// Gets or sets the service name.
+        ///     Gets or sets the service name.
         /// </summary>
         public static string ServiceName { get; set; }
 
         /// <summary>
-        /// Determines whether this Windows Service is installed.
+        ///     Determines whether this Windows Service is installed.
         /// </summary>
         /// <returns><c>true</c> is installed, <c>false</c> otherwise.</returns>
         public static bool IsInstalled()
@@ -72,7 +76,7 @@ namespace GrabCaster.Framework.NTService
         // IsInstalled
 
         /// <summary>
-        /// Determines whether the Windows Service is running.
+        ///     Determines whether the Windows Service is running.
         /// </summary>
         /// <returns><c>true</c> is running, <c>false</c> otherwise.</returns>
         public static bool IsRunning()
@@ -93,9 +97,9 @@ namespace GrabCaster.Framework.NTService
         // IsRunning
 
         /// <summary>
-        /// Creates an <see cref="AssemblyInstaller"/> object to perform the service installation.
+        ///     Creates an <see cref="AssemblyInstaller" /> object to perform the service installation.
         /// </summary>
-        /// <returns>Returns an <see cref="AssemblyInstaller"/> object to perform the service installation.</returns>
+        /// <returns>Returns an <see cref="AssemblyInstaller" /> object to perform the service installation.</returns>
         public static AssemblyInstaller GetInstaller()
         {
             var installer = new AssemblyInstaller(typeof(NTWindowsService).Assembly, null)
@@ -110,7 +114,7 @@ namespace GrabCaster.Framework.NTService
         // GetInstaller
 
         /// <summary>
-        /// Installs the Windows Service.
+        ///     Installs the Windows Service.
         /// </summary>
         public static void InstallService()
         {
@@ -166,7 +170,7 @@ namespace GrabCaster.Framework.NTService
         // InstallService
 
         /// <summary>
-        /// Uninstalls the Windows Service.
+        ///     Uninstalls the Windows Service.
         /// </summary>
         public static void UninstallService()
         {
@@ -204,7 +208,7 @@ namespace GrabCaster.Framework.NTService
         // UninstallService
 
         /// <summary>
-        /// Starts the Windows Service.
+        ///     Starts the Windows Service.
         /// </summary>
         public static void StartService()
         {
@@ -247,7 +251,7 @@ namespace GrabCaster.Framework.NTService
         // StartService
 
         /// <summary>
-        /// Stops the Windows Service.
+        ///     Stops the Windows Service.
         /// </summary>
         public static void StopService()
         {

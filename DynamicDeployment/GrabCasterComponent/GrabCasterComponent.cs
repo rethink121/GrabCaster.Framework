@@ -1,6 +1,6 @@
 ﻿// GrabCasterComponent.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,12 +25,16 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Components;
+
+#endregion
+
 namespace GrabCaster.Framework.BTSTransformComponent
 {
-    using Base;
-    using Contracts.Attributes;
-    using Contracts.Components;
-
     //<USING>
 
     [ComponentContract("{*ID*}", "*NAME*", "*DESCRIPTION*")]
@@ -39,10 +43,10 @@ namespace GrabCaster.Framework.BTSTransformComponent
         //<PROPERTIES>
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         /// <value>
-        /// The data context.
+        ///     The data context.
         /// </value>
         [ComponentPropertyContract("DataContext", "Main data context")]
         public byte[] DataContext { get; set; }

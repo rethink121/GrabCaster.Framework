@@ -1,6 +1,6 @@
 ﻿// LockSlimQueueLog.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,48 +25,52 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using GrabCaster.Framework.Base;
+using Timer = System.Timers.Timer;
+
+#endregion
+
 namespace GrabCaster.Framework.Log
 {
-    using Base;
-    using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Reflection;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Timer = System.Timers.Timer;
-
     public abstract class LockSlimQueueLog<T> : ConcurrentQueue<T>
         where T : class
     {
         /// <summary>
-        /// The cap limit.
+        ///     The cap limit.
         /// </summary>
         protected int CapLimit;
 
         /// <summary>
-        /// The locker.
-        /// </summary>
-        protected ReaderWriterLockSlim Locker;
-
-        /// <summary>
-        /// The on publish executed.
-        /// </summary>
-        protected int OnPublishExecuted;
-
-        /// <summary>
-        /// The time limit.
-        /// </summary>
-        protected int TimeLimit;
-
-        /// <summary>
-        /// The internal timer.
+        ///     The internal timer.
         /// </summary>
         protected Timer InternalTimer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="LockSlimQueueLog{T}"/> class.
+        ///     The locker.
+        /// </summary>
+        protected ReaderWriterLockSlim Locker;
+
+        /// <summary>
+        ///     The on publish executed.
+        /// </summary>
+        protected int OnPublishExecuted;
+
+        /// <summary>
+        ///     The time limit.
+        /// </summary>
+        protected int TimeLimit;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="LockSlimQueueLog{T}" /> class.
         /// </summary>
         protected LockSlimQueueLog()
         {
@@ -111,7 +115,7 @@ namespace GrabCaster.Framework.Log
         }
 
         /// <summary>
-        /// The publish.
+        ///     The publish.
         /// </summary>
         protected virtual void Publish()
         {

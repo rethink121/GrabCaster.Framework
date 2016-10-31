@@ -1,6 +1,6 @@
 ﻿// AzureTopicTrigger.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,76 +25,79 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Triggers;
+using Microsoft.ServiceBus;
+using Microsoft.ServiceBus.Messaging;
+
+#endregion
 
 namespace GrabCaster.Framework.AzureTopicTrigger
 {
-    using Contracts.Attributes;
-    using Contracts.Globals;
-    using Contracts.Triggers;
-    using Microsoft.ServiceBus;
-    using Microsoft.ServiceBus.Messaging;
-    using System;
-
     /// <summary>
-    /// The azure topic trigger.
+    ///     The azure topic trigger.
     /// </summary>
     [TriggerContract("{D56A660E-2BBE-4705-BA2E-E89BBE0689DB}", "Azure Topic Trigger", "Azure Topic Trigger", false, true,
          false)]
     public class AzureTopicTrigger : ITriggerType
     {
         /// <summary>
-        /// Gets or sets the connection string.
+        ///     Gets or sets the connection string.
         /// </summary>
         [TriggerPropertyContract("ConnectionString", "Azure ConnectionString")]
         public string ConnectionString { get; set; }
 
         /// <summary>
-        /// Gets or sets the topic path.
+        ///     Gets or sets the topic path.
         /// </summary>
         [TriggerPropertyContract("TopicPath", "TopicPath")]
         public string TopicPath { get; set; }
 
         /// <summary>
-        /// Gets or sets the messages filter.
+        ///     Gets or sets the messages filter.
         /// </summary>
         [TriggerPropertyContract("MessagesFilter", "MessagesFilter")]
         public string MessagesFilter { get; set; }
 
         /// <summary>
-        /// Gets or sets the subscription name.
+        ///     Gets or sets the subscription name.
         /// </summary>
         [TriggerPropertyContract("SubscriptionName", "SubscriptionName")]
         public string SubscriptionName { get; set; }
 
+        public string SupportBag { get; set; }
+
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
 
-        public string SupportBag { get; set; }
-
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action trigger.
+        ///     Gets or sets the set event action trigger.
         /// </summary>
         public ActionTrigger ActionTrigger { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionTrigger">
-        /// The set event action trigger.
+        ///     The set event action trigger.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [TriggerActionContract("{EB36D04B-7491-46EF-B27F-6F07E2F31D48}", "Main action", "Main action description")]
         public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)

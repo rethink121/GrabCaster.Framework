@@ -1,6 +1,6 @@
 ﻿// EventConfiguration.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,14 +25,18 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using GrabCaster.Framework.Contracts.Bubbling;
+using GrabCaster.Framework.Contracts.Channels;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Configuration
 {
-    using Bubbling;
-    using Channels;
-    using System;
-    using System.Collections.Generic;
-    using System.Runtime.Serialization;
-
     /// <summary>
     ///     Trigger event File
     /// </summary>
@@ -41,33 +45,33 @@ namespace GrabCaster.Framework.Contracts.Configuration
     public class EventConfiguration
     {
         /// <summary>
-        /// Gets or sets the event.
+        ///     Gets or sets the event.
         /// </summary>
         [DataMember]
         public Event Event { get; set; }
     }
 
     /// <summary>
-    /// The event.
+    ///     The event.
     /// </summary>
     [DataContract]
     [Serializable]
     public class Event
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Event"/> class.
+        ///     Initializes a new instance of the <see cref="Event" /> class.
         /// </summary>
         /// <param name="idComponent">
-        /// The id component.
+        ///     The id component.
         /// </param>
         /// <param name="idConfiguration">
-        /// The id configuration.
+        ///     The id configuration.
         /// </param>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="description">
-        /// The description.
+        ///     The description.
         /// </param>
         public Event(string idComponent, string idConfiguration, string name, string description)
         {
@@ -78,74 +82,74 @@ namespace GrabCaster.Framework.Contracts.Configuration
         }
 
         /// <summary>
-        /// Gets or sets the id component.
+        ///     Gets or sets the id component.
         /// </summary>
         [DataMember]
         public string IdComponent { get; set; }
 
         /// <summary>
-        /// Gets or sets the id configuration.
+        ///     Gets or sets the id configuration.
         /// </summary>
         [DataMember]
         public string IdConfiguration { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        ///     Gets or sets the name.
         /// </summary>
         [DataMember]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         [DataMember]
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the id chains.
+        ///     Gets or sets the id chains.
         /// </summary>
         [DataMember]
         public List<Chain> Chains { get; set; }
 
         /// <summary>
-        /// Gets or sets the event properties.
+        ///     Gets or sets the event properties.
         /// </summary>
         [DataMember]
         public List<EventProperty> EventProperties { get; set; }
 
         /// <summary>
-        /// Cache in dictionary the event properties.
+        ///     Cache in dictionary the event properties.
         /// </summary>
         public Dictionary<string, EventProperty> CacheEventProperties { get; set; }
 
         /// <summary>
-        /// Gets or sets the channels.
+        ///     Gets or sets the channels.
         /// </summary>
         [DataMember]
         public List<Channel> Channels { get; set; }
 
         /// <summary>
-        /// Gets or sets the correlation.
+        ///     Gets or sets the correlation.
         /// </summary>
         [DataMember]
         public Correlation Correlation { get; set; }
     }
 
     /// <summary>
-    /// The event property.
+    ///     The event property.
     /// </summary>
     [DataContract]
     [Serializable]
     public class EventProperty
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventProperty"/> class.
+        ///     Initializes a new instance of the <see cref="EventProperty" /> class.
         /// </summary>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="value">
-        /// The value.
+        ///     The value.
         /// </param>
         public EventProperty(string name, object value)
         {
@@ -160,27 +164,27 @@ namespace GrabCaster.Framework.Contracts.Configuration
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the value.
+        ///     Gets or sets the value.
         /// </summary>
         [DataMember]
         public object Value { get; set; }
     }
 
     /// <summary>
-    /// The event action.
+    ///     The event action.
     /// </summary>
     [DataContract]
     [Serializable]
     public class EventAction
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventAction"/> class.
+        ///     Initializes a new instance of the <see cref="EventAction" /> class.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        ///     The id.
         /// </param>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         public EventAction(string id, string name)
         {

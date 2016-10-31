@@ -1,6 +1,6 @@
 ﻿// Form1.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,24 +25,27 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using GrabCaster.Framework.Base;
+#region Usings
+
 using System;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Xsl;
+using GrabCaster.Framework.Base;
 
+#endregion
 
 namespace GrabCaster.BizTalk.Extensibility.Laboratory
 {
     public partial class Form1 : Form
     {
-        public string prpassemblyfile;
         public string prpassdirectory;
-        public string prppipetype;
-        public string prpinputinstance;
+        public string prpassemblyfile;
         public string prpfilename;
+        public string prpinputinstance;
+        public string prppipetype;
 
         public Form1()
         {

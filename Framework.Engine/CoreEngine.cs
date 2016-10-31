@@ -1,6 +1,6 @@
 ﻿// CoreEngine.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,20 +25,23 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Diagnostics;
+using System.Reflection;
+using System.Text;
+using System.Threading;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Engine.OffRamp;
+using GrabCaster.Framework.Engine.OnRamp;
+using GrabCaster.Framework.Log;
+
+#endregion
 
 namespace GrabCaster.Framework.Engine
 {
-    using Base;
-    using Contracts.Globals;
-    using Log;
-    using OffRamp;
-    using OnRamp;
-    using System;
-    using System.Diagnostics;
-    using System.Reflection;
-    using System.Text;
-    using System.Threading;
-
     /// <summary>
     ///     Primary engine, it start all, this is the first point
     /// </summary>

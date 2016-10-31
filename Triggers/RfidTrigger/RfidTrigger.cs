@@ -1,6 +1,6 @@
 ﻿// RfidTrigger.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,23 +25,26 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
+using System.Threading;
 using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Triggers;
+using Newtonsoft.Json;
+using Phidgets;
+using Phidgets.Events;
+
+#endregion
 
 namespace GrabCaster.Framework.RfidTrigger
 {
-    using Contracts.Attributes;
-    using Contracts.Globals;
-    using Contracts.Triggers;
-    using Newtonsoft.Json;
-    using Phidgets;
-    using Phidgets.Events;
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.Serialization;
-    using System.Threading;
-
     /// <summary>
-    /// The RIFD trigger.
+    ///     The RIFD trigger.
     /// </summary>
     [TriggerContract("{782B745E-1F6F-440A-A209-E250A1EA5013}", "RFID Trigger", "Read Rfid Tag from a Pidget device",
          false, true, false)]
@@ -50,39 +53,39 @@ namespace GrabCaster.Framework.RfidTrigger
     public class RfidTrigger : ITriggerType
     {
         /// <summary>
-        /// Gets or sets the event message.
+        ///     Gets or sets the event message.
         /// </summary>
         public string EventMessage { get; set; }
+
+        public string SupportBag { get; set; }
 
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
 
-        public string SupportBag { get; set; }
-
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action trigger.
+        ///     Gets or sets the set event action trigger.
         /// </summary>
         public ActionTrigger ActionTrigger { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionTrigger">
-        /// The set event action trigger.
+        ///     The set event action trigger.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [TriggerActionContract("{76438098-8811-4F14-825A-F0B8AB932465}", "Main action", "Main action description")]
         public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)
@@ -121,13 +124,13 @@ namespace GrabCaster.Framework.RfidTrigger
         }
 
         /// <summary>
-        /// Attach event handler. display the serial number of the attached RFID phidget
+        ///     Attach event handler. display the serial number of the attached RFID phidget
         /// </summary>
         /// <param name="sender">
-        /// The sender.
+        ///     The sender.
         /// </param>
         /// <param name="e">
-        /// The e.
+        ///     The e.
         /// </param>
         private static void RfidAttach(object sender, AttachEventArgs e)
         {
@@ -135,13 +138,13 @@ namespace GrabCaster.Framework.RfidTrigger
         }
 
         /// <summary>
-        /// Detach event handler. display the serial number of the detached RFID phidget
+        ///     Detach event handler. display the serial number of the detached RFID phidget
         /// </summary>
         /// <param name="sender">
-        /// The sender.
+        ///     The sender.
         /// </param>
         /// <param name="e">
-        /// The e.
+        ///     The e.
         /// </param>
         private static void RfidDetach(object sender, DetachEventArgs e)
         {
@@ -149,13 +152,13 @@ namespace GrabCaster.Framework.RfidTrigger
         }
 
         /// <summary>
-        /// Print the tag code for the tag that was just lost
+        ///     Print the tag code for the tag that was just lost
         /// </summary>
         /// <param name="sender">
-        /// The sender.
+        ///     The sender.
         /// </param>
         /// <param name="e">
-        /// The e.
+        ///     The e.
         /// </param>
         private static void RfidTagLost(object sender, TagEventArgs e)
         {
@@ -163,13 +166,13 @@ namespace GrabCaster.Framework.RfidTrigger
         }
 
         /// <summary>
-        /// Error event handler. display the error description string
+        ///     Error event handler. display the error description string
         /// </summary>
         /// <param name="sender">
-        /// The sender.
+        ///     The sender.
         /// </param>
         /// <param name="e">
-        /// The e.
+        ///     The e.
         /// </param>
         private void RfidError(object sender, ErrorEventArgs e)
         {
@@ -178,13 +181,13 @@ namespace GrabCaster.Framework.RfidTrigger
         }
 
         /// <summary>
-        /// Print the tag code of the scanned tag
+        ///     Print the tag code of the scanned tag
         /// </summary>
         /// <param name="sender">
-        /// The sender.
+        ///     The sender.
         /// </param>
         /// <param name="e">
-        /// The e.
+        ///     The e.
         /// </param>
         private void RfidTag(object sender, TagEventArgs e)
         {
@@ -198,7 +201,7 @@ namespace GrabCaster.Framework.RfidTrigger
     }
 
     /// <summary>
-    /// The rfid tag.
+    ///     The rfid tag.
     /// </summary>
     [DataContract]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
@@ -206,13 +209,13 @@ namespace GrabCaster.Framework.RfidTrigger
     public class RfidTag
     {
         /// <summary>
-        /// Gets or sets the tag id.
+        ///     Gets or sets the tag id.
         /// </summary>
         [DataMember]
         public string TagId { get; set; }
 
         /// <summary>
-        /// Gets or sets the bank id.
+        ///     Gets or sets the bank id.
         /// </summary>
         [DataMember]
         public string BankId { get; set; }

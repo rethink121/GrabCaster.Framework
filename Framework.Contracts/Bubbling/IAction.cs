@@ -1,6 +1,6 @@
 ﻿// IAction.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,11 +25,15 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System.Collections.Generic;
+using System.Reflection;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Bubbling
 {
-    using System.Collections.Generic;
-    using System.Reflection;
-
     /// <summary>
     ///     The Lower receive layer, this receive the raw data
     /// </summary>
@@ -37,7 +41,7 @@ namespace GrabCaster.Framework.Contracts.Bubbling
     {
         /// <summary>
         ///     Unique Action ID
-        /// </summary>   
+        /// </summary>
         string Id { get; set; }
 
         /// <summary>
@@ -51,7 +55,7 @@ namespace GrabCaster.Framework.Contracts.Bubbling
         MethodInfo AssemblyMethodInfo { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         string Description { get; set; }
 

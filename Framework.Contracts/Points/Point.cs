@@ -1,6 +1,6 @@
 ﻿// Point.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,29 +25,33 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Runtime.Serialization;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Points
 {
-    using System;
-    using System.Runtime.Serialization;
-
     /// <summary>
-    /// The point.
+    ///     The point.
     /// </summary>
     [DataContract]
     [Serializable]
     public class Point : IPoint
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Point"/> class.
+        ///     Initializes a new instance of the <see cref="Point" /> class.
         /// </summary>
         /// <param name="pointId">
-        /// The point id.
+        ///     The point id.
         /// </param>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="description">
-        /// The description.
+        ///     The description.
         /// </param>
         public Point(string pointId, string name, string description)
         {
@@ -57,19 +61,19 @@ namespace GrabCaster.Framework.Contracts.Points
         }
 
         /// <summary>
-        /// Gets or sets the point id.
+        ///     Gets or sets the point id.
         /// </summary>
         [DataMember]
         public string PointId { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        ///     Gets or sets the name.
         /// </summary>
         [DataMember]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         [DataMember]
         public string Description { get; set; }

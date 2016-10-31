@@ -1,6 +1,6 @@
 ﻿// Channel.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,34 +25,38 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using GrabCaster.Framework.Contracts.Points;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Channels
 {
-    using Points;
-    using System;
-    using System.Collections.Generic;
-    using System.Runtime.Serialization;
-
     /// <summary>
-    /// The channel.
+    ///     The channel.
     /// </summary>
     [DataContract]
     [Serializable]
     public class Channel : IChannel
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Channel"/> class.
+        ///     Initializes a new instance of the <see cref="Channel" /> class.
         /// </summary>
         /// <param name="channelId">
-        /// The channel id.
+        ///     The channel id.
         /// </param>
         /// <param name="channelName">
-        /// The channel name.
+        ///     The channel name.
         /// </param>
         /// <param name="channelDescription">
-        /// The channel description.
+        ///     The channel description.
         /// </param>
         /// <param name="points">
-        /// The points.
+        ///     The points.
         /// </param>
         public Channel(string channelId, string channelName, string channelDescription, List<Point> points)
         {
@@ -63,25 +67,25 @@ namespace GrabCaster.Framework.Contracts.Channels
         }
 
         /// <summary>
-        /// Gets or sets the channel id.
+        ///     Gets or sets the channel id.
         /// </summary>
         [DataMember]
         public string ChannelId { get; set; }
 
         /// <summary>
-        /// Gets or sets the channel name.
+        ///     Gets or sets the channel name.
         /// </summary>
         [DataMember]
         public string ChannelName { get; set; }
 
         /// <summary>
-        /// Gets or sets the channel description.
+        ///     Gets or sets the channel description.
         /// </summary>
         [DataMember]
         public string ChannelDescription { get; set; }
 
         /// <summary>
-        /// Gets or sets the points.
+        ///     Gets or sets the points.
         /// </summary>
         [DataMember]
         public List<Point> Points { get; set; }

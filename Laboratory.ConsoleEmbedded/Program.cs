@@ -1,6 +1,6 @@
 ﻿// Program.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,26 +25,29 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using GrabCaster.Framework.Base;
-using GrabCaster.Framework.Contracts;
-using GrabCaster.Framework.Contracts.Bubbling;
+#region Usings
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts;
+using GrabCaster.Framework.Contracts.Bubbling;
+using GrabCaster.Framework.Contracts.Events;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Library;
+
+#endregion
 
 namespace GrabCaster.Laboratory.ConsoleEmbedded
 {
-    using Framework.Contracts.Events;
-    using Framework.Contracts.Globals;
-    using Framework.Library;
-
     class Program
     {
         /// <summary>
-        /// The main.
+        ///     The main.
         /// </summary>
         /// <param name="args">
-        /// The args.
+        ///     The args.
         /// </param>
         static void Main(string[] args)
         {
@@ -172,13 +175,13 @@ namespace GrabCaster.Laboratory.ConsoleEmbedded
         }
 
         /// <summary>
-        /// The event received from embedded.
+        ///     The event received from embedded.
         /// </summary>
         /// <param name="eventType">
-        /// The event type.
+        ///     The event type.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         private static void EventReceivedFromEmbedded(IEventType eventType, ActionContext context)
         {

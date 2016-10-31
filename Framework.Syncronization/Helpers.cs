@@ -1,6 +1,6 @@
 ﻿// Helpers.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,18 +25,21 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-using GrabCaster.Framework.Base;
-using GrabCaster.Framework.Log;
+#region Usings
+
 using System;
 using System.Reflection;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Log;
+using Microsoft.Synchronization;
+using Microsoft.Synchronization.Files;
+
+#endregion
 
 namespace GrabCaster.Framework.Syncronization
 {
-    using Microsoft.Synchronization;
-    using Microsoft.Synchronization.Files;
-
     /// <summary>
-    /// Syncronozation Class
+    ///     Syncronozation Class
     /// </summary>
     public static class Helpers
     {
@@ -44,7 +47,7 @@ namespace GrabCaster.Framework.Syncronization
 
 
         /// <summary>
-        /// Syncronize 2 folders
+        ///     Syncronize 2 folders
         /// </summary>
         /// <param name="SourceFolder"></param>
         /// <param name="DestinationFolder"></param>

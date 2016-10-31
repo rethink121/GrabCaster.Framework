@@ -1,6 +1,6 @@
 ﻿// CSharpTrigger.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,80 +25,78 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Triggers;
+using Roslyn.Compilers;
+using Roslyn.Scripting.CSharp;
+
+#endregion
 
 namespace GrabCaster.Framework.CSharpTrigger
 {
-    using Contracts.Attributes;
-    using Contracts.Globals;
-    using Contracts.Triggers;
-    using Roslyn.Compilers;
-    using Roslyn.Scripting.CSharp;
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-
     /// <summary>
-    /// The c sharp trigger.
+    ///     The c sharp trigger.
     /// </summary>
     [TriggerContract("{928647A2-9BB3-4D9C-8C4D-C63181AC1686}", "CSharp Trigger",
          "Execute a trigger write in CSharp script", false, true, false)]
     public class CSharpTrigger : ITriggerType
     {
         /// <summary>
-        /// Gets or sets the script.
+        ///     Gets or sets the script.
         /// </summary>
         [TriggerPropertyContract("Script", "Script to execute")]
         public string Script { get; set; }
 
         /// <summary>
-        /// Gets or sets the script file.
+        ///     Gets or sets the script file.
         /// </summary>
         [TriggerPropertyContract("ScriptFile", "Script from file")]
         public string ScriptFile { get; set; }
 
         /// <summary>
-        /// Gets or sets the message properties.
+        ///     Gets or sets the message properties.
         /// </summary>
         [EventPropertyContract("MessageProperties", "MessageProperties")]
         public Dictionary<string, object> MessageProperties { get; set; }
 
-        [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
-        public bool Syncronous { get; set; }
-
         public AutoResetEvent WaitHandle { get; set; }
-
-        public void SyncAsyncActionReceived(byte[] content)
-        {
-            throw new NotImplementedException();
-        }
 
         public string SupportBag { get; set; }
 
+        [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
+        public bool Syncronous { get; set; }
+
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action trigger.
+        ///     Gets or sets the set event action trigger.
         /// </summary>
         public ActionTrigger ActionTrigger { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [TriggerPropertyContract("DataContext", "Trigger Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionTrigger">
-        /// The set event action trigger.
+        ///     The set event action trigger.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [TriggerActionContract("{00437935-DB38-426B-BF4D-A101BD64E96F}", "Main action", "Main action description")]
         public byte[] Execute(ActionTrigger actionTrigger, ActionContext context)
@@ -135,6 +133,11 @@ namespace GrabCaster.Framework.CSharpTrigger
                 // ignored
                 return null;
             }
+        }
+
+        public void SyncAsyncActionReceived(byte[] content)
+        {
+            throw new NotImplementedException();
         }
     }
 }

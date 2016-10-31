@@ -1,6 +1,6 @@
 ﻿// IEvent.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,39 +25,43 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using GrabCaster.Framework.Contracts.Globals;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Events
 {
-    using Globals;
-
     /// <summary>
-    /// Interface for all event action classes.
+    ///     Interface for all event action classes.
     /// </summary>
     public interface IEventType
     {
         /// <summary>
-        /// Gets or sets the internal context passed to the event (some other event to execute) to use in delegates events.
+        ///     Gets or sets the internal context passed to the event (some other event to execute) to use in delegates events.
         /// </summary>
         /// <returns>The internal context passed to the event.</returns>
         ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the internal delegate to use in delegates events.
+        ///     Gets or sets the internal delegate to use in delegates events.
         /// </summary>
         /// <value>
-        /// The set event action event.
+        ///     The set event action event.
         /// </value>
         ActionEvent ActionEvent { get; set; }
 
         /// <summary>
-        /// Gets or sets the main default data.
+        ///     Gets or sets the main default data.
         /// </summary>
         /// <value>
-        /// The main default data.
+        ///     The main default data.
         /// </value>
         byte[] DataContext { get; set; }
 
         /// <summary>
-        /// Performs the execution of the event.
+        ///     Performs the execution of the event.
         /// </summary>
         /// <param name="actionEvent">The The internal delegate to use</param>
         /// <param name="context">The internal context passed to the event.</param>

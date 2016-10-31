@@ -1,6 +1,6 @@
 ﻿// EventTraceWatcher.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,133 +25,137 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
+using System.Threading;
+using Core.Eventing.Interop;
+
+#endregion
+
 namespace GrabCaster.Framework.ETW
 {
-    using Core.Eventing.Interop;
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.InteropServices;
-    using System.Threading;
-
     /// <summary>
-    /// The trace level.
+    ///     The trace level.
     /// </summary>
     public enum TraceLevel
     {
         /// <summary>
-        /// The critical.
+        ///     The critical.
         /// </summary>
         Critical = 1,
 
         /// <summary>
-        /// The error.
+        ///     The error.
         /// </summary>
         Error = 2,
 
         /// <summary>
-        /// The warning.
+        ///     The warning.
         /// </summary>
         Warning = 3,
 
         /// <summary>
-        /// The information.
+        ///     The information.
         /// </summary>
         Information = 4,
 
         /// <summary>
-        /// The verbose.
+        ///     The verbose.
         /// </summary>
         Verbose = 5
     }
 
     /// <summary>
-    /// The event trace watcher.
+    ///     The event trace watcher.
     /// </summary>
     [SuppressMessage("StyleCop.CSharp.MaintainabilityRules", "SA1404:CodeAnalysisSuppressionMustHaveJustification",
          Justification = "Reviewed. Suppression is OK here.")]
     public sealed class EventTraceWatcher : IDisposable
     {
         /// <summary>
-        /// The logger name.
+        ///     The logger name.
         /// </summary>
         private readonly string _loggerName;
 
         /// <summary>
-        /// The async result.
+        ///     The async result.
         /// </summary>
         private IAsyncResult _asyncResult;
 
         /// <summary>
-        /// The enabled.
+        ///     The enabled.
         /// </summary>
         private bool _enabled;
 
         /// <summary>
-        /// The event provider id.
+        ///     The event provider id.
         /// </summary>
         private Guid _eventProviderId;
 
         /// <summary>
-        /// The event trace properties.
+        ///     The event trace properties.
         /// </summary>
         private EventTraceProperties _eventTraceProperties;
 
         /// <summary>
-        /// The log file.
+        ///     The log file.
         /// </summary>
         private EventTraceLogfile _logFile;
 
         /// <summary>
-        /// The process events delgate.
+        ///     The process events delgate.
         /// </summary>
         private ProcessTraceDelegate _processEventsDelgate;
 
         /// <summary>
-        /// The session handle.
+        ///     The session handle.
         /// </summary>
         private SessionSafeHandle _sessionHandle;
 
         /// <summary>
-        /// The trace event info cache.
+        ///     The trace event info cache.
         /// </summary>
         private SortedList<byte, TraceEventInfoWrapper> _traceEventInfoCache =
             new SortedList<byte /*opcode*/, TraceEventInfoWrapper>();
 
         /// <summary>
-        /// The trace handle.
+        ///     The trace handle.
         /// </summary>
         private TraceSafeHandle _traceHandle;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventTraceWatcher"/> class.
+        ///     Initializes a new instance of the <see cref="EventTraceWatcher" /> class.
         /// </summary>
         /// <param name="loggerName">
-        /// The logger name.
+        ///     The logger name.
         /// </param>
         /// <param name="eventProviderId">
-        /// The event provider id.
+        ///     The event provider id.
         /// </param>
         public EventTraceWatcher(string loggerName, Guid eventProviderId)
         {
-            this._loggerName = loggerName;
-            this._eventProviderId = eventProviderId;
+            _loggerName = loggerName;
+            _eventProviderId = eventProviderId;
         }
 
         /// <summary>
-        /// Gets or sets the match any keyword.
+        ///     Gets or sets the match any keyword.
         /// </summary>
         public ulong MatchAnyKeyword { get; set; }
 
         /// <summary>
-        /// Gets or sets the level.
+        ///     Gets or sets the level.
         /// </summary>
         public TraceLevel Level { get; set; }
 
         /// <summary>
-        /// The dispose.
+        ///     The dispose.
         /// </summary>
         public void Dispose()
         {
@@ -160,7 +164,7 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// Finalizes an instance of the <see cref="EventTraceWatcher"/> class. 
+        ///     Finalizes an instance of the <see cref="EventTraceWatcher" /> class.
         /// </summary>
         ~EventTraceWatcher()
         {
@@ -168,12 +172,12 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// The event arrived.
+        ///     The event arrived.
         /// </summary>
         public event EventHandler<EventArrivedEventArgs> EventArrived;
 
         /// <summary>
-        /// The cleanup.
+        ///     The cleanup.
         /// </summary>
         private void Cleanup()
         {
@@ -187,13 +191,13 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// The create event args from event record.
+        ///     The create event args from event record.
         /// </summary>
         /// <param name="eventRecord">
-        /// The event record.
+        ///     The event record.
         /// </param>
         /// <returns>
-        /// The <see cref="EventArrivedEventArgs"/>.
+        ///     The <see cref="EventArrivedEventArgs" />.
         /// </returns>
         private EventArrivedEventArgs CreateEventArgsFromEventRecord(EventRecord eventRecord)
         {
@@ -236,10 +240,10 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// The event record callback.
+        ///     The event record callback.
         /// </summary>
         /// <param name="eventRecord">
-        /// The event record.
+        ///     The event record.
         /// </param>
         private void EventRecordCallback([In] ref EventRecord eventRecord)
         {
@@ -252,10 +256,10 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// The load existing event trace properties.
+        ///     The load existing event trace properties.
         /// </summary>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         /// <exception cref="Win32Exception">
         /// </exception>
@@ -279,10 +283,10 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// The process trace in background.
+        ///     The process trace in background.
         /// </summary>
         /// <param name="traceInternalHandle">
-        /// The trace handle.
+        ///     The trace handle.
         /// </param>
         /// <exception cref="Win32Exception">
         /// </exception>
@@ -340,10 +344,10 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// The set enabled.
+        ///     The set enabled.
         /// </summary>
         /// <param name="value">
-        /// The value.
+        ///     The value.
         /// </param>
         private void SetEnabled(bool value)
         {
@@ -365,7 +369,7 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// The start.
+        ///     The start.
         /// </summary>
         public void Start()
         {
@@ -373,7 +377,7 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// The start tracing.
+        ///     The start tracing.
         /// </summary>
         /// <exception cref="Win32Exception">
         /// </exception>
@@ -475,7 +479,7 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// The stop.
+        ///     The stop.
         /// </summary>
         public void Stop()
         {
@@ -483,7 +487,7 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// The stop tracing.
+        ///     The stop tracing.
         /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         private void StopTracing()
@@ -509,23 +513,23 @@ namespace GrabCaster.Framework.ETW
         }
 
         /// <summary>
-        /// The process trace delegate.
+        ///     The process trace delegate.
         /// </summary>
         /// <param name="traceHandle">
-        /// The trace handle.
+        ///     The trace handle.
         /// </param>
         private delegate void ProcessTraceDelegate(TraceSafeHandle traceHandle);
 
         /// <summary>
-        /// The trace safe handle.
+        ///     The trace safe handle.
         /// </summary>
         private sealed class TraceSafeHandle : SafeHandle
         {
             /// <summary>
-            /// Initializes a new instance of the <see cref="TraceSafeHandle"/> class.
+            ///     Initializes a new instance of the <see cref="TraceSafeHandle" /> class.
             /// </summary>
             /// <param name="handle">
-            /// The handle.
+            ///     The handle.
             /// </param>
             [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
             public TraceSafeHandle(ulong handle)
@@ -535,7 +539,7 @@ namespace GrabCaster.Framework.ETW
             }
 
             /// <summary>
-            /// Gets a value indicating whether is invalid.
+            ///     Gets a value indicating whether is invalid.
             /// </summary>
             public override bool IsInvalid => UnsafeValue == 0;
 

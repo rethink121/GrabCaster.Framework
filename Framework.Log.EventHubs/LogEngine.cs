@@ -1,6 +1,6 @@
 ﻿// LogEngine.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,22 +25,26 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Log;
+
+#endregion
+
 namespace GrabCaster.Framework.Log.EventHubs
 {
-    using Contracts.Attributes;
-    using Contracts.Log;
-
     /// <summary>
-    /// The log engine.
+    ///     The log engine.
     /// </summary>
     [LogContract("AEC1AF21-2131-475D-AEFE-DDCA2D835466", "LogEngine", "Event Hubs Log System")]
     public class LogEngine : ILogEngine
     {
         /// <summary>
-        /// Initialize log.
+        ///     Initialize log.
         /// </summary>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public bool InitLog()
         {
@@ -48,13 +52,13 @@ namespace GrabCaster.Framework.Log.EventHubs
         }
 
         /// <summary>
-        /// The write log.
+        ///     The write log.
         /// </summary>
         /// <param name="logMessage">
-        /// The log message.
+        ///     The log message.
         /// </param>
         /// <returns>
-        /// The <see cref="bool"/>.
+        ///     The <see cref="bool" />.
         /// </returns>
         public bool WriteLog(LogMessage logMessage)
         {

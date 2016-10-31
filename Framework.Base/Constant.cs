@@ -1,6 +1,6 @@
 ﻿// Constant.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -28,12 +28,12 @@
 namespace GrabCaster.Framework.Base
 {
     /// <summary>
-    /// Holds the constants.
+    ///     Holds the constants.
     /// </summary>
     public static class Constant
     {
         /// <summary>
-        /// The ID for the high critical events (Engine).
+        ///     The ID for the high critical events (Engine).
         /// </summary>
         public const int LogLevelError = 1;
 
@@ -43,19 +43,19 @@ namespace GrabCaster.Framework.Base
 
 
         /// <summary>
-        /// The task category error.
+        ///     The task category error.
         /// </summary>
         public static string TaskCategoriesError { get; } = ConfigurationBag.EngineName;
 
         /// <summary>
-        /// The task category for console.
+        ///     The task category for console.
         /// </summary>
         public static string TaskCategoriesConsole { get; } = "Console";
 
         public static string EmbeddedEventId { get; } = "{A31209D7-C989-4E5D-93DA-BD341D843870}";
 
         /// <summary>
-        /// The task category for event hubs.
+        ///     The task category for event hubs.
         /// </summary>
         public static string TaskCategoriesEventHubs { get; } = "Event Hub";
     } // Constant

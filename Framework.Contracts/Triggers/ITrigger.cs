@@ -1,6 +1,6 @@
 ﻿// ITrigger.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,27 +25,31 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using GrabCaster.Framework.Contracts.Globals;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Triggers
 {
-    using Globals;
-
     /// <summary>
-    /// The TriggerType interface.
+    ///     The TriggerType interface.
     /// </summary>
     public interface ITriggerType
     {
         /// <summary>
-        /// Internal Trigger context.
+        ///     Internal Trigger context.
         /// </summary>
         ActionContext Context { get; set; }
 
         /// <summary>
-        /// internal delegate to use in delegates events
+        ///     internal delegate to use in delegates events
         /// </summary>
         ActionTrigger ActionTrigger { get; set; }
 
         /// <summary>
-        /// Identify if the trigger request must be syncronous or not
+        ///     Identify if the trigger request must be syncronous or not
         /// </summary>
         bool Syncronous { get; set; }
 
@@ -55,13 +59,13 @@ namespace GrabCaster.Framework.Contracts.Triggers
         byte[] DataContext { get; set; }
 
         /// <summary>
-        /// Main default method
+        ///     Main default method
         /// </summary>
         /// <param name="actionTrigger">
-        /// The set Event Action Trigger.
+        ///     The set Event Action Trigger.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         byte[] Execute(ActionTrigger actionTrigger, ActionContext context);
     }

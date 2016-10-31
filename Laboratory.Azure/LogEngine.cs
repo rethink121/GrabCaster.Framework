@@ -1,6 +1,6 @@
 ﻿// LogEngine.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,12 +25,15 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
 using System;
+using Microsoft.WindowsAzure.Storage.Table;
+
+#endregion
 
 namespace GrabCaster.Framework.Library.Azure
 {
-    using Microsoft.WindowsAzure.Storage.Table;
-
     public static class LogEngine
     {
         public static void TraceInformation(string message)

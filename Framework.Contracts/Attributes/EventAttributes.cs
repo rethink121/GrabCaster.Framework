@@ -1,6 +1,6 @@
 ﻿// EventAttributes.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,31 +25,35 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Attributes
 {
-    using System;
-
     /// <summary>
-    /// The event contract.
+    ///     The event contract.
     /// </summary>
     [Serializable]
     [AttributeUsage(AttributeTargets.Class)]
     public class EventContract : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventContract"/> class.
+        ///     Initializes a new instance of the <see cref="EventContract" /> class.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        ///     The id.
         /// </param>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="description">
-        /// The description.
+        ///     The description.
         /// </param>
         /// <param name="shared">
-        /// The shared.
+        ///     The shared.
         /// </param>
         public EventContract(string id, string name, string description, bool shared)
         {
@@ -70,30 +74,30 @@ namespace GrabCaster.Framework.Contracts.Attributes
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether shared.
+        ///     Gets or sets a value indicating whether shared.
         /// </summary>
         public bool Shared { get; set; }
     }
 
     /// <summary>
-    /// The event property contract.
+    ///     The event property contract.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
     public class EventPropertyContract : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventPropertyContract"/> class.
+        ///     Initializes a new instance of the <see cref="EventPropertyContract" /> class.
         /// </summary>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="description">
-        /// The description.
+        ///     The description.
         /// </param>
         public EventPropertyContract(string name, string description)
         {
@@ -107,28 +111,28 @@ namespace GrabCaster.Framework.Contracts.Attributes
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         public string Description { get; set; }
     }
 
     /// <summary>
-    /// The event action contract.
+    ///     The event action contract.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
     public class EventActionContract : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="EventActionContract"/> class.
+        ///     Initializes a new instance of the <see cref="EventActionContract" /> class.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        ///     The id.
         /// </param>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="description">
-        /// The description.
+        ///     The description.
         /// </param>
         public EventActionContract(string id, string name, string description)
         {
@@ -148,7 +152,7 @@ namespace GrabCaster.Framework.Contracts.Attributes
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the description.
+        ///     Gets or sets the description.
         /// </summary>
         public string Description { get; set; }
     }

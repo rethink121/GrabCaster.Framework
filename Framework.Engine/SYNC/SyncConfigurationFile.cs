@@ -1,6 +1,6 @@
 ﻿// SyncConfigurationFile.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,32 +25,36 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Runtime.Serialization;
+
+#endregion
+
 namespace GrabCaster.Framework.Engine
 {
-    using System;
-    using System.Runtime.Serialization;
-
     /// <summary>
-    /// The sync configuration file.
+    ///     The sync configuration file.
     /// </summary>
     [DataContract]
     [Serializable]
     public class SyncConfigurationFile
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SyncConfigurationFile"/> class.
+        ///     Initializes a new instance of the <see cref="SyncConfigurationFile" /> class.
         /// </summary>
         /// <param name="fileType">
-        /// The file type.
+        ///     The file type.
         /// </param>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="fileContent">
-        /// The file content.
+        ///     The file content.
         /// </param>
         /// <param name="channelId">
-        /// The channel id.
+        ///     The channel id.
         /// </param>
         public SyncConfigurationFile(
             string fileType,
@@ -65,25 +69,25 @@ namespace GrabCaster.Framework.Engine
         }
 
         /// <summary>
-        /// Gets or sets the file type.
+        ///     Gets or sets the file type.
         /// </summary>
         [DataMember]
         public string FileType { get; set; }
 
         /// <summary>
-        /// Gets or sets the name.
+        ///     Gets or sets the name.
         /// </summary>
         [DataMember]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the file content.
+        ///     Gets or sets the file content.
         /// </summary>
         [DataMember]
         public byte[] FileContent { get; set; }
 
         /// <summary>
-        /// Gets or sets the channel id.
+        ///     Gets or sets the channel id.
         /// </summary>
         [DataMember]
         public string ChannelId { get; set; }

@@ -1,6 +1,6 @@
 ﻿// Parameter.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,11 +25,15 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Runtime.Serialization;
+
+#endregion
+
 namespace GrabCaster.Framework.Contracts.Bubbling
 {
-    using System;
-    using System.Runtime.Serialization;
-
     /// <summary>
     ///     Action parameter
     /// </summary>
@@ -38,16 +42,16 @@ namespace GrabCaster.Framework.Contracts.Bubbling
     public class Parameter : IParameter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Parameter"/> class.
+        ///     Initializes a new instance of the <see cref="Parameter" /> class.
         /// </summary>
         /// <param name="name">
-        /// The name.
+        ///     The name.
         /// </param>
         /// <param name="type">
-        /// The type.
+        ///     The type.
         /// </param>
         /// <param name="value">
-        /// The value.
+        ///     The value.
         /// </param>
         public Parameter(string name, Type type, object value)
         {

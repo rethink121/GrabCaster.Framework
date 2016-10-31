@@ -1,6 +1,6 @@
 ﻿// IRESTEventsEngine.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,29 +25,33 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System.IO;
+using System.ServiceModel;
+using System.ServiceModel.Web;
+
+#endregion
+
 namespace GrabCaster.Framework.Engine
 {
-    using System.IO;
-    using System.ServiceModel;
-    using System.ServiceModel.Web;
-
     /// <summary>
-    /// The RestEventsEngine interface.
+    ///     The RestEventsEngine interface.
     /// </summary>
     [ServiceContract]
     public interface IRestEventsEngine
     {
         /// <summary>
-        /// The sync send bubbling configuration.
+        ///     The sync send bubbling configuration.
         /// </summary>
         /// <param name="channelId">
-        /// The channel id.
+        ///     The channel id.
         /// </param>
         /// <param name="pointId">
-        /// The point id.
+        ///     The point id.
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         [OperationContract]
         [WebGet]
@@ -66,35 +70,35 @@ namespace GrabCaster.Framework.Engine
         string Sync();
 
         /// <summary>
-        /// The configuration.
+        ///     The configuration.
         /// </summary>
         /// <returns>
-        /// The <see cref="Stream"/>.
+        ///     The <see cref="Stream" />.
         /// </returns>
         [OperationContract]
         [WebGet]
         Stream Configuration();
 
         /// <summary>
-        /// The execute trigger.
+        ///     The execute trigger.
         /// </summary>
         /// <param name="triggerId">
-        /// The trigger id.
+        ///     The trigger id.
         /// </param>
         /// <param name="configurationId"></param>
         /// <param name="value"></param>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         [OperationContract]
         [WebGet]
         string ExecuteTrigger(string configurationId, string triggerId, string value);
 
         /// <summary>
-        /// The refresh bubbling setting.
+        ///     The refresh bubbling setting.
         /// </summary>
         /// <returns>
-        /// The <see cref="string"/>.
+        ///     The <see cref="string" />.
         /// </returns>
         [OperationContract]
         [WebGet]

@@ -1,6 +1,6 @@
 ﻿// EtwTrigger.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,21 +25,25 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading;
+using System.Threading.Tasks;
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Contracts.Triggers;
+using Timer = System.Timers.Timer;
+
+#endregion
+
 namespace GrabCaster.Framework.ETW
 {
-    using Contracts.Attributes;
-    using Contracts.Globals;
-    using Contracts.Triggers;
-    using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Timer = System.Timers.Timer;
-
     /// <summary>
-    /// The etw trigger.
+    ///     The etw trigger.
     /// </summary>
     [TriggerContract("{753B071D-FD3D-443F-8368-0727CA8BE84E}", "ETW Trigger", "Intercept ETW Message", false, true,
          false)]
@@ -48,17 +52,18 @@ namespace GrabCaster.Framework.ETW
     public class EtwTrigger : ITriggerType
     {
         /// <summary>
-        /// The lock slim eh queue.
+        ///     The lock slim eh queue.
         /// </summary>
         public static LockSlimEhQueue<byte[]> LockSlimEhQueue { get; } = null;
 
         [TriggerPropertyContract("EtwProvider", "Event Source to monitor")]
         public string EtwProvider { get; set; }
 
+        public string SupportBag { get; set; }
+
         [TriggerPropertyContract("Syncronous", "Trigger Syncronous")]
         public bool Syncronous { get; set; }
 
-        public string SupportBag { get; set; }
         public ActionContext Context { get; set; }
 
         public ActionTrigger ActionTrigger { get; set; }
@@ -104,22 +109,21 @@ namespace GrabCaster.Framework.ETW
     public class LockSlimEhQueue<T> : ConcurrentQueue<T>
         where T : class
     {
+        protected ActionContext ActionContext;
+
+        //EH
+        protected ActionTrigger ActionTrigger;
         protected int CaptureLimit;
 
         protected EtwTrigger EtwTrigger;
 
-        protected ActionContext ActionContext;
+        public Timer InternalTimer;
 
         protected ReaderWriterLockSlim Locker;
 
         protected int OnPublishExecuted;
 
-        //EH
-        protected ActionTrigger ActionTrigger;
-
         protected int TimeLimit;
-
-        public Timer InternalTimer;
 
         public LockSlimEhQueue(
             int capLimit,

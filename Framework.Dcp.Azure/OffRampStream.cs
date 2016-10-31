@@ -1,6 +1,6 @@
 ﻿// OffRampStream.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,19 +25,22 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Reflection;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Contracts.Attributes;
 using GrabCaster.Framework.Contracts.Bubbling;
+using GrabCaster.Framework.Contracts.Messaging;
+using GrabCaster.Framework.Log;
+using Microsoft.ServiceBus;
+using Microsoft.ServiceBus.Messaging;
+
+#endregion
 
 namespace GrabCaster.Framework.Dcp.Azure
 {
-    using Base;
-    using Contracts.Attributes;
-    using Contracts.Messaging;
-    using Log;
-    using Microsoft.ServiceBus;
-    using Microsoft.ServiceBus.Messaging;
-    using System;
-    using System.Reflection;
-
     /// <summary>
     ///     Send messages to EH
     /// </summary>

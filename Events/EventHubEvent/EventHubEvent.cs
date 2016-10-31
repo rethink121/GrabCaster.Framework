@@ -1,6 +1,6 @@
 ﻿// EventHubEvent.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,57 +25,61 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using GrabCaster.Framework.Contracts.Attributes;
+using GrabCaster.Framework.Contracts.Events;
+using GrabCaster.Framework.Contracts.Globals;
+using Microsoft.ServiceBus;
+using Microsoft.ServiceBus.Messaging;
+
+#endregion
+
 namespace GrabCaster.Framework.EventHubEvent
 {
-    using Contracts.Attributes;
-    using Contracts.Events;
-    using Contracts.Globals;
-    using Microsoft.ServiceBus;
-    using Microsoft.ServiceBus.Messaging;
-
     /// <summary>
-    /// The event hub event.
+    ///     The event hub event.
     /// </summary>
     [EventContract("{F249290E-0231-44A9-A348-1CC7FCC33C7F}", "Event Hub Event", "Send a message to Azure Event Hub.",
          true)]
     public class EventHubEvent : IEventType
     {
         /// <summary>
-        /// Gets or sets the event hub name.
+        ///     Gets or sets the event hub name.
         /// </summary>
         [EventPropertyContract("EventHubName", "EventHubName")]
         public string EventHubName { get; set; }
 
         /// <summary>
-        /// Gets or sets the connection string.
+        ///     Gets or sets the connection string.
         /// </summary>
         [EventPropertyContract("ConnectionString", "Event Hub connectionString")]
         public string ConnectionString { get; set; }
 
         /// <summary>
-        /// Gets or sets the context.
+        ///     Gets or sets the context.
         /// </summary>
         public ActionContext Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the set event action event.
+        ///     Gets or sets the set event action event.
         /// </summary>
         public ActionEvent ActionEvent { get; set; }
 
         /// <summary>
-        /// Gets or sets the data context.
+        ///     Gets or sets the data context.
         /// </summary>
         [EventPropertyContract("DataContext", "Event Default Main Data")]
         public byte[] DataContext { get; set; }
 
         /// <summary>
-        /// The execute.
+        ///     The execute.
         /// </summary>
         /// <param name="actionEvent">
-        /// The set event action event.
+        ///     The set event action event.
         /// </param>
         /// <param name="context">
-        /// The context.
+        ///     The context.
         /// </param>
         [EventActionContract("{FA452E1A-95E9-4076-A1EE-1B41E9561824}", "Main action", "Main action description")]
         public byte[] Execute(ActionEvent actionEvent, ActionContext context)
@@ -101,33 +105,33 @@ namespace GrabCaster.Framework.EventHubEvent
     }
 
     /// <summary>
-    /// The internal event up stream.
+    ///     The internal event up stream.
     /// </summary>
     internal static class InternalEventUpStream
     {
         /// <summary>
-        /// The builder.
+        ///     The builder.
         /// </summary>
         private static ServiceBusConnectionStringBuilder builder;
 
         /// <summary>
-        /// The event hub client.
+        ///     The event hub client.
         /// </summary>
         private static EventHubClient eventHubClient;
 
         /// <summary>
-        /// The instance loaded.
+        ///     The instance loaded.
         /// </summary>
         public static bool InstanceLoaded { get; set; }
 
         /// <summary>
-        /// The create event up stream.
+        ///     The create event up stream.
         /// </summary>
         /// <param name="connectionString">
-        /// The connection string.
+        ///     The connection string.
         /// </param>
         /// <param name="eventHubName">
-        /// The event hub name.
+        ///     The event hub name.
         /// </param>
         public static void CreateEventUpStream(string connectionString, string eventHubName)
         {
@@ -143,10 +147,10 @@ namespace GrabCaster.Framework.EventHubEvent
         }
 
         /// <summary>
-        /// The send message.
+        ///     The send message.
         /// </summary>
         /// <param name="message">
-        /// The message.
+        ///     The message.
         /// </param>
         public static void SendMessage(byte[] message)
         {

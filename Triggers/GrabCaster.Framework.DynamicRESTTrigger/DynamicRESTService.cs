@@ -1,6 +1,6 @@
 ﻿// DynamicRESTService.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -24,6 +24,9 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
+
+#region Usings
+
 using System;
 using System.ServiceModel;
 using System.ServiceModel.Description;
@@ -32,14 +35,16 @@ using System.Threading;
 using GrabCaster.Framework.Base;
 using GrabCaster.Framework.Contracts.Globals;
 
+#endregion
+
 namespace GrabCaster.Framework.DynamicRESTTrigger
 {
-    public class DynamicRestService:IDynamicRest
+    public class DynamicRestService : IDynamicRest
     {
         private static Func<ActionTrigger, ActionContext> _getDataTrigger;
 
         static WebServiceHost engineHost;
-        
+
         public string GetValue(string fromValue)
         {
             //execute the trigger event
@@ -48,7 +53,7 @@ namespace GrabCaster.Framework.DynamicRESTTrigger
             return null;
         }
 
-        public static bool StartService(string webApiEndPoint,Func<ActionTrigger, ActionContext> getDataTrigger)
+        public static bool StartService(string webApiEndPoint, Func<ActionTrigger, ActionContext> getDataTrigger)
         {
             _getDataTrigger = getDataTrigger;
 
@@ -59,7 +64,6 @@ namespace GrabCaster.Framework.DynamicRESTTrigger
             engineHost.Open();
             Thread.Sleep(Timeout.Infinite);
             return true;
-
         }
     }
 }

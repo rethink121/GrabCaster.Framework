@@ -1,6 +1,6 @@
 ﻿// BlobDevicePersistentProvider.cs
 // 
-// Copyright (c) 2014-2016, Nino Crudle <nino dot crudele at live dot com>
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -25,16 +25,20 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
+#region Usings
+
+using System;
+using System.Reflection;
+using GrabCaster.Framework.Contracts.Attributes;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
+
+#endregion
+
 namespace GrabCaster.Framework.Library.Azure
 {
-    using Contracts.Attributes;
-    using Microsoft.WindowsAzure.Storage;
-    using Microsoft.WindowsAzure.Storage.Blob;
-    using System;
-    using System.Reflection;
-
     /// <summary>
-    /// Main persistent provider.
+    ///     Main persistent provider.
     /// </summary>
     [DevicePersistentProviderContract("{53158DA4-EAEA-4D8A-90C8-81A66F7A0F74}", "DevicePersistentProvider",
          "Device Persistent Provider for Azure")]
