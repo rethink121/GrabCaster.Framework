@@ -74,17 +74,6 @@ namespace GrabCaster.Framework
                     $"Version {Assembly.GetExecutingAssembly().GetName().Version}",
                     ConsoleColor.Green);
 
-                if (ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
-                {
-                    LogEngine.WriteLog(
-                        ConfigurationBag.EngineName,
-                        "Warning the Device Provider Interface is disable, the GrabCaster point will be able to work in local mode only.",
-                        Constant.LogLevelWarning,
-                        Constant.TaskCategoriesError,
-                        null,
-                        Constant.LogLevelWarning);
-                }
-
                 if (!Environment.UserInteractive)
                 {
                     Debug.WriteLine(

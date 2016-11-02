@@ -49,6 +49,12 @@ namespace GrabCaster.Framework.FileEvent
         /// <summary>
         ///     Gets or sets the output directory.
         /// </summary>
+        [EventPropertyContract("MacroFileName", "specify the file name to use")]
+        public string MacroFileName { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the output directory.
+        /// </summary>
         [EventPropertyContract("OutputDirectory", "When the file has to be created")]
         public string OutputDirectory { get; set; }
 
@@ -83,7 +89,7 @@ namespace GrabCaster.Framework.FileEvent
             try
             {
                 Debug.WriteLine("In FileEvent Event.");
-                File.WriteAllBytes(OutputDirectory + Guid.NewGuid() + ".txt",
+                File.WriteAllBytes(OutputDirectory + GenerateFileName(MacroFileName),
                     DataContext == null ? new byte[0] : DataContext);
                 DataContext = Serialization.ObjectToByteArray(true);
                 actionEvent(this, context);
@@ -95,6 +101,17 @@ namespace GrabCaster.Framework.FileEvent
                 actionEvent(this, null);
                 return null;
             }
+        }
+
+        private string GenerateFileName(string fileNameMacro)
+        {
+            string fileName = "";
+            fileName = fileNameMacro.Replace("%DATETIME%", DateTime.Now.ToString("yy-MM-dd-hh-mm-ss"))
+            .Replace("%DATE%", DateTime.Now.ToString("yy-MM-dd"))
+            .Replace("%GUID%", Guid.NewGuid().ToString());
+
+            return fileName;
+
         }
     }
 }

@@ -106,16 +106,7 @@ namespace GrabCaster.Framework.Engine.OnRamp
         /// </param>
         public void Init(string onRampPatternComponent)
         {
-            if (ConfigurationBag.Configuration.RunLocalOnly)
-            {
-                LogEngine.WriteLog(ConfigurationBag.EngineName,
-                    $"OnRamp provider not started, this GrabCaster point is configured for local execution only.",
-                    Constant.LogLevelError,
-                    Constant.TaskCategoriesError,
-                    null,
-                    Constant.LogLevelWarning);
-                return;
-            }
+
             // Delegate event for ingestor where ReceiveMessageOnRamp is the event
             receiveMessageOnRampDelegate = ReceiveMessageOnRamp;
 

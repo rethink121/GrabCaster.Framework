@@ -98,25 +98,6 @@ namespace GrabCaster.Framework.Library
                     $"Version {Assembly.GetExecutingAssembly().GetName().Version}",
                     ConsoleColor.Green);
 
-                if (ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
-                {
-                    LogEngine.WriteLog(
-                        ConfigurationBag.EngineName,
-                        "Warning the Device Provider Interface is disable, the GrabCaster point will be able to work in local mode only.",
-                        Constant.LogLevelError,
-                        Constant.TaskCategoriesError,
-                        null,
-                        Constant.LogLevelWarning);
-                }
-                // Could be useful?
-                //if (!Environment.UserInteractive)
-                //{
-                //    Debug.WriteLine("GrabCaster-servicesToRun procedure initialization.");
-                //    // ServiceBase[] servicesToRun = { new NTWindowsService() };
-                //    Debug.WriteLine("GrabCaster-servicesToRun procedure starting.");
-                //    // ServiceBase.Run(servicesToRun);
-                //}
-
                 Debug.WriteLine("--GrabCaster Sevice Initialization--Start Engine.");
                 // delegateActionEvent = delegateActionEventEmbedded;
                 CoreEngine.StartEventEngine(null);
@@ -166,25 +147,6 @@ namespace GrabCaster.Framework.Library
                 Debug.WriteLine(
                     $"Version {Assembly.GetExecutingAssembly().GetName().Version}",
                     ConsoleColor.Green);
-
-                if (ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
-                {
-                    LogEngine.WriteLog(
-                        ConfigurationBag.EngineName,
-                        "Warning the Device Provider Interface is disable, the GrabCaster point will be able to work in local mode only.",
-                        Constant.LogLevelError,
-                        Constant.TaskCategoriesError,
-                        null,
-                        Constant.LogLevelWarning);
-                }
-                // Could be useful?
-                //if (!Environment.UserInteractive)
-                //{
-                //    Debug.WriteLine("GrabCaster-servicesToRun procedure initialization.");
-                //    // ServiceBase[] servicesToRun = { new NTWindowsService() };
-                //    Debug.WriteLine("GrabCaster-servicesToRun procedure starting.");
-                //    // ServiceBase.Run(servicesToRun);
-                //}
 
                 Debug.WriteLine("--GrabCaster Sevice Initialization--Start Engine.", ConsoleColor.Green);
                 _delegate = delegateActionEventEmbedded;

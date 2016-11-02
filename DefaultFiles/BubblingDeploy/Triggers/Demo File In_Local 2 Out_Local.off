@@ -32,10 +32,10 @@
 	},
   "Events": [
     {
-		"IdConfiguration": "{2956466a-1fed-4ae2-bb2f-11275620f067}",
-		"IdComponent": "{8c87cf14-7a9c-4a62-91b5-d47cd57695d8}",
-		"Name": "HTTPSendContentEvent Event configuration",
-		"Description": "HTTPSendContentEvent Event configuration"
+	"IdConfiguration": "{F4CF1B12-4EC4-43FA-8842-575A5E4CDE5A}",
+	"IdComponent": "{D438C746-5E75-4D59-B595-8300138FB1EA}",
+	"Name": "File2File Demo Event ",
+	"Description": "Write file to the GrabCaster Demo OUT folder"
     }
   ]
 }

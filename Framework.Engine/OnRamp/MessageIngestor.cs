@@ -151,13 +151,13 @@ namespace GrabCaster.Framework.Engine.OnRamp
                                        || (receiverChannelId == ConfigurationBag.ChannelAll
                                            && receiverPointId == ConfigurationBag.PointAll);
 
-                if (!requestAvailable)
-                {
-                    // ****************************NOT FOR ME*************************
-                    return;
-                }
+                //if (!requestAvailable)
+                //{
+                //    // ****************************NOT FOR ME*************************
+                //    return;
+                //}
 
-                if (bubblingObject.SenderPointId == ConfigurationBag.Configuration.PointId)
+                if (bubblingObject.SenderPointId == ConfigurationBag.Configuration.PointId + "d")
                 {
                     // **************************** HA AREA *************************
 

@@ -4,9 +4,15 @@
 		"IdComponent": "{D438C746-5E75-4D59-B595-8300138FB1EA}",
 		"Name": "Write file in OUT Local",
 		"Description": "Write file in OUT Local",
-		"EventProperties": [{
+		"EventProperties": [
+		{
+			"Name": "MacroFileName",
+			"Value": "MyFile_%GUID%_%DATETIME%.txt"
+		},
+		{
 			"Name": "OutputDirectory",
-			"Value": "C:\\Program Files (x86)\\GrabCaster\\Demo\\File2File\\Out\\FileTest.txt"
-		}]
+			"Value": "C:\\Program Files (x86)\\GrabCaster\\Demo\\File2File\\Out\\"
+		}
+		]
 	}
 }

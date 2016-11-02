@@ -93,13 +93,6 @@ namespace GrabCaster.Framework.Log.EventHubs
         {
             try
             {
-                if (ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
-                {
-                    EventLog.WriteEntry("Framework.Log.EventHubs",
-                        "The remote logging storage provider is not available, this GrabCaster point is configured for local only execution.",
-                        EventLogEntryType.Error);
-                    return true;
-                }
 
                 Debug.WriteLine("LogEventUpStream - serialize log message.");
                 //Create EH data message

@@ -16,7 +16,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ApplicationPackageRoot\ApplicationManifest - Multi partitions - Copy.xml" />
+    <None Include="ApplicationPackageRoot\ApplicationManifest - Multi partitions.xml" />
     <None Include="ApplicationPackageRoot\ApplicationManifest - Single instance.xml" />
     <None Include="ApplicationPackageRoot\ApplicationManifest.xml" />
     <None Include="ApplicationParameters\Cloud.xml" />

@@ -124,51 +124,36 @@ namespace GrabCaster.Framework.Engine
                 MessageIngestor.InitSecondaryPersistProvider();
 
                 //Create the two sends layers
-                // in EventsEngine
-                if (!ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
+                Debug.WriteLine("Start Internal Event Engine Channel.");
+
+
+                //in EventUpStream
+                Debug.WriteLine("Start External Event Engine Channel.");
+                //OnRamp start the OnRamp Engine
+                var canStart = OffRampEngineSending.Init("MSP Device Component.dll (vNext)");
+
+                if (!canStart)
                 {
-                    Debug.WriteLine("Start Internal Event Engine Channel.");
-                    var canStart = EventsEngine.CreateEventUpStream();
-
-                    if (!canStart)
-                    {
-                        LogEngine.WriteLog(
-                            ConfigurationBag.EngineName,
-                            $"Error during engine service starting. Name: {ConfigurationBag.EngineName} - ID: {ConfigurationBag.Configuration.ChannelId}",
-                            Constant.LogLevelError,
-                            Constant.TaskCategoriesError,
-                            null,
-                            Constant.LogLevelError);
-                        Thread.Sleep(ConfigurationBag.Configuration.WaitTimeBeforeRestarting);
-                        Environment.Exit(0);
-                    }
-
-                    //in EventUpStream
-                    Debug.WriteLine("Start External Event Engine Channel.");
-                    //OnRamp start the OnRamp Engine
-                    canStart = OffRampEngineSending.Init("MSP Device Component.dll (vNext)");
-
-                    if (EventsEngine.HAEnabled)
-                    {
-                        Thread haCheck = new Thread(EventsEngine.HAPointsUpdate);
-                        haCheck.Start();
-                        Thread haClean = new Thread(EventsEngine.HAPointsClean);
-                        haClean.Start();
-                    }
-
-                    if (!canStart)
-                    {
-                        LogEngine.WriteLog(
-                            ConfigurationBag.EngineName,
-                            $"Error during engine service starting. Name: {ConfigurationBag.Configuration.ChannelName} - ID: {ConfigurationBag.Configuration.ChannelId}",
-                            Constant.LogLevelError,
-                            Constant.TaskCategoriesError,
-                            null,
-                            Constant.LogLevelError);
-                        Thread.Sleep(ConfigurationBag.Configuration.WaitTimeBeforeRestarting);
-                        Environment.Exit(0);
-                    }
+                    LogEngine.WriteLog(
+                        ConfigurationBag.EngineName,
+                        $"Error during engine service starting. Name: {ConfigurationBag.Configuration.ChannelName} - ID: {ConfigurationBag.Configuration.ChannelId}",
+                        Constant.LogLevelError,
+                        Constant.TaskCategoriesError,
+                        null,
+                        Constant.LogLevelError);
+                    Thread.Sleep(ConfigurationBag.Configuration.WaitTimeBeforeRestarting);
+                    Environment.Exit(0);
                 }
+
+
+                if (EventsEngine.HAEnabled)
+                {
+                    Thread haCheck = new Thread(EventsEngine.HAPointsUpdate);
+                    haCheck.Start();
+                    Thread haClean = new Thread(EventsEngine.HAPointsClean);
+                    haClean.Start();
+                }
+
 
                 //*****************Event object stream area*********************
                 //Load the global event and triggers dlls
@@ -212,12 +197,10 @@ namespace GrabCaster.Framework.Engine
                 var treadEngineStates = new Thread(CheckServiceStates);
                 treadEngineStates.Start();
 
-                if (!ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
-                {
-                    Debug.WriteLine("Start On Ramp Engine.", ConsoleColor.Green);
-                    var onRampEngineReceiving = new OnRampEngineReceiving();
-                    onRampEngineReceiving.Init("component.dll name");
-                }
+                Debug.WriteLine("Start On Ramp Engine.", ConsoleColor.Green);
+                var onRampEngineReceiving = new OnRampEngineReceiving();
+                onRampEngineReceiving.Init("component.dll name");
+
                 // Configuration files watcher
                 //EventsEngine.StartConfigurationSyncEngine();
 

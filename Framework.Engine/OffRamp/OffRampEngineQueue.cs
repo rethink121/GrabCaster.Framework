@@ -111,17 +111,6 @@ namespace GrabCaster.Framework.Engine.OffRamp
                     null,
                     Constant.LogLevelWarning);
 
-
-                if (ConfigurationBag.Configuration.RunLocalOnly)
-                {
-                    LogEngine.WriteLog(ConfigurationBag.EngineName,
-                        $"OffRamp provider not started, this GrabCaster point is configured for local execution only.",
-                        Constant.LogLevelError,
-                        Constant.TaskCategoriesError,
-                        null,
-                        Constant.LogLevelWarning);
-                    return false;
-                }
                 Debug.WriteLine("Initialize Abstract Event Up Stream Engine.");
 
                 // Load event up stream external component

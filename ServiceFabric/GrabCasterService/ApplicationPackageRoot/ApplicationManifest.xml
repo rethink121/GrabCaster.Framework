@@ -5,7 +5,7 @@
                      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Parameters>
-    <Parameter Name="GrabCaster_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="GrabCaster_InstanceCount" DefaultValue="1" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -21,14 +21,13 @@
          
          The attribute ServiceTypeName below must match the name defined in the imported ServiceManifest.xml file. -->
     <Service Name="GrabCaster">
-      <!--<StatelessService ServiceTypeName="GrabCasterType" InstanceCount="[GrabCaster_InstanceCount]">-->
-      <StatelessService ServiceTypeName="GrabCasterType" InstanceCount="1">
+      <StatelessService ServiceTypeName="GrabCasterType" InstanceCount="[GrabCaster_InstanceCount]">
+      <!--Add or remove the NamedPartition you want to use -->
       <NamedPartition>
           <Partition Name="one" />
           <Partition Name="two" />
-          <Partition Name="three" />
-          <Partition Name="four" />
         </NamedPartition>
+        <!--use SingletonPartition if you want to replicate other similar Grabby instances-->
         <!--<SingletonPartition />-->
       </StatelessService>
     </Service>

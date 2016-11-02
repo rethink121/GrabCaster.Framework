@@ -77,8 +77,6 @@ namespace GrabCaster.Framework.Log
 
         public static bool Enabled;
 
-        public static bool Verbose;
-
         public static bool ConsoleOut = true;
 
         private static readonly string EventViewerSource = ConfigurationBag.EngineName;
@@ -93,7 +91,6 @@ namespace GrabCaster.Framework.Log
             {
                 ConfigurationBag.LoadConfiguration();
                 Enabled = ConfigurationBag.Configuration.LoggingEngineEnabled;
-                Verbose = ConfigurationBag.Configuration.LoggingVerbose;
                 //Load logging external component
                 var loggingComponent = Path.Combine(
                     ConfigurationBag.Configuration.DirectoryOperativeRootExeName,
@@ -164,7 +161,7 @@ namespace GrabCaster.Framework.Log
             Exception exception,
             int logLevel)
         {
-            if (!Enabled || ConfigurationBag.Configuration.LoggingLevel <= logLevel)
+            if (!Enabled || logLevel >= ConfigurationBag.Configuration.LoggingLevel)
                 return;
 
             Debug.WriteLine($"GrabCaster-{message}");

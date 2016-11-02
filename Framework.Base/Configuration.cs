@@ -438,10 +438,7 @@ namespace GrabCaster.Framework.Base
 
         [DataMember]
         public int LoggingLevel { get; set; }
-
-        [DataMember]
-        public bool LoggingVerbose { get; set; }
-
+ 
         [DataMember]
         public bool Clustered { get; set; }
 
@@ -644,9 +641,6 @@ namespace GrabCaster.Framework.Base
         public EventHubsCheckPointPattern EventHubsCheckPointPattern { get; set; }
 
         [DataMember]
-        public bool DisableExternalEventsStreamEngine { get; set; }
-
-        [DataMember]
         public int ThrottlingOnRampIncomingRateNumber { get; set; }
 
         [DataMember]
@@ -681,8 +675,5 @@ namespace GrabCaster.Framework.Base
 
         [DataMember]
         public int MinAsyncWorkerThreads { get; set; }
-
-        [DataMember]
-        public bool RunLocalOnly { get; set; }
     }
 }

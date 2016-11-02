@@ -678,18 +678,15 @@ namespace GrabCaster.Framework.Engine
                     else
                     {
                         // Send to MSP
-                        if (!ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
-                        {
-                            var remoteContext = new ActionContext(context.BubblingObjectBag);
-                            remoteContext.BubblingObjectBag.Events.Clear();
-                            remoteContext.BubblingObjectBag.Events.Add(eventToExecute);
-                            OffRampEngineSending.SendMessageOffRamp(
-                                remoteContext.BubblingObjectBag,
-                                "Event",
-                                string.Empty,
-                                string.Empty,
-                                null);
-                        }
+                        var remoteContext = new ActionContext(context.BubblingObjectBag);
+                        remoteContext.BubblingObjectBag.Events.Clear();
+                        remoteContext.BubblingObjectBag.Events.Add(eventToExecute);
+                        OffRampEngineSending.SendMessageOffRamp(
+                            remoteContext.BubblingObjectBag,
+                            "Event",
+                            string.Empty,
+                            string.Empty,
+                            null);
                     }
                 }
             }
@@ -1928,7 +1925,7 @@ namespace GrabCaster.Framework.Engine
                     Constant.LogLevelError,
                     Constant.TaskCategoriesError,
                     ex,
-                    Constant.LogLevelWarning);
+                    Constant.LogLevelError);
             }
         }
 
@@ -2536,24 +2533,15 @@ namespace GrabCaster.Framework.Engine
                     // Overriding properties?
                     if (bubblingObjectEvent.EventProperties != null)
                     {
-                        IEnumerable<PropertyInfo> propertyInfos =
-                            eventType.GetType()
-                                .GetProperties()
-                                .ToList()
-                                .Where(
-                                    p =>
-                                        p.GetCustomAttributes(typeof(EventPropertyContract), true).Length > 0 &&
-                                        p.Name != "DataContext");
-                        //todo optimization vedi se riesci a ottimizzarlo.
-                        //problema e' che il dictionary non e' serializzabile, un array?
-                        foreach (var propertyInfo in propertyInfos)
+                        foreach (var bubblingProperty in bubblingObjectEvent.EventProperties)
                         {
-                            EventProperty eventProperty =
-                                bubblingObjectEvent.EventProperties.First(p => p.Name == propertyInfo.Name);
+                            PropertyInfo propertyInfo =eventType.GetType()
+                                                                .GetProperties().First(p => p.Name == bubblingProperty.Name);
                             propertyInfo.SetValue(eventType,
-                                Convert.ChangeType(eventProperty.Value, propertyInfo.PropertyType),
-                                null);
+                                        Convert.ChangeType(bubblingProperty.Value, propertyInfo.PropertyType),
+                                        null);
                         }
+   
                     }
                 }
                 // Pass Data property to Execute
@@ -2602,7 +2590,7 @@ namespace GrabCaster.Framework.Engine
         {
             try
             {
-                // Event Hub Configuration
+                // Event Configuration
                 connectionString = ConfigurationBag.Configuration.AzureNameSpaceConnectionString;
                 eventHubName = ConfigurationBag.Configuration.GroupEventHubsName;
 

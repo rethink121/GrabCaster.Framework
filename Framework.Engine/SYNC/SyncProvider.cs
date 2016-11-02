@@ -412,29 +412,16 @@ namespace GrabCaster.Framework.Engine
         {
             try
             {
-                if (!ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
-                {
-                    Debug.WriteLine(
-                        $"Syncronizing  Bubbling confuguration - Point ID {ConfigurationBag.Configuration.PointId}",
-                        ConsoleColor.Yellow);
-                    //todo optimization adesso usi il bubblingobject per trasporto, serializza il tutto e mettilo the datastorage del bubblingobject
-                    //OffRampEngineSending.SendMessageOnRamp(
-                    //    EventsEngine.SyncronizationConfigurationFileList,
-                    //    "SyncSendBubblingConfiguration", 
-                    //    channelId, 
-                    //    pointId, 
-                    //    null);
-                }
-                else
-                {
-                    LogEngine.WriteLog(
-                        ConfigurationBag.EngineName,
-                        "Warning the Device Provider Interface is disable, the GrabCaster point will be able to work in local mode only.",
-                        Constant.LogLevelError,
-                        Constant.TaskCategoriesError,
-                        null,
-                        Constant.LogLevelWarning);
-                }
+                Debug.WriteLine(
+                    $"Syncronizing  Bubbling confuguration - Point ID {ConfigurationBag.Configuration.PointId}",
+                    ConsoleColor.Yellow);
+                //todo optimization adesso usi il bubblingobject per trasporto, serializza il tutto e mettilo the datastorage del bubblingobject
+                //OffRampEngineSending.SendMessageOnRamp(
+                //    EventsEngine.SyncronizationConfigurationFileList,
+                //    "SyncSendBubblingConfiguration", 
+                //    channelId, 
+                //    pointId, 
+                //    null);
             }
             catch (Exception ex)
             {
@@ -461,36 +448,24 @@ namespace GrabCaster.Framework.Engine
         {
             try
             {
-                if (!ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
-                {
-                    Debug.WriteLine(
-                        $"Send all confuguration - Point ID {ConfigurationBag.Configuration.PointId}",
-                        ConsoleColor.Yellow);
-                    var stream = GetConfiguration();
 
-                    // byte[] data
-                    // SerializationEngine.ObjectToByteArray(stream);
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        stream.CopyTo(memoryStream);
-                        //todo optimization adesso usi il bubblingobject per trasporto, serializza il tutto e mettilo the datastorage del bubblingobject
-                        //OffRampEngineSending.SendMessageOnRamp(
-                        //    memoryStream.ToArray(), 
-                        //    "SyncSendConfiguration", 
-                        //    channelId, 
-                        //    pointId, 
-                        //    null);
-                    }
-                }
-                else
+                Debug.WriteLine(
+                    $"Send all confuguration - Point ID {ConfigurationBag.Configuration.PointId}",
+                    ConsoleColor.Yellow);
+                var stream = GetConfiguration();
+
+                // byte[] data
+                // SerializationEngine.ObjectToByteArray(stream);
+                using (var memoryStream = new MemoryStream())
                 {
-                    LogEngine.WriteLog(
-                        ConfigurationBag.EngineName,
-                        "Warning the Device Provider Interface is disable, the GrabCaster point will be able to work in local mode only.",
-                        Constant.LogLevelError,
-                        Constant.TaskCategoriesError,
-                        null,
-                        Constant.LogLevelWarning);
+                    stream.CopyTo(memoryStream);
+                    //todo optimization adesso usi il bubblingobject per trasporto, serializza il tutto e mettilo the datastorage del bubblingobject
+                    //OffRampEngineSending.SendMessageOnRamp(
+                    //    memoryStream.ToArray(), 
+                    //    "SyncSendConfiguration", 
+                    //    channelId, 
+                    //    pointId, 
+                    //    null);
                 }
             }
             catch (Exception ex)
@@ -528,17 +503,6 @@ namespace GrabCaster.Framework.Engine
         {
             try
             {
-                if (ConfigurationBag.Configuration.DisableExternalEventsStreamEngine)
-                {
-                    LogEngine.WriteLog(
-                        ConfigurationBag.EngineName,
-                        "Warning the Device Provider Interface is disable, the GrabCaster point will be able to work in local mode only.",
-                        Constant.LogLevelError,
-                        Constant.TaskCategoriesError,
-                        null,
-                        Constant.LogLevelWarning);
-                    return;
-                }
 
                 Debug.WriteLine(
                     $"Syncronizing  Bubbling confuguration - Point ID {ConfigurationBag.Configuration.PointId}",
