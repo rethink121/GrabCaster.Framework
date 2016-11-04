@@ -6,7 +6,7 @@
 	"ComponentProperties": [
 	{
 		"Name": "AssemblyFile",
-		"Value": "C:\\Users\\Nino\\Documents\\GrabCaster\\GrabCaster.Framework\\BizTalk.Laoratory\\PipelineLaboratory\\PipelineLaboratory\\bin\\Debug\\PipelineLaboratory.dll"
+		"Value": "C:\\Program Files (x86)\\GrabCaster\\Demo\\PipelineLaboratory.dll"
 	},
 	{
 		"Name": "PipelineTypeName",
@@ -14,7 +14,7 @@
 	},
 	{
 		"Name": "PipelinePathFile",
-		"Value": "C:\\Users\\Nino\\Documents\\GrabCaster\\GrabCaster.Framework\\BizTalk.Laoratory\\PipelineLaboratory\\PipelineLaboratory\\ReceivePipelineFlat.btp"
+		"Value": "C:\\Program Files (x86)\\GrabCaster\\Demo\\ReceivePipelineFlat.btp"
 	}
 	]
 	}

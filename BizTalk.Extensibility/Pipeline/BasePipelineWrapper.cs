@@ -31,6 +31,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using GrabCaster.Framework.Base;
+using GrabCaster.Framework.Log;
 using Microsoft.BizTalk.Component.Interop;
 using Microsoft.Test.BizTalk.PipelineObjects;
 using Microsoft.XLANGs.BaseTypes;
@@ -277,16 +279,27 @@ namespace GrabCaster.BizTalk.Extensibility
         //Load Document specification
         public IDocumentSpec LoadDocSpec(Type schemaType)
         {
-            if (schemaType == null)
-                throw new ArgumentNullException("schemaType");
-            if (!schemaType.IsSubclassOf(typeof(SchemaBase)))
-                throw new ArgumentException("Type does not represent a schema", "schemaType");
+            try
+            {
+                if (schemaType == null)
+                    throw new ArgumentNullException("schemaType");
+                if (!schemaType.IsSubclassOf(typeof(SchemaBase)))
+                    throw new ArgumentException("Type does not represent a schema", "schemaType");
 
-            string typename = schemaType.FullName;
-            string assemblyName = schemaType.Assembly.FullName;
-            DocumentSpec docSpec = new DocumentSpec(typename, assemblyName);
+                string typename = schemaType.FullName;
+                string assemblyName = schemaType.Assembly.FullName;
+                DocumentSpec docSpec = new DocumentSpec(typename, assemblyName);
 
-            return docSpec;
+                return docSpec;
+            }
+            catch (Exception ex)
+            {
+
+                LogEngine.DirectEventViewerLog($"Error in pipeline component during load specs for assembly {schemaType.Assembly.FullName} check system GAC.",1);
+                return null;
+
+            }
+
         }
 
         //Load Document specification usinf asm name too

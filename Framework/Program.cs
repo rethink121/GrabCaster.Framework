@@ -24,7 +24,6 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-
 #region Usings
 
 using System;
@@ -126,7 +125,6 @@ namespace GrabCaster.Framework
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine(@"[M] Run GrabCaster in MS-DOS Console mode.");
-                        Console.WriteLine(@"[C] Configure GrabCaster Point.");
                         Console.WriteLine(@"[I] Install GrabCaster Windows NT Service.");
                         Console.WriteLine(@"[U] Uninstall GrabCaster Windows NT Service.");
                         Console.WriteLine(@"[O] Clone a new GrabCaster Point.");
@@ -154,12 +152,14 @@ namespace GrabCaster.Framework
                             case ConsoleKey.I:
                                 Console.ForegroundColor = ConsoleColor.White;
                                 Console.Clear();
+                                Console.WriteLine("Specify the Windows NT Service Name and press Enter:");
                                 CoreNtService.ServiceName = AskInputLine("Specify the Windows NT Service Name:");
                                 CoreNtService.InstallService();
                                 break;
                             case ConsoleKey.U:
                                 Console.ForegroundColor = ConsoleColor.White;
                                 Console.Clear();
+                                Console.WriteLine("Specify the Windows NT Service Name and press Enter:");
                                 CoreNtService.ServiceName = AskInputLine("Specify the Windows NT Service Name:");
                                 CoreNtService.StopService();
                                 CoreNtService.UninstallService();

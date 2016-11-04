@@ -95,6 +95,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Develoment Script", "Develo
 		Development Script\PrepareBizTalkAdapterEnvironment.cmd = Development Script\PrepareBizTalkAdapterEnvironment.cmd
 		Development Script\PrepareDeployPackage.cmd = Development Script\PrepareDeployPackage.cmd
 		Development Script\PrepareDevEnvironment.cmd = Development Script\PrepareDevEnvironment.cmd
+		Service Fabric Deployment anbd troubleshoting.txt = Service Fabric Deployment anbd troubleshoting.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{90D2C72F-4DCD-47E2-A834-406C616D0790}"

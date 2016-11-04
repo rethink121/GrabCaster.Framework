@@ -24,7 +24,6 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-
 #region Usings
 
 using System;
@@ -382,7 +381,7 @@ namespace GrabCaster.Framework.Base
         public static string ReturnStorageConnectionString()
         {
             return
-                $"DefaultEndpointsProtocol=https;AccountName={Configuration.GroupEventHubsStorageAccountName};AccountKey={Configuration.GroupEventHubsStorageAccountKey}";
+                $"DefaultEndpointsProtocol=https;AccountName={Configuration.GroupStorageAccountName};AccountKey={Configuration.GroupStorageAccountKey}";
         }
 
 
@@ -479,7 +478,6 @@ namespace GrabCaster.Framework.Base
         ///     Enable persisting message engine
         /// </summary>
         /// <returns></returns>
-        [DataMember]
         public bool EnablePersistingMessaging { get; set; }
 
         public string DirectoryServiceExecutable { get; set; }
@@ -521,27 +519,27 @@ namespace GrabCaster.Framework.Base
         /// </summary>
         /// <returns></returns>
         [DataMember]
-        public string GroupEventHubsStorageAccountName { get; set; }
+        public string GroupStorageAccountName { get; set; }
 
         /// <summary>
         ///     Group Storage Account key
         /// </summary>
         /// <returns></returns>
         [DataMember]
-        public string GroupEventHubsStorageAccountKey { get; set; }
+        public string GroupStorageAccountKey { get; set; }
 
         /// <summary>
         ///     Local storage pattern used by engine
         /// </summary>
         /// <returns></returns>
-        [DataMember]
+  
         public string LocalStorageProvider { get; set; }
 
         /// <summary>
         ///     Local storage used by engine
         /// </summary>
         /// <returns></returns>
-        [DataMember]
+  
         public string LocalStorageConnectionString { get; set; }
 
         /// <summary>

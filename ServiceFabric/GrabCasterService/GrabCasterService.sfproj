@@ -2,7 +2,7 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.3.0\build\Microsoft.VisualStudio.Azure.Fabric.Application.props" Condition="Exists('..\packages\Microsoft.VisualStudio.Azure.Fabric.MSBuild.1.3.0\build\Microsoft.VisualStudio.Azure.Fabric.Application.props')" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>9040c924-a3d0-46c6-89cd-9c4914ada024</ProjectGuid>
+    <ProjectGuid>3a21868c-ac22-4f0b-8853-76c3410aff13</ProjectGuid>
     <ProjectVersion>1.3</ProjectVersion>
   </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
@@ -16,8 +16,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ApplicationPackageRoot\ApplicationManifest - Multi partitions.xml" />
-    <None Include="ApplicationPackageRoot\ApplicationManifest - Single instance.xml" />
     <None Include="ApplicationPackageRoot\ApplicationManifest.xml" />
     <None Include="ApplicationParameters\Cloud.xml" />
     <None Include="ApplicationParameters\Local.1Node.xml" />
@@ -28,10 +26,10 @@
     <None Include="Scripts\Deploy-FabricApplication.ps1" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ApplicationPackageRoot\GrabCasterPkg\Config\Settings.xml" />
-    <Content Include="ApplicationPackageRoot\GrabCasterPkg\ServiceManifest.xml" />
+    <Content Include="ApplicationPackageRoot\GrabCasterServicePkg\Config\Settings.xml" />
+    <Content Include="ApplicationPackageRoot\GrabCasterServicePkg\ServiceManifest.xml" />
     <Content Include="BasePackage\**\*.*">
-      <Link>ApplicationPackageRoot\GrabCasterPkg\Code\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Link>ApplicationPackageRoot\GrabCasterServicePkg\Code\%(RecursiveDir)%(Filename)%(Extension)</Link>
     </Content>
     <Content Include="packages.config" />
   </ItemGroup>

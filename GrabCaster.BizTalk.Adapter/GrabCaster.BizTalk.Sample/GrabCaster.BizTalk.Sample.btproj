@@ -82,6 +82,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="GrabCaster.snk" />
+    <Schema Include="GrabCasterProperties.xsd">
+      <TypeName>GrabCasterProperties</TypeName>
+      <Namespace>GrabCaster.BizTalk.Sample</Namespace>
+      <SubType>Task</SubType>
+    </Schema>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\BizTalk\BizTalkC.targets" />

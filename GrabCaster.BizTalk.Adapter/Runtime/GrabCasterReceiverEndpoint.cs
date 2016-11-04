@@ -1,23 +1,29 @@
-// -----------------------------------------------------------------------------------
+// GrabCasterReceiverEndpoint.cs
 // 
-// GRABCASTER LTD CONFIDENTIAL
-// ___________________________
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
+// All rights reserved.
 // 
-// Copyright © 2013 - 2016 GrabCaster Ltd. All rights reserved.
-// This work is registered with the UK Copyright Service: Registration No:284701085
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
 // 
+//   - Redistributions of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//   - Redistributions in binary form must reproduce the above copyright
+//     notice, this list of conditions and the following disclaimer in the
+//     documentation and/or other materials provided with the distribution.
+//   
 // 
-// NOTICE:  All information contained herein is, and remains
-// the property of GrabCaster Ltd and its suppliers,
-// if any.  The intellectual and technical concepts contained
-// herein are proprietary to GrabCaster Ltd
-// and its suppliers and may be covered by UK and Foreign Patents,
-// patents in process, and are protected by trade secret or copyright law.
-// Dissemination of this information or reproduction of this material
-// is strictly forbidden unless prior written permission is obtained
-// from GrabCaster Ltd.
-// 
-// -----------------------------------------------------------------------------------
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+// POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.IO;
 using System.Net;
@@ -206,7 +212,7 @@ namespace GrabCaster.Framework.BizTalk.Adapter
         /// <param name="context">
         /// The context.
         /// </param>
-        private void EventReceivedFromEmbedded(IEventType eventType, EventActionContext context)
+        private void EventReceivedFromEmbedded(IEventType eventType, ActionContext context)
         {
             string stringValue = Encoding.UTF8.GetString(eventType.DataContext);
             System.Diagnostics.Debug.WriteLine("---------------EVENT RECEIVED FROM EMBEDDED LIBRARY---------------");
@@ -233,7 +239,7 @@ namespace GrabCaster.Framework.BizTalk.Adapter
         //  batch tuning parameters (number of bytes and number of messages) because the
         //  list is randomly ordered it is possible to have non-optimal batches. It would
         //  be a slight optimization to order by increasing size and then cut the batches.
-        private void PrepareMessageAndSubmit (IEventType eventType, EventActionContext context)
+        private void PrepareMessageAndSubmit (IEventType eventType, ActionContext context)
         {
             Trace.WriteLine("[GrabCasterReceiverEndpoint] PrepareMessageAndSubmit called");
             
@@ -247,7 +253,7 @@ namespace GrabCaster.Framework.BizTalk.Adapter
             if ( null == msg )
                 return;
             else
-                batchMessages.Add(new BatchMessage(msg, context.BubblingConfiguration.MessageId, BatchOperationType.Submit));            //  keep a running total for the current batch
+                batchMessages.Add(new BatchMessage(msg, context.BubblingObjectBag.MessageId, BatchOperationType.Submit));            //  keep a running total for the current batch
             bytesInBatch += eventType.DataContext.Length;
 
             //  zero for the value means infinite 
@@ -335,7 +341,7 @@ namespace GrabCaster.Framework.BizTalk.Adapter
             }
         }
 
-        private IBaseMessage CreateMessage (IEventType eventType, EventActionContext contextItem)
+        private IBaseMessage CreateMessage (IEventType eventType, ActionContext contextItem)
         {
             Stream fs;
             fs = new MemoryStream(eventType.DataContext);
@@ -348,7 +354,7 @@ namespace GrabCaster.Framework.BizTalk.Adapter
             context.InboundTransportType     = this.transportType;
             context.InboundTransportLocation = this.properties.Uri;
             //Write/Promote any adapter specific properties on the message context
-            message.Context.Write(PROP_REMOTEMESSAGEID, PROP_NAMESPACE, contextItem.BubblingConfiguration.MessageId);
+            message.Context.Write(PROP_REMOTEMESSAGEID, PROP_NAMESPACE, contextItem.BubblingObjectBag.MessageId);
             
             return message;
         }

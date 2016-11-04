@@ -1,44 +1,41 @@
-// -----------------------------------------------------------------------------------
+// GrabCasterTransmitterEndpoint.cs
 // 
-// GRABCASTER LTD CONFIDENTIAL
-// ___________________________
+// Copyright (c) 2014-2016, Nino Crudele <nino dot crudele at live dot com>
+// All rights reserved.
 // 
-// Copyright © 2013 - 2016 GrabCaster Ltd. All rights reserved.
-// This work is registered with the UK Copyright Service: Registration No:284701085
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
 // 
+//   - Redistributions of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//   - Redistributions in binary form must reproduce the above copyright
+//     notice, this list of conditions and the following disclaimer in the
+//     documentation and/or other materials provided with the distribution.
+//   
 // 
-// NOTICE:  All information contained herein is, and remains
-// the property of GrabCaster Ltd and its suppliers,
-// if any.  The intellectual and technical concepts contained
-// herein are proprietary to GrabCaster Ltd
-// and its suppliers and may be covered by UK and Foreign Patents,
-// patents in process, and are protected by trade secret or copyright law.
-// Dissemination of this information or reproduction of this material
-// is strictly forbidden unless prior written permission is obtained
-// from GrabCaster Ltd.
-// 
-// -----------------------------------------------------------------------------------
-using System;
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+// CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+// POSSIBILITY OF SUCH DAMAGE.
+
 using System.IO;
-using System.Xml;
-using System.Text;
-using System.Collections;
-using System.Threading;
-using Microsoft.BizTalk.TransportProxy.Interop;
 using Microsoft.BizTalk.Component.Interop;
 using Microsoft.BizTalk.Message.Interop;
 using GrabCaster.Framework.BizTalk.Adapter.Common;
-using GrabCaster.Framework.Log;
-using GrabCaster.Framework.Library;
 using GrabCaster.Framework.Contracts.Events;
-using GrabCaster.Framework.Contracts.Globals;
 using System.Diagnostics;
+using GrabCaster.Framework.Contracts.Globals;
+using GrabCaster.Framework.Library;
 
 namespace GrabCaster.Framework.BizTalk.Adapter
 {
-    using GrabCaster.Framework.Base;
-    using GrabCaster.Framework.Common;
-
     /// <summary>
 	/// There is one instance of HttpTransmitterEndpoint class for each every static send port.
 	/// Messages will be forwarded to this class by AsyncTransmitterBatch
@@ -61,13 +58,13 @@ namespace GrabCaster.Framework.BizTalk.Adapter
         /// <summary>
         /// The set event action event embedded.
         /// </summary>
-        private static SetEventActionEvent setEventActionEventEmbedded;
+        private static ActionEvent actionEvent;
 
         public override void Open(EndpointParameters endpointParameters, IPropertyBag handlerPropertyBag, string propertyNamespace)
         {
 
-            setEventActionEventEmbedded = EventReceivedFromEmbedded;
-            GrabCaster.Framework.Library.Embedded.InitializeOffRampEmbedded(setEventActionEventEmbedded);
+            actionEvent = EventReceivedFromEmbedded;
+            GrabCaster.Framework.Library.Embedded.InitializeOffRampEmbedded(actionEvent);
             this.propertyNamespace = propertyNamespace;
         }
 
@@ -80,7 +77,7 @@ namespace GrabCaster.Framework.BizTalk.Adapter
         /// <param name="context">
         /// The context.
         /// </param>
-        private void EventReceivedFromEmbedded(IEventType eventType, EventActionContext context)
+        private void EventReceivedFromEmbedded(IEventType eventType, ActionContext context)
         {
             System.Diagnostics.Debug.WriteLine("Event executed in GrabCaster BizTalk Sender Adpater.");
             Trace.WriteLine("Event executed in GrabCaster BizTalk Sender Adpater.");

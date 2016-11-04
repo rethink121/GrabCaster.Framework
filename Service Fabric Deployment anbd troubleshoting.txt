@@ -1,0 +1,8 @@
+Deploy-FabricApplication.ps1' -ApplicationPackagePath 'C:\Users\Ninoc\Documents\GrabCaster\ServiceFabric\GrabCasterService\pkg\Debug' -PublishProfileFile 'C:\Users\Ninoc\Documents\GrabCaster\ServiceFabric\GrabCasterService\PublishProfiles\Cloud.xml' -DeployOnly:$false -UnregisterUnusedApplicationVersionsAfterUpgrade $false -OverrideUpgradeBehavior 'None' -OverwriteBehavior 'SameAppTypeAndVersion' -SkipPackageValidation:$false -ErrorAction Stop
+
+
+5
+down vote
+The most common explanation for code the runs locally but not in Azure is that you're targeting a .NET framework version that is not present on the VMs provisioned in a Service Fabric cluster. They currently provide .NET 4.5.1 out of the box, with .NET 4.5.2 getting added some time this month. Try retargeting your app to 4.5.1.
+
+Update: as of February 2016, VMs provisioned for Service Fabric clusters come with .NET 4.5.2 by default.

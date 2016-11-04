@@ -1,14 +1,14 @@
 {
 	"Chain": {
-		"idChain": "Specify any ID to identify this chain",
-		"Name": "Specify any name to identify this configuration chain",
-		"Description": "Specify any description to describe this configuration chain",
+		"idChain": "{F60C8A3B-0ABD-4595-BCFD-7A2B6DE46EC6}",
+		"Name": "BizTalk pipeline flat file",
+		"Description": "BizTalk pipeline flat file",
 	"Components": [
 	{
-		"idComponent": "Specify the ID Component to call"
+		"idComponent": "{F60C8A3B-0ABD-4595-BCFD-7A2B6DE46EC6}"
 	},
 	{
-		"idComponent": "Specify the ID Component to call"
+		"idComponent": "{EFA41557-6AE0-4880-B8B2-EE3DF2C1E48E}"
 	}
 	]
 	}

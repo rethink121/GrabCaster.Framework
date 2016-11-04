@@ -24,7 +24,6 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-
 #region Usings
 
 using System;
@@ -2317,6 +2316,7 @@ namespace GrabCaster.Framework.Engine
                             p =>
                                 p.GetCustomAttributes(typeof(ComponentPropertyContract), true).Length > 0 &&
                                 p.Name != "DataContext");
+
                 // Assign all propertyies value trigger to class instance and execute
                 foreach (var propertyInfo in propertyInfos)
                 {
@@ -2326,6 +2326,9 @@ namespace GrabCaster.Framework.Engine
                         null);
                 }
 
+                //Set DataContext
+                PropertyInfo propertyInfosDataContext = chainComponentType.GetType().GetProperties().First(p => p.Name == "DataContext");
+                propertyInfosDataContext.SetValue(chainComponentType, Content,null);
                 try
                 {
                     return chainComponentType.Execute();
@@ -2363,8 +2366,7 @@ namespace GrabCaster.Framework.Engine
                 foreach (var chain in chains)
                 {
                     Debug.WriteLine(
-                        "-!CHAINS HAS TO BE EXECUTED!- Chain name {chain.IdChain} - Chain Name {chain.Name}",
-                        ConsoleColor.DarkGreen);
+                        $"-!CHAINS HAS TO BE EXECUTED!- Chain name {chain.IdChain} - Chain Name {chain.Name}");
                     var bubblingComponentConfiguration =
                         ConfigurationJsonChainFileList.Find(property => property.Chain.IdChain == chain.IdChain);
                     if (bubblingComponentConfiguration == null)

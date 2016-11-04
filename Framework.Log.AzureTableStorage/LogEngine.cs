@@ -24,7 +24,6 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-
 #region Usings
 
 using System;
@@ -55,8 +54,8 @@ namespace GrabCaster.Framework.Log.AzureTableStorage
         /// </returns>
         public bool InitLog()
         {
-            var storageAccountName = ConfigurationBag.Configuration.GroupEventHubsStorageAccountName;
-            var storageAccountKey = ConfigurationBag.Configuration.GroupEventHubsStorageAccountKey;
+            var storageAccountName = ConfigurationBag.Configuration.GroupStorageAccountName;
+            var storageAccountKey = ConfigurationBag.Configuration.GroupStorageAccountKey;
             var connectionString =
                 $"DefaultEndpointsProtocol=https;AccountName={storageAccountName};AccountKey={storageAccountKey}";
             var storageAccount = CloudStorageAccount.Parse(connectionString);

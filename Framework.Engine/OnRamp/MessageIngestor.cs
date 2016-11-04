@@ -24,7 +24,6 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
-
 #region Usings
 
 using System;
@@ -151,13 +150,13 @@ namespace GrabCaster.Framework.Engine.OnRamp
                                        || (receiverChannelId == ConfigurationBag.ChannelAll
                                            && receiverPointId == ConfigurationBag.PointAll);
 
-                //if (!requestAvailable)
-                //{
-                //    // ****************************NOT FOR ME*************************
-                //    return;
-                //}
+                if (!requestAvailable)
+                {
+                    // ****************************NOT FOR ME*************************
+                    return;
+                }
 
-                if (bubblingObject.SenderPointId == ConfigurationBag.Configuration.PointId + "d")
+                if (bubblingObject.SenderPointId == ConfigurationBag.Configuration.PointId)
                 {
                     // **************************** HA AREA *************************
 
