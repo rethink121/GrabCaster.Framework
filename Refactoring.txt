@@ -1,6 +1,0 @@
-ho tolto  //CHANGE0110.1706
-                    //if (propertyFound != null && propertyFound.Name != "context"
-                    //        && propertyFound.Name != "SetEventActionTrigger")
-                    //{
-                    //    propertyFound.Value = propertyInfo.GetValue(trigger);
-                    //}

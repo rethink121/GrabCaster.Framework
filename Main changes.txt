@@ -1,4 +1,0 @@
-//Main change 1
-se le proprieta dei trigger e eventi iniziano con DataContext e sono uguali allora copia
-il valore della prop del trigger in quella dellevento
-(propertyFound != null && propertyFound.Name.StartsWith("DataContext"))
