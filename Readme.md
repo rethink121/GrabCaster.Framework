@@ -23,9 +23,9 @@ To prepare a new GrabBaster msi package build the Setup project in the GrabCaste
 
 # Code contributions
 
-By contributing code to the GrabCaster project in any form, including sending a pull request via Github, a code fragment or patch via private email or public discussion groups, you agree to release your code under the terms of the BSD license that you can find in the [LICENSE]https://github.com/grabcaster/GrabCaster.Framework/blob/master/LICENSE.TXT file included in the Redis source distribution.
+Note: by contributing code to the GrabCaster project in any form, including sending a pull request via Github, a code fragment or patch via private email or public discussion groups, you agree to release your code under the terms of the BSD license that you can find in the file included in the Redis source distribution.
 
-The author is happy to receive any kind of contribution or collaboration, you can contact the author my [email]mailto:nino.crudele@live.com or through the [GrabCaster Site] http://grabcaster.io.
+The [author]https://github.com/grabcaster/GrabCaster.Framework/blob/master/LICENSE.TXT is happy to receive any kind of contribution or collaboration, you can contact the author my [email]mailto:nino.crudele@live.com or through the [GrabCaster Site] http://grabcaster.io.
 
 # GrabCaster License
 
