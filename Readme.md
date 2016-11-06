@@ -27,16 +27,6 @@ Note: by contributing code to the GrabCaster project in any form, including send
 
 The author is happy to receive any kind of contribution or collaboration, you can contact the author by [email](mailto:nino.crudele@live.com "email") or through the [GrabCaster Site](http://grabcaster.io "GrabCaster Site").
 
-# GrabCaster License
-
-TBD
-The key points are:
-
-* There is no cost to license the software or the source code, it is available to you to download.
-* You can build it and deploy it as many times as you like.
-* You can redistribute it, in executable or source-code form, to anyone you like, as long as you do so also under the license rules.
-* You are free to modify the source code, either for your own purposes or to provide to others. However, the license requires that you contribute these modifications (in legal terms, derivative works) back to the community by creating a pull request in GitHub.
-
 # External Licenses
 
 #### StackExchange.Redis is used in GrabCaster.Framework.Dcp.Redis component
