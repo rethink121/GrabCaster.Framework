@@ -25,13 +25,13 @@ xcopy "Batch Files\Create new Clone.cmd" Setup\bin\Debug\Deploy\*  /y
 rem xcopy "Documentation\GrabCaster v1.0- Technical Manual.pdf" Setup\bin\Debug\Deploy\Documentation\ /s /y /e
 xcopy Framework\bin\Debug\*.dll Setup\bin\Debug\Deploy\*  /y
 xcopy Framework\bin\Debug\*.pdb Setup\bin\Debug\Deploy\*  /y
-copy DefaultFiles\DeployDefault.cfg Setup\bin\Debug\Deploy\GrabCaster.cfg  /y
+copy DefaultFiles\DeployDefault.cfg Setup\bin\Debug\Deploy\DeployDefault.cfg  /y
 copy DefaultFiles\license.rtf Setup\bin\Debug\Deploy\license.rtf  /y
 copy DefaultFiles\license.rtf Setup\bin\Release\Deploy\license.rtf  /y
 xcopy Framework\bin\Debug\*.exe Setup\bin\Debug\Deploy\*  /y
 
 xcopy Framework\bin\Release\*.dll Setup\bin\Release\Deploy\*  /y
-copy DefaultFiles\DeployDefault.cfg Setup\bin\Release\Deploy\GrabCaster.cfg  /y
+copy DefaultFiles\DeployDefault.cfg Setup\bin\Release\Deploy\DeployDefault.cfg  /y
 xcopy Framework\bin\Release\*.exe Setup\bin\Release\Deploy\*  /y
 
 xcopy DefaultFiles\BubblingDeploy Setup\bin\Debug\Deploy\Root_GrabCaster\Bubbling\ /s /y /e

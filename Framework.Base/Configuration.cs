@@ -179,6 +179,7 @@ namespace GrabCaster.Framework.Base
         {
             try
             {
+
                 //Get Exe name
                 var filename =
                     Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName)
@@ -195,6 +196,20 @@ namespace GrabCaster.Framework.Base
                 //{
                 //    byte[] content = File.ReadAllBytes(configurationFile);
                 //}
+
+
+                string defaultFile = configurationFile.Replace("GrabCaster.cfg", "DevDefault.cfg");
+
+                if (File.Exists(defaultFile))
+                {
+                    string newContent = string.Empty;
+                    string content = File.ReadAllText(defaultFile);
+                    newContent = content.Replace("POINTID", Guid.NewGuid().ToString().ToUpper()
+                        .Replace("CHANNELID", Guid.NewGuid().ToString().ToUpper()));
+                    File.WriteAllText(defaultFile, newContent);
+                    File.Move(defaultFile, configurationFile);
+                }
+
                 Configuration =
                     JsonConvert.DeserializeObject<Configuration>(
                         Encoding.UTF8.GetString(File.ReadAllBytes(configurationFile)));
