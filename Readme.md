@@ -10,7 +10,7 @@ GrabCaster includes the building blocks developers need to integrate successful,
 GrabCaster connects any kind of technology, custom programs, operating system stacks, it works with any existing line of business applications such as Enterprise Resource Planning (ERP) systems, Warehouse Management Systems (WMS), hardware devices and more specialized vertical software. This flexibility allows it to work seamlessly and in almost all cases automatically with minimal implementation required.
 
 # Download and use GrabCaster
-You can find the last build and the tutorials in the [GrabCaster Site]http://grabcaster.io
+You can find the last build and the tutorials in the  [GrabCaster Site](http://grabcaster.io "GrabCaster Site").
 
 # Prepare the development environment
 use the Public branch and clone the repository.  
@@ -25,7 +25,7 @@ To prepare a new GrabBaster msi package build the Setup project in the GrabCaste
 
 Note: by contributing code to the GrabCaster project in any form, including sending a pull request via Github, a code fragment or patch via private email or public discussion groups, you agree to release your code under the terms of the BSD license that you can find in the file included in the Redis source distribution.
 
-The author is happy to receive any kind of contribution or collaboration, you can contact the author my [link](mailto:nino.crudele@live.com "email") or through the [link](http://grabcaster.io "GrabCaster Site").
+The author is happy to receive any kind of contribution or collaboration, you can contact the author my [email](mailto:nino.crudele@live.com "email") or through the [GrabCaster Site](http://grabcaster.io "GrabCaster Site").
 
 # GrabCaster License
 
