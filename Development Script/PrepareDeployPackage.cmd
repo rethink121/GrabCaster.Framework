@@ -18,7 +18,9 @@ call DeployTriggerDLLReleaseversion.cmd
 
 cd..
 
-echo xcopy DefaultFiles\License.txt Setup\bin\Debug\Deploy\*  /y
+xcopy DefaultFiles\License.txt Setup\bin\Debug\Deploy\*  /y
+xcopy DefaultFiles\License.txt Setup\bin\Release\Deploy\*  /y
+
 xcopy "Batch Files\Create new Clone.cmd" Setup\bin\Debug\Deploy\*  /y
 rem xcopy "Documentation\GrabCaster v1.0- Technical Manual.pdf" Setup\bin\Debug\Deploy\Documentation\ /s /y /e
 xcopy Framework\bin\Debug\*.dll Setup\bin\Debug\Deploy\*  /y
