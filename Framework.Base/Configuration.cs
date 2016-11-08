@@ -204,10 +204,17 @@ namespace GrabCaster.Framework.Base
                 {
                     string newContent = string.Empty;
                     string content = File.ReadAllText(defaultFile);
-                    newContent = content.Replace("POINTID", Guid.NewGuid().ToString().ToUpper()
-                        .Replace("CHANNELID", Guid.NewGuid().ToString().ToUpper()));
+
+                    Console.WriteLine("GrabCaster first Run");
+                    Console.WriteLine("Insert a point name and press Enter:");
+                    string pointName = Console.ReadLine();
+                    newContent = content.Replace("POINTID", Guid.NewGuid().ToString().ToUpper());
+                    newContent = newContent.Replace("[POINTNAME]", pointName);
+
+
                     File.WriteAllText(defaultFile, newContent);
                     File.Move(defaultFile, configurationFile);
+
                 }
 
                 Configuration =

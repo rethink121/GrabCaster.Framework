@@ -25,7 +25,7 @@ xcopy "Batch Files\Create new Clone.cmd" Setup\bin\Debug\Deploy\*  /y
 rem xcopy "Documentation\GrabCaster v1.0- Technical Manual.pdf" Setup\bin\Debug\Deploy\Documentation\ /s /y /e
 xcopy Framework\bin\Debug\*.dll Setup\bin\Debug\Deploy\*  /y
 xcopy Framework\bin\Debug\*.pdb Setup\bin\Debug\Deploy\*  /y
-copy DefaultFiles\DeployDefault.cfg Setup\bin\Debug\Deploy\DeployDefault.cfg  /y
+copy DefaultFiles\DeployDefault.cfg Setup\bin\Debug\Deploy\DevDefault.cfg  /y
 copy DefaultFiles\license.rtf Setup\bin\Debug\Deploy\license.rtf  /y
 copy DefaultFiles\license.rtf Setup\bin\Release\Deploy\license.rtf  /y
 xcopy Framework\bin\Debug\*.exe Setup\bin\Debug\Deploy\*  /y
