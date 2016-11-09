@@ -39,14 +39,15 @@
             this.labellastrun = new System.Windows.Forms.Label();
             this.textBoxMessage = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonPowerJson
             // 
-            this.buttonPowerJson.Location = new System.Drawing.Point(103, 240);
-            this.buttonPowerJson.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonPowerJson.Location = new System.Drawing.Point(77, 195);
+            this.buttonPowerJson.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonPowerJson.Name = "buttonPowerJson";
-            this.buttonPowerJson.Size = new System.Drawing.Size(188, 37);
+            this.buttonPowerJson.Size = new System.Drawing.Size(141, 30);
             this.buttonPowerJson.TabIndex = 0;
             this.buttonPowerJson.Text = "Write in Event Vierwer";
             this.buttonPowerJson.UseVisualStyleBackColor = true;
@@ -55,18 +56,19 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(11, 14);
+            this.label1.Location = new System.Drawing.Point(8, 11);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(73, 17);
+            this.label1.Size = new System.Drawing.Size(65, 15);
             this.label1.TabIndex = 2;
             this.label1.Text = "How many";
             // 
             // textBoxNum
             // 
-            this.textBoxNum.Location = new System.Drawing.Point(103, 14);
-            this.textBoxNum.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBoxNum.Location = new System.Drawing.Point(77, 11);
+            this.textBoxNum.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBoxNum.Name = "textBoxNum";
-            this.textBoxNum.Size = new System.Drawing.Size(189, 22);
+            this.textBoxNum.Size = new System.Drawing.Size(143, 20);
             this.textBoxNum.TabIndex = 3;
             this.textBoxNum.Text = "1";
             // 
@@ -79,18 +81,18 @@
             "DEMOTEXTMESSAGE",
             "DEMONOTEPAD",
             "DEMOEV"});
-            this.comboBoxsource.Location = new System.Drawing.Point(103, 44);
-            this.comboBoxsource.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.comboBoxsource.Location = new System.Drawing.Point(77, 36);
             this.comboBoxsource.Name = "comboBoxsource";
-            this.comboBoxsource.Size = new System.Drawing.Size(401, 24);
+            this.comboBoxsource.Size = new System.Drawing.Size(302, 21);
             this.comboBoxsource.TabIndex = 4;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(11, 48);
+            this.label2.Location = new System.Drawing.Point(8, 39);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(40, 17);
+            this.label2.Size = new System.Drawing.Size(33, 15);
             this.label2.TabIndex = 5;
             this.label2.Text = "Type";
             this.label2.Click += new System.EventHandler(this.Label2Click);
@@ -98,35 +100,44 @@
             // labellastrun
             // 
             this.labellastrun.AutoSize = true;
-            this.labellastrun.Location = new System.Drawing.Point(312, 258);
-            this.labellastrun.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labellastrun.Location = new System.Drawing.Point(234, 210);
             this.labellastrun.Name = "labellastrun";
-            this.labellastrun.Size = new System.Drawing.Size(12, 17);
+            this.labellastrun.Size = new System.Drawing.Size(10, 15);
             this.labellastrun.TabIndex = 6;
             this.labellastrun.Text = " ";
             // 
             // textBoxMessage
             // 
-            this.textBoxMessage.Location = new System.Drawing.Point(103, 78);
-            this.textBoxMessage.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxMessage.Location = new System.Drawing.Point(77, 63);
             this.textBoxMessage.Name = "textBoxMessage";
-            this.textBoxMessage.Size = new System.Drawing.Size(401, 22);
+            this.textBoxMessage.Size = new System.Drawing.Size(302, 20);
             this.textBoxMessage.TabIndex = 7;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(11, 81);
+            this.label3.Location = new System.Drawing.Point(8, 66);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(35, 17);
+            this.label3.Size = new System.Drawing.Size(30, 15);
             this.label3.TabIndex = 8;
             this.label3.Text = "Text";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(500, 200);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(128, 42);
+            this.button1.TabIndex = 9;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // Demos
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(853, 313);
+            this.ClientSize = new System.Drawing.Size(640, 254);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBoxMessage);
             this.Controls.Add(this.labellastrun);
@@ -135,7 +146,7 @@
             this.Controls.Add(this.textBoxNum);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonPowerJson);
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Demos";
             this.Text = "Demo and Labs";
             this.Load += new System.EventHandler(this.DemosLoad);
@@ -154,5 +165,6 @@
         private Label labellastrun;
         private TextBox textBoxMessage;
         private Label label3;
+        private Button button1;
     }
 }

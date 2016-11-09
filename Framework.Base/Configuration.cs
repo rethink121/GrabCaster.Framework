@@ -209,7 +209,7 @@ namespace GrabCaster.Framework.Base
                     Console.WriteLine("Insert a point name and press Enter:");
                     string pointName = Console.ReadLine();
                     newContent = content.Replace("POINTID", Guid.NewGuid().ToString().ToUpper());
-                    newContent = newContent.Replace("[POINTNAME]", pointName);
+                    newContent = newContent.Replace("POINTNAME", pointName);
 
 
                     File.WriteAllText(defaultFile, newContent);

@@ -46,12 +46,12 @@ copy Framework.Deployment\bin\Debug\GrabCaster.Framework.Deployment.dll Framewor
 copy Framework.Deployment\bin\Debug\GrabCaster.Framework.Deployment.pdb Framework\bin\Debug\* /y
 copy Framework.Deployment\bin\Release\GrabCaster.Framework.Deployment.dll Framework\bin\Release\* /y
 
-xcopy DefaultFiles\DynamicDeployment\* Framework\bin\Debug\Root_GrabCaster\Deploy\ /s /y
-xcopy DefaultFiles\DynamicDeployment\* Framework\bin\Release\Root_GrabCaster\Deploy\ /s /y
+xcopy ..\DefaultFiles\DynamicDeployment\* Framework\bin\Debug\Root_GrabCaster\Deploy\ /s /y
+xcopy ..\DefaultFiles\DynamicDeployment\* Framework\bin\Release\Root_GrabCaster\Deploy\ /s /y
 
 
-xcopy DefaultFiles\Log Framework\bin\Debug\Log\* /s /y /e
-xcopy DefaultFiles\Log Framework\bin\Debug\Log\* /s /y /e
+xcopy ..\DefaultFiles\Log Framework\bin\Debug\Log\* /s /y /e
+xcopy ..\DefaultFiles\Log Framework\bin\Debug\Log\* /s /y /e
 
 echo copy in embedded folder
 

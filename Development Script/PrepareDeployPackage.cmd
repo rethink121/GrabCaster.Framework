@@ -18,39 +18,37 @@ call DeployTriggerDLLReleaseversion.cmd
 
 cd..
 
-xcopy DefaultFiles\License.txt Setup\bin\Debug\Deploy\*  /y
-xcopy DefaultFiles\License.txt Setup\bin\Release\Deploy\*  /y
+xcopy ..\DefaultFiles\License.txt Setup\bin\Debug\Deploy\*  /y
+xcopy ..\DefaultFiles\License.txt Setup\bin\Release\Deploy\*  /y
 
 xcopy "Batch Files\Create new Clone.cmd" Setup\bin\Debug\Deploy\*  /y
 rem xcopy "Documentation\GrabCaster v1.0- Technical Manual.pdf" Setup\bin\Debug\Deploy\Documentation\ /s /y /e
 xcopy Framework\bin\Debug\*.dll Setup\bin\Debug\Deploy\*  /y
 xcopy Framework\bin\Debug\*.pdb Setup\bin\Debug\Deploy\*  /y
-copy DefaultFiles\DeployDefault.cfg Setup\bin\Debug\Deploy\DevDefault.cfg  /y
-copy DefaultFiles\license.rtf Setup\bin\Debug\Deploy\license.rtf  /y
-copy DefaultFiles\license.rtf Setup\bin\Release\Deploy\license.rtf  /y
+copy ..\DefaultFiles\DeployDefault.cfg Setup\bin\Debug\Deploy\DevDefault.cfg  /y
 xcopy Framework\bin\Debug\*.exe Setup\bin\Debug\Deploy\*  /y
 
 xcopy Framework\bin\Release\*.dll Setup\bin\Release\Deploy\*  /y
-copy DefaultFiles\DeployDefault.cfg Setup\bin\Release\Deploy\DeployDefault.cfg  /y
+copy ..\DefaultFiles\DeployDefault.cfg Setup\bin\Release\Deploy\DevDefault.cfg  /y
 xcopy Framework\bin\Release\*.exe Setup\bin\Release\Deploy\*  /y
 
-xcopy DefaultFiles\BubblingDeploy Setup\bin\Debug\Deploy\Root_GrabCaster\Bubbling\ /s /y /e
-xcopy DefaultFiles\BubblingDeploy Setup\bin\Release\Deploy\Root_GrabCaster\Bubbling\ /s /y /e
+xcopy ..\DefaultFiles\BubblingDeploy Setup\bin\Debug\Deploy\Root_GrabCaster\Bubbling\ /s /y /e
+xcopy ..\DefaultFiles\BubblingDeploy Setup\bin\Release\Deploy\Root_GrabCaster\Bubbling\ /s /y /e
 
 
-xcopy DefaultFiles\ConfigurationTemplates Setup\bin\Release\Deploy\Root_GrabCaster\ConfigurationTemplates\ /s /y /e
-xcopy DefaultFiles\ConfigurationTemplates Setup\bin\Release\Deploy\Root_GrabCaster\ConfigurationTemplates\ /s /y /e
+xcopy ..\DefaultFiles\ConfigurationTemplates Setup\bin\Release\Deploy\Root_GrabCaster\ConfigurationTemplates\ /s /y /e
+xcopy ..\DefaultFiles\ConfigurationTemplates Setup\bin\Release\Deploy\Root_GrabCaster\ConfigurationTemplates\ /s /y /e
 
 
 
 
-xcopy DefaultFiles\Log Setup\bin\Debug\Deploy\Log\* /s /y /e
-xcopy DefaultFiles\Log Setup\bin\Release\Deploy\Log\* /s /y /e
+xcopy ..\DefaultFiles\Log Setup\bin\Debug\Deploy\Log\* /s /y /e
+xcopy ..\DefaultFiles\Log Setup\bin\Release\Deploy\Log\* /s /y /e
 
-xcopy DefaultFiles\Demo Setup\bin\Debug\Deploy\Demo\* /s /y /e
-xcopy DefaultFiles\Demo Setup\bin\Release\Deploy\Demo\* /s /y /e
-xcopy DefaultFiles\Samples Setup\bin\Debug\Deploy\Samples\* /s /y /e
-xcopy DefaultFiles\PersistentStorage Setup\bin\Debug\Deploy\PersistentStorage\* /s /y /e
+xcopy ..\DefaultFiles\Demo Setup\bin\Debug\Deploy\Demo\* /s /y /e
+xcopy ..\DefaultFiles\Demo Setup\bin\Release\Deploy\Demo\* /s /y /e
+xcopy ..\DefaultFiles\Samples Setup\bin\Debug\Deploy\Samples\* /s /y /e
+xcopy ..\DefaultFiles\PersistentStorage Setup\bin\Debug\Deploy\PersistentStorage\* /s /y /e
 copy Framework.Log.EventHubs\bin\Debug\GrabCaster.Framework.Log.EventHubs.dll Setup\bin\Debug\Deploy\Root_GrabCaster\* /y
 copy Framework.Log.EventHubs\bin\Debug\GrabCaster.Framework.Log.EventHubs.pdb Setup\bin\Debug\Deploy\Root_GrabCaster\* /y
 copy Framework.Log.EventHubs\bin\Release\GrabCaster.Framework.Log.EventHubs.dll Setup\bin\Release\Deploy\Root_GrabCaster\* /y
@@ -67,8 +65,8 @@ copy Framework.Deployment\bin\Debug\GrabCaster.Framework.Deployment.dll Setup\bi
 copy Framework.Deployment\bin\Debug\GrabCaster.Framework.Deployment.pdb Setup\bin\Debug\Deploy\* /y
 copy Framework.Deployment\bin\Release\GrabCaster.Framework.Deployment.dll Setup\bin\Release\Deploy\* /y
 
-xcopy DefaultFiles\DynamicDeploymentDeploy\* Setup\bin\Debug\Deploy\DynamicDeployment\ /s /y
-xcopy DefaultFiles\DynamicDeploymentDeploy\* Setup\bin\Release\Deploy\DynamicDeployment\ /s /y
+xcopy ..\DefaultFiles\DynamicDeploymentDeploy\* Setup\bin\Debug\Deploy\DynamicDeployment\ /s /y
+xcopy ..\DefaultFiles\DynamicDeploymentDeploy\* Setup\bin\Release\Deploy\DynamicDeployment\ /s /y
 
 
 
@@ -102,7 +100,7 @@ xcopy GrabCaster.BizTalk.Adapter\Runtime\bin\Debug\GrabCaster.Framework.BizTalk.
 xcopy GrabCaster.BizTalk.Adapter\Runtime\bin\Debug\GrabCaster.Framework.BizTalk.Adapter.Designtime.pdb Setup\bin\Debug\Deploy\*  /y
 xcopy GrabCaster.BizTalk.Adapter\GrabCaster.reg Setup\bin\Debug\Deploy\*  /y
 xcopy GrabCaster.BizTalk.Adapter\Register BizTalk Adapter.txt" Setup\bin\Debug\Deploy\*  /y
-copy DefaultFiles\DeployDefault.cfg Setup\bin\Debug\Deploy\BTSNTSvc.cfg  /y
+copy ..\DefaultFiles\DeployDefault.cfg Setup\bin\Debug\Deploy\BTSNTSvc.cfg  /y
 
 xcopy GrabCaster.BizTalk.Adapter\Runtime\bin\Release\GrabCaster.Framework.BizTalk.Adapter.dll Setup\bin\Release\Deploy\*  /y
 xcopy GrabCaster.BizTalk.Adapter\Runtime\bin\Release\GrabCaster.Framework.BizTalk.Common.dll Setup\bin\Release\Deploy\*  /y
@@ -113,7 +111,7 @@ xcopy Setup\bin\Release\Deploy\Root_GrabCaster\* Setup\bin\Release\Deploy\Root_B
 pause
 xcopy GrabCaster.BizTalk.Adapter\GrabCaster.reg Setup\bin\Release\Deploy\*  /y
 xcopy GrabCaster.BizTalk.Adapter\Register_BizTalk_Adapter.txt Setup\bin\Release\Deploy\*  /y
-copy DefaultFiles\DeployDefault.cfg Setup\bin\Release\Deploy\BTSNTSvc.cfg  /y
+copy ..\DefaultFiles\DeployDefault.cfg Setup\bin\Release\Deploy\BTSNTSvc.cfg  /y
 
 
 cd %~dp0
