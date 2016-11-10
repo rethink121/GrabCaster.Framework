@@ -35,6 +35,7 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Windows.Forms;
 
 #endregion
@@ -109,5 +110,33 @@ namespace Laboratory
         private void Label2Click(object sender, EventArgs e)
         {
         }
+
+        private void buttonMultiGC_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                string newfolder = @"C:\Program Files (x86)\GrabCaster" + i;
+                copyFolder(@"C:\Program Files (x86)\GrabCaster", newfolder);
+                string fContent = File.ReadAllText(newfolder + "\\GrabCaster.cfg");
+                fContent = fContent.Replace("[POINTNUM]", i.ToString());
+                File.WriteAllText(newfolder + "\\GrabCaster.cfg",fContent);
+                Process.Start(newfolder + "\\GrabCaster.exe","M");
+            }
+
+        }
+
+        private void copyFolder(string SourcePath, string DestinationPath)
+        {
+            //Now Create all of the directories
+            foreach (string dirPath in Directory.GetDirectories(SourcePath, "*",
+                SearchOption.AllDirectories))
+                Directory.CreateDirectory(dirPath.Replace(SourcePath, DestinationPath));
+
+            //Copy all the files & Replaces any files with the same name
+            foreach (string newPath in Directory.GetFiles(SourcePath, "*.*",
+                SearchOption.AllDirectories))
+                File.Copy(newPath, newPath.Replace(SourcePath, DestinationPath), true);
+        }
+
     }
 }

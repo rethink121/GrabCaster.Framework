@@ -39,13 +39,13 @@
             this.labellastrun = new System.Windows.Forms.Label();
             this.textBoxMessage = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonMultiGC = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonPowerJson
             // 
             this.buttonPowerJson.Location = new System.Drawing.Point(77, 195);
-            this.buttonPowerJson.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonPowerJson.Margin = new System.Windows.Forms.Padding(2);
             this.buttonPowerJson.Name = "buttonPowerJson";
             this.buttonPowerJson.Size = new System.Drawing.Size(141, 30);
             this.buttonPowerJson.TabIndex = 0;
@@ -66,7 +66,7 @@
             // textBoxNum
             // 
             this.textBoxNum.Location = new System.Drawing.Point(77, 11);
-            this.textBoxNum.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxNum.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxNum.Name = "textBoxNum";
             this.textBoxNum.Size = new System.Drawing.Size(143, 20);
             this.textBoxNum.TabIndex = 3;
@@ -123,21 +123,22 @@
             this.label3.TabIndex = 8;
             this.label3.Text = "Text";
             // 
-            // button1
+            // buttonMultiGC
             // 
-            this.button1.Location = new System.Drawing.Point(500, 200);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(128, 42);
-            this.button1.TabIndex = 9;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.buttonMultiGC.Location = new System.Drawing.Point(500, 200);
+            this.buttonMultiGC.Name = "buttonMultiGC";
+            this.buttonMultiGC.Size = new System.Drawing.Size(128, 42);
+            this.buttonMultiGC.TabIndex = 9;
+            this.buttonMultiGC.Text = "Create multi GC";
+            this.buttonMultiGC.UseVisualStyleBackColor = true;
+            this.buttonMultiGC.Click += new System.EventHandler(this.buttonMultiGC_Click);
             // 
             // Demos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 254);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonMultiGC);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBoxMessage);
             this.Controls.Add(this.labellastrun);
@@ -146,7 +147,7 @@
             this.Controls.Add(this.textBoxNum);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonPowerJson);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Demos";
             this.Text = "Demo and Labs";
             this.Load += new System.EventHandler(this.DemosLoad);
@@ -165,6 +166,6 @@
         private Label labellastrun;
         private TextBox textBoxMessage;
         private Label label3;
-        private Button button1;
+        private Button buttonMultiGC;
     }
 }
