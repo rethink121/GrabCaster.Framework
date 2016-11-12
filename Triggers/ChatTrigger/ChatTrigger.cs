@@ -198,6 +198,7 @@ namespace GrabCaster.Framework.ChatTrigger
 
                     if (virtualkCode == 13)
                     {
+
                         trigger.DataContext =
                             EncodingDecoding.EncodingString2Bytes(
                                 string.Concat("[", ConfigurationBag.Configuration.PointName, "]: ", LineChat.ToString()));

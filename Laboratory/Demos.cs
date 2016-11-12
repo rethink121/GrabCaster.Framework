@@ -113,7 +113,10 @@ namespace Laboratory
 
         private void buttonMultiGC_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < 100; i++)
+            int from = int.Parse(textBoxFrom.Text);
+            int to = int.Parse(textBoxTo.Text);
+
+            for (int i = from; i < to; i++)
             {
                 string newfolder = @"C:\Program Files (x86)\GrabCaster" + i;
                 copyFolder(@"C:\Program Files (x86)\GrabCaster", newfolder);

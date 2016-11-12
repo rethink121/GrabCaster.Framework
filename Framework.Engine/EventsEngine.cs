@@ -78,6 +78,8 @@ namespace GrabCaster.Framework.Engine
         public static bool HAMaster = false;
         //If HA in enabled
         public static bool HAEnabled;
+        //If need to refresh configuration
+        public static bool ConfigurationUpdated;
         //iD point (Tick)
         public static long HAPointTickId;
         public static Dictionary<long, DateTime> HAPoints;
@@ -2638,7 +2640,7 @@ namespace GrabCaster.Framework.Engine
         ///     By these area the engine is going to manage what is going to change and look and start the provisioning
         /// </summary>
         // *************EVENTS WATCHER MANAGEMENT*************************************
-        public static void StartConfigurationSyncEngine()
+        public static void StartFolderWatcherEngine()
         {
             try
             {
@@ -2654,6 +2656,9 @@ namespace GrabCaster.Framework.Engine
                 FswEventFolder.Changed += EventFolderChanged;
                 FswEventFolder.Deleted += EventFolderChanged;
                 FswEventFolder.Renamed += EventFolderChanged;
+
+                new Task(CheckConfigurationupdated).Start();
+
             }
             catch (Exception ex)
             {
@@ -2678,23 +2683,34 @@ namespace GrabCaster.Framework.Engine
         /// </param>
         private static void EventFolderChanged(object source, FileSystemEventArgs e)
         {
-            if (Regex.IsMatch(
+            ConfigurationUpdated = true;
+        }
 
-                // ReSharper disable once AssignNullToNotNullAttribute
-                Path.GetExtension(e.FullPath),
-                ConfigurationBag.GcEventsFilesExtensions,
-                RegexOptions.IgnoreCase))
+        private static void CheckConfigurationupdated()
+        {
+            while (true)
             {
-                try
+                if (ConfigurationUpdated)
                 {
-                    FswEventFolder.EnableRaisingEvents = false;
-                    SyncProvider.RefreshBubblingSetting();
+                    ConfigurationUpdated = false;
+                    try
+                    {
+                        SyncProvider.RefreshBubblingSetting();
+                    }
+                    catch (Exception ex)
+                    {
+                        LogEngine.WriteLog(
+                            ConfigurationBag.EngineName,
+                            $"Error in {MethodBase.GetCurrentMethod().Name}",
+                            Constant.LogLevelError,
+                            Constant.TaskCategoriesError,
+                            ex,
+                            Constant.LogLevelError);
+                    }
                 }
-                finally
-                {
-                    FswEventFolder.EnableRaisingEvents = true;
-                }
+                Thread.Sleep(5000);
             }
+            
         }
     }
 

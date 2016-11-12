@@ -117,6 +117,10 @@ namespace GrabCaster.Framework.Engine
 
                 //****************************Check for updates
 
+                //****************************Start folder whatcher
+                EventsEngine.StartFolderWatcherEngine();
+                //****************************Start folder whatcher
+
                 //Set service states
                 Debug.WriteLine("Initialize Engine Service states.");
                 ServiceStates.RunPolling = ConfigurationBag.Configuration.RunInternalPolling;

@@ -30,6 +30,7 @@
 // OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // 
+
 #region Usings
 
 using System;
@@ -74,8 +75,23 @@ namespace GrabCaster.Framework.Dcp.Redis
 
         public void SendMessage(BubblingObject message)
         {
-            byte[] byteArrayBytes = BubblingObject.SerializeMessage(message);
-            subscriber.Publish("*", byteArrayBytes);
+            try
+            {
+                byte[] byteArrayBytes = BubblingObject.SerializeMessage(message);
+                subscriber.Publish("*", byteArrayBytes);
+            }
+            catch (Exception ex)
+            {
+
+                LogEngine.WriteLog(
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesEventHubs,
+                    ex,
+                    Constant.LogLevelError);
+            }
+
         }
     }
 }

@@ -40,6 +40,10 @@
             this.textBoxMessage = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.buttonMultiGC = new System.Windows.Forms.Button();
+            this.textBoxFrom = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBoxTo = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonPowerJson
@@ -133,11 +137,53 @@
             this.buttonMultiGC.UseVisualStyleBackColor = true;
             this.buttonMultiGC.Click += new System.EventHandler(this.buttonMultiGC_Click);
             // 
+            // textBoxFrom
+            // 
+            this.textBoxFrom.Location = new System.Drawing.Point(581, 143);
+            this.textBoxFrom.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxFrom.Name = "textBoxFrom";
+            this.textBoxFrom.Size = new System.Drawing.Size(48, 20);
+            this.textBoxFrom.TabIndex = 11;
+            this.textBoxFrom.Text = "0";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(498, 143);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(36, 15);
+            this.label4.TabIndex = 10;
+            this.label4.Text = "From";
+            // 
+            // textBoxTo
+            // 
+            this.textBoxTo.Location = new System.Drawing.Point(580, 167);
+            this.textBoxTo.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxTo.Name = "textBoxTo";
+            this.textBoxTo.Size = new System.Drawing.Size(48, 20);
+            this.textBoxTo.TabIndex = 13;
+            this.textBoxTo.Text = "50";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(497, 167);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(21, 15);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "To";
+            // 
             // Demos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 254);
+            this.Controls.Add(this.textBoxTo);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.textBoxFrom);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.buttonMultiGC);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBoxMessage);
@@ -167,5 +213,9 @@
         private TextBox textBoxMessage;
         private Label label3;
         private Button buttonMultiGC;
+        private TextBox textBoxFrom;
+        private Label label4;
+        private TextBox textBoxTo;
+        private Label label5;
     }
 }

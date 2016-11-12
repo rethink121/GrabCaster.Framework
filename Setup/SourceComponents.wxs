@@ -1681,6 +1681,9 @@
                             <Component Id="cmp21BDCFAFB07FFB65392A76C46D19D4F7" Guid="*">
                                 <File Id="filD447FBFDA450590AE99E1DDA43B444F0" KeyPath="yes" Source="$(var.SourcePath)\ServiceFabric\GrabCasterService\BasePackage\Log\10272016-49b27ebc-80f9-4b20-8260-2d52aeed828f.txt" />
                             </Component>
+                            <Component Id="cmp0DC98AE93D88276B5189BDC87C28E99C" Guid="*">
+                                <File Id="filD79FBAFEE707EC72215E9870AA75DD18" KeyPath="yes" Source="$(var.SourcePath)\ServiceFabric\GrabCasterService\BasePackage\Log\11102016-70ce0323-7541-4551-bdb6-6abe0185c0c6.txt" />
+                            </Component>
                         </Directory>
                         <Directory Id="dir599232BA2A7632D8582620FE5431925B" Name="Root_GrabCaster">
                             <Component Id="cmp17BF4B91EFB58E57A545485A8B08BF53" Guid="*">
@@ -1775,8 +1778,8 @@
                                     <Component Id="cmp25A9CCD7D95BD2392E7901819BB646FA" Guid="*">
                                         <File Id="fil9506DDFC8B8278A7D59EFCBC5F732A46" KeyPath="yes" Source="$(var.SourcePath)\ServiceFabric\GrabCasterService\BasePackage\Root_GrabCaster\Bubbling\Triggers\Demo File In_LocalRemoteAll 2 Out All Channels All Points.trg" />
                                     </Component>
-                                    <Component Id="cmp7D091BAD73201013BD30AA0BFF3A0375" Guid="*">
-                                        <File Id="fil9A31CD61703B92B1B0AEBFB167002818" KeyPath="yes" Source="$(var.SourcePath)\ServiceFabric\GrabCasterService\BasePackage\Root_GrabCaster\Bubbling\Triggers\Demo Notepad Chat.off" />
+                                    <Component Id="cmpEC602E01B67C58C2280EE6C057E7674D" Guid="*">
+                                        <File Id="fil246570DEF8DAE158A8B8891F0C023A11" KeyPath="yes" Source="$(var.SourcePath)\ServiceFabric\GrabCasterService\BasePackage\Root_GrabCaster\Bubbling\Triggers\Demo Notepad Chat.trg" />
                                     </Component>
                                     <Component Id="cmpACF9E64ECD780A0D38557B7E2C8AE50B" Guid="*">
                                         <File Id="filCCA15B721173186255E1ADD470FE9200" KeyPath="yes" Source="$(var.SourcePath)\ServiceFabric\GrabCasterService\BasePackage\Root_GrabCaster\Bubbling\Triggers\Demo SQL Bulk Select 2 SQL Bulk Insert All Points.off" />
@@ -2399,6 +2402,7 @@
             <ComponentRef Id="cmp2CD578EFD4110E446C7401202DAE6724" />
             <ComponentRef Id="cmp7631751F509EAA20FEA23274BBAE81B7" />
             <ComponentRef Id="cmp21BDCFAFB07FFB65392A76C46D19D4F7" />
+            <ComponentRef Id="cmp0DC98AE93D88276B5189BDC87C28E99C" />
             <ComponentRef Id="cmp17BF4B91EFB58E57A545485A8B08BF53" />
             <ComponentRef Id="cmp3D199E356AA07941363DD6EF83966F0F" />
             <ComponentRef Id="cmp899B1781984331B3421A800D30912E10" />
@@ -2427,7 +2431,7 @@
             <ComponentRef Id="cmp2F54F3A3CD86D398B464BB0A51410F7A" />
             <ComponentRef Id="cmp1AEC16FA3AF5D125B4FF0D974876F9CC" />
             <ComponentRef Id="cmp25A9CCD7D95BD2392E7901819BB646FA" />
-            <ComponentRef Id="cmp7D091BAD73201013BD30AA0BFF3A0375" />
+            <ComponentRef Id="cmpEC602E01B67C58C2280EE6C057E7674D" />
             <ComponentRef Id="cmpACF9E64ECD780A0D38557B7E2C8AE50B" />
             <ComponentRef Id="cmpE9081C373640C776A965AE45B96526E0" />
             <ComponentRef Id="cmp8DB1B884DA0739DBF993D1AFD5F9D707" />
