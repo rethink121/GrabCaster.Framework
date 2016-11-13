@@ -180,7 +180,7 @@ namespace GrabCaster.Framework.Engine
                 }
 
                 //Load the Active triggers and the active events
-                EventsEngine.RefreshBubblingSetting();
+                EventsEngine.RefreshBubblingSetting(false);
                 //Start triggers single instances
                 EventsEngine.ExecuteBubblingTriggerConfigurationsSingleInstance();
                 //Start triggers polling instances

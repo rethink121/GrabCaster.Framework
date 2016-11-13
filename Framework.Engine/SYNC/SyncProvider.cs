@@ -1188,11 +1188,11 @@ namespace GrabCaster.Framework.Engine
         /// <summary>
         ///     TODO The refresh bubbling setting.
         /// </summary>
-        public static void RefreshBubblingSetting()
+        public static void RefreshBubblingSetting(bool RefreshTriggerRunning)
         {
             ////Check if it's a simple event/trigger configuration update (NOT DLL), then just update the eventlistsetting
             Debug.WriteLine("-!EVENTS CONFIGURATION ENGINE SYNC!-", ConsoleColor.Green);
-            EventsEngine.RefreshBubblingSetting();
+            EventsEngine.RefreshBubblingSetting(RefreshTriggerRunning);
             ConfigurationBag.LoadConfiguration();
         }
     }

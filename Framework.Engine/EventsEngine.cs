@@ -107,6 +107,7 @@ namespace GrabCaster.Framework.Engine
         ///     Triggers dll deployed in the bubbling folder
         /// </summary>
         public static Dictionary<string, ITriggerAssembly> CacheTriggerComponents;
+        public static Dictionary<string, ITriggerType> CacheTriggerRunning;
 
         /// <summary>
         ///     Events dll deployed in the bubbling folder
@@ -791,7 +792,7 @@ namespace GrabCaster.Framework.Engine
                     string backupFolder = currentSyncFolder.Replace("\\Sync\\In",
                         $"\\Sync\\{DateTime.Now.ToString("yyyyMMdd_HHmmss")}");
                     Directory.Move(currentSyncFolder, backupFolder);
-                    RefreshBubblingSetting();
+                    RefreshBubblingSetting(true);
                     return true;
                 }
                 LogEngine.DirectEventViewerLog(
@@ -1062,6 +1063,7 @@ namespace GrabCaster.Framework.Engine
             // Load all Triggers and Events DLLs in the main dictionary
 
             CacheTriggerComponents = new Dictionary<string, ITriggerAssembly>();
+            CacheTriggerRunning = new Dictionary<string, ITriggerType>();
             CacheEventComponents = new Dictionary<string, IEventAssembly>();
             CacheChainComponents = new Dictionary<string, IChainComponentAssembly>();
             CacheEngineComponents = new Dictionary<string, Assembly>();
@@ -1414,7 +1416,7 @@ namespace GrabCaster.Framework.Engine
         ///     Create all bubbling object for trigger event and components
         ///     to be used by the engine
         /// </summary>
-        public static void RefreshBubblingSetting()
+        public static void RefreshBubblingSetting(bool RefreshTriggersRunning)
         {
             //Instantiate vars
             try
@@ -1454,7 +1456,7 @@ namespace GrabCaster.Framework.Engine
                     {
                         try
                         {
-                            // TODO 10001
+                            // TODO 10001.execute
                             triggerConfiguration =
                                 JsonConvert.DeserializeObject<TriggerConfiguration>(
                                     File.ReadAllText(triggerConfigurationsFile));
@@ -1574,6 +1576,7 @@ namespace GrabCaster.Framework.Engine
                                     p =>
                                         p.GetCustomAttributes(typeof(TriggerPropertyContract), true).Length > 0 &&
                                         p.Name != "DataContext");
+
                         foreach (var propertyInfo in propertyInfos)
                         {
                             TriggerProperty triggerProperty =
@@ -1584,6 +1587,8 @@ namespace GrabCaster.Framework.Engine
                             bubblingOTriggerClone.Properties.Add(triggerProperty.Name,
                                 new Property(triggerProperty.Name, triggerProperty.Name, propertyInfo,
                                     propertyInfo.PropertyType, triggerProperty.Value));
+
+
                         }
 
                         PropertyInfo propertyInfosDataContext =
@@ -1591,6 +1596,33 @@ namespace GrabCaster.Framework.Engine
                         bubblingOTriggerClone.Properties.Add(propertyInfosDataContext.Name,
                             new Property(propertyInfosDataContext.Name, propertyInfosDataContext.Name,
                                 propertyInfosDataContext, propertyInfosDataContext.PropertyType, null));
+
+                        if (RefreshTriggersRunning)
+                        {
+                            //Refresh properties trigger running
+                            ITriggerType triggerTypeRunning;
+                            CacheTriggerRunning.TryGetValue(triggerConfiguration.Trigger.IdComponent, out triggerTypeRunning);
+
+                            IEnumerable<PropertyInfo> propertyInfosRunning =
+                                triggerTypeRunning.GetType()
+                                    .GetProperties()
+                                    .ToList()
+                                    .Where(
+                                        p =>
+                                            p.GetCustomAttributes(typeof(TriggerPropertyContract), true).Length > 0 &&
+                                            p.Name != "DataContext");
+
+                            foreach (var propertyInfo in propertyInfosRunning)
+                            {
+                                TriggerProperty triggerProperty =
+                                    triggerConfiguration.Trigger.TriggerProperties.First(p => p.Name == propertyInfo.Name);
+
+                                propertyInfo.SetValue(triggerTypeRunning,
+                                    Convert.ChangeType(triggerProperty.Value, propertyInfo.PropertyType),
+                                    null);
+                            }
+                        }
+                     
 
 
                         // Add in the list
@@ -2115,6 +2147,9 @@ namespace GrabCaster.Framework.Engine
                     Activator.CreateInstance(triggerAssemblyTemp.AssemblyClassType) as ITriggerType;
 
                 triggerType.DataContext = embeddedContent;
+
+                CacheTriggerRunning.Add(bubblingObject.IdComponent, triggerType);
+
                 //todo optimization ma le proprieta' sono gia settate nel refreshbubbling
                 // Assign all propertyies value trigger to class instance and execute
 
@@ -2695,7 +2730,7 @@ namespace GrabCaster.Framework.Engine
                     ConfigurationUpdated = false;
                     try
                     {
-                        SyncProvider.RefreshBubblingSetting();
+                        SyncProvider.RefreshBubblingSetting(true);
                     }
                     catch (Exception ex)
                     {

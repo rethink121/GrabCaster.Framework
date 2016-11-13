@@ -129,7 +129,7 @@ namespace GrabCaster.Framework.Engine
         {
             try
             {
-                SyncProvider.RefreshBubblingSetting();
+                SyncProvider.RefreshBubblingSetting(true);
             }
             catch (Exception ex)
             {

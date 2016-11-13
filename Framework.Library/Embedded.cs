@@ -261,7 +261,7 @@ namespace GrabCaster.Framework.Library
             EventsEngine.LoadAssemblyComponents(ref triggers, ref events, ref components);
 
             //Load event list configuration
-            EventsEngine.RefreshBubblingSetting();
+            EventsEngine.RefreshBubblingSetting(false);
         }
 
 
