@@ -1529,6 +1529,8 @@ namespace GrabCaster.Framework.Engine
                     //Check if the dll is deployed with the appropiate idComponent
                     ITriggerAssembly triggerAssembly;
                     CacheTriggerComponents.TryGetValue(triggerConfiguration.Trigger.IdComponent, out triggerAssembly);
+
+
                     //var bubblingTrigger =
                     //    GlobalAssemblyFiles.Find(
                     //        property => property.IdComponent == triggerConfiguration.Trigger.IdComponent);
@@ -1601,7 +1603,7 @@ namespace GrabCaster.Framework.Engine
                         {
                             //Refresh properties trigger running
                             ITriggerType triggerTypeRunning;
-                            CacheTriggerRunning.TryGetValue(triggerConfiguration.Trigger.IdComponent, out triggerTypeRunning);
+                            CacheTriggerRunning.TryGetValue(triggerConfiguration.Trigger.IdConfiguration + triggerConfiguration.Trigger.IdComponent, out triggerTypeRunning);
 
                             IEnumerable<PropertyInfo> propertyInfosRunning =
                                 triggerTypeRunning.GetType()
@@ -2085,7 +2087,9 @@ namespace GrabCaster.Framework.Engine
         {
             foreach (var bubblingTriggerConfiguration in BubblingTriggerConfigurationsPolling)
             {
-                ExecuteTriggerConfiguration(bubblingTriggerConfiguration, null);
+                //This function is for internall polling only, no thread pool available
+                ExecuteTriggerConfigurationForPolling(bubblingTriggerConfiguration,null);
+
             }
         }
 
@@ -2118,6 +2122,8 @@ namespace GrabCaster.Framework.Engine
                     bubblingObject,
                     embeddedContent
                 });
+
+
         }
 
         /// <summary>
@@ -2127,14 +2133,12 @@ namespace GrabCaster.Framework.Engine
         /// <param name="bubblingObject">
         ///     The bubbling Trigger Configuration.
         /// </param>
-        public static void ExecuteTriggerConfigurationInPool(object objectState)
+        public static void ExecuteTriggerConfigurationForPolling(BubblingObject bubblingObject, byte[] embeddedContent)
         {
+
+
             try
             {
-                object[] callBackParameters = objectState as object[];
-                BubblingObject bubblingObject = (BubblingObject) callBackParameters[0];
-                byte[] embeddedContent = (byte[]) callBackParameters[1];
-
                 // Set master EventActionContext eccoloqua
                 var eventActionContext = new ActionContext(bubblingObject);
 
@@ -2146,9 +2150,13 @@ namespace GrabCaster.Framework.Engine
                 ITriggerType triggerType =
                     Activator.CreateInstance(triggerAssemblyTemp.AssemblyClassType) as ITriggerType;
 
+                lock (CacheTriggerRunning)
+                {
+                    CacheTriggerRunning.Add(bubblingObject.IdConfiguration + bubblingObject.IdComponent, triggerType);
+                }
+
                 triggerType.DataContext = embeddedContent;
 
-                CacheTriggerRunning.Add(bubblingObject.IdComponent, triggerType);
 
                 //todo optimization ma le proprieta' sono gia settate nel refreshbubbling
                 // Assign all propertyies value trigger to class instance and execute
@@ -2190,7 +2198,91 @@ namespace GrabCaster.Framework.Engine
             {
                 LogEngine.WriteLog(
                     ConfigurationBag.EngineName,
-                    $"Error in {MethodBase.GetCurrentMethod().Name}\r Possible reasons: A property is missing or null, a configuration file is wrong.",
+                    $"Error in {MethodBase.GetCurrentMethod().Name}\r IDConfiguration: {bubblingObject.IdConfiguration}" +
+                    $" - IdComponent: {bubblingObject.IdComponent}.",
+                    Constant.LogLevelError,
+                    Constant.TaskCategoriesError,
+                    ex,
+                    Constant.LogLevelError);
+            }
+        }
+
+        /// <summary>
+        ///     Execute a trigger and if the Execute method return != null then it set all return value in a action and excute the
+        ///     action
+        /// </summary>
+        /// <param name="bubblingObject">
+        ///     The bubbling Trigger Configuration.
+        /// </param>
+        public static void ExecuteTriggerConfigurationInPool(object objectState)
+        {
+
+            object[] callBackParameters = objectState as object[];
+            BubblingObject bubblingObject = (BubblingObject)callBackParameters[0];
+            byte[] embeddedContent = (byte[])callBackParameters[1];
+            try
+            {
+                // Set master EventActionContext eccoloqua
+                var eventActionContext = new ActionContext(bubblingObject);
+
+                eventActionContext.MessageId = Guid.NewGuid().ToString();
+
+                // In the first execute the main Execute method
+                ITriggerAssembly triggerAssemblyTemp;
+                CacheTriggerComponents.TryGetValue(bubblingObject.IdComponent, out triggerAssemblyTemp);
+                ITriggerType triggerType =
+                    Activator.CreateInstance(triggerAssemblyTemp.AssemblyClassType) as ITriggerType;
+
+                lock (CacheTriggerRunning)
+                {
+                    CacheTriggerRunning.Add(bubblingObject.IdConfiguration + bubblingObject.IdComponent, triggerType);
+                }
+
+                triggerType.DataContext = embeddedContent;
+
+
+                //todo optimization ma le proprieta' sono gia settate nel refreshbubbling
+                // Assign all propertyies value trigger to class instance and execute
+
+                //triggerConfiguration.Properties["DataContext"].Value = embeddedContent;
+
+                //Set assembly properties values
+                IEnumerable<PropertyInfo> propertyInfos =
+                    triggerType.GetType()
+                        .GetProperties()
+                        .ToList()
+                        .Where(
+                            p =>
+                                p.GetCustomAttributes(typeof(TriggerPropertyContract), true).Length > 0 &&
+                                p.Name != "DataContext");
+                foreach (var propertyInfo in propertyInfos)
+                {
+                    propertyInfo.SetValue(triggerType,
+                        Convert.ChangeType(bubblingObject.Properties[propertyInfo.Name].Value, propertyInfo.PropertyType),
+                        null);
+                }
+
+                try
+                {
+                    triggerType.Execute(delegateActionTrigger, eventActionContext);
+                }
+                catch (TargetInvocationException ex)
+                {
+                    LogEngine.WriteLog(
+                        ConfigurationBag.EngineName,
+                        $"Critical Error in {MethodBase.GetCurrentMethod().Name} invoking the component {triggerAssemblyTemp.AssemblyFile}",
+                        Constant.LogLevelError,
+                        Constant.TaskCategoriesError,
+                        ex,
+                        Constant.LogLevelError);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogEngine.WriteLog(
+                    ConfigurationBag.EngineName,
+                    $"Error in {MethodBase.GetCurrentMethod().Name}\r IDConfiguration: {bubblingObject.IdConfiguration}" +
+                    $" - IdComponent: {bubblingObject.IdComponent}.",
                     Constant.LogLevelError,
                     Constant.TaskCategoriesError,
                     ex,
