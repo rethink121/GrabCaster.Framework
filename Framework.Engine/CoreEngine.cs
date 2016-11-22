@@ -115,11 +115,6 @@ namespace GrabCaster.Framework.Engine
                     EventsEngine.SyncronizePoint();
                 }
 
-                //****************************Check for updates
-
-                //****************************Start folder whatcher
-                EventsEngine.StartFolderWatcherEngine();
-                //****************************Start folder whatcher
 
                 //Set service states
                 Debug.WriteLine("Initialize Engine Service states.");
@@ -211,7 +206,10 @@ namespace GrabCaster.Framework.Engine
                 onRampEngineReceiving.Init("component.dll name");
 
                 // Configuration files watcher
-                //EventsEngine.StartConfigurationSyncEngine();
+                //****************************Start folder whatcher
+                EventsEngine.StartFolderWatcherEngine();
+                //****************************Start folder whatcher
+
 
                 LogEngine.WriteLog(
                     ConfigurationBag.EngineName,

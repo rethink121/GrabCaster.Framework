@@ -111,7 +111,7 @@ namespace GrabCaster.Framework.ChatEvent
                 return null;
             }
 
-            if (notepads[0] != null)
+            if (notepads[0] != null && notepads[0].MainWindowTitle.ToUpper() == "CHAT.TXT - NOTEPAD")
             {
                 EmptyClipboard();
                 var child = FindWindowEx(notepads[0].MainWindowHandle, new IntPtr(0), "Edit", null);

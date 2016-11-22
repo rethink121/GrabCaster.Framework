@@ -65,7 +65,7 @@ namespace GrabCaster.Framework.Storage
                 var blobClient = storageAccount.CreateCloudBlobClient();
 
                 // Retrieve a reference to a container. 
-                var container = blobClient.GetContainerReference(ConfigurationBag.Configuration.GroupEventHubsName);
+                var container = blobClient.GetContainerReference(ConfigurationBag.Configuration.GroupStorageAccountName + "gcstorage");
 
                 // Create the container if it doesn't already exist.
                 container.CreateIfNotExists();
@@ -102,7 +102,7 @@ namespace GrabCaster.Framework.Storage
                 var blobClient = storageAccount.CreateCloudBlobClient();
 
                 // Retrieve a reference to a container. 
-                var container = blobClient.GetContainerReference(ConfigurationBag.Configuration.GroupEventHubsName);
+                var container = blobClient.GetContainerReference(ConfigurationBag.Configuration.GroupStorageAccountName + "gcstorage");
 
                 // Create the container if it doesn't already exist.
                 container.CreateIfNotExists();

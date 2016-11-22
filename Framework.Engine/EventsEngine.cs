@@ -2085,11 +2085,15 @@ namespace GrabCaster.Framework.Engine
         /// </summary>
         public static void ExecuteBubblingTriggerConfigurationPolling()
         {
-            foreach (var bubblingTriggerConfiguration in BubblingTriggerConfigurationsPolling)
+            while (true)
             {
-                //This function is for internall polling only, no thread pool available
-                ExecuteTriggerConfigurationForPolling(bubblingTriggerConfiguration,null);
+                foreach (var bubblingTriggerConfiguration in BubblingTriggerConfigurationsPolling)
+                {
+                    //This function is for internall polling only, no thread pool available
+                    ExecuteTriggerConfigurationForPolling(bubblingTriggerConfiguration, null);
 
+                }
+                Thread.Sleep(ConfigurationBag.Configuration.EnginePollingTime);
             }
         }
 
@@ -2149,11 +2153,6 @@ namespace GrabCaster.Framework.Engine
                 CacheTriggerComponents.TryGetValue(bubblingObject.IdComponent, out triggerAssemblyTemp);
                 ITriggerType triggerType =
                     Activator.CreateInstance(triggerAssemblyTemp.AssemblyClassType) as ITriggerType;
-
-                lock (CacheTriggerRunning)
-                {
-                    CacheTriggerRunning.Add(bubblingObject.IdConfiguration + bubblingObject.IdComponent, triggerType);
-                }
 
                 triggerType.DataContext = embeddedContent;
 
@@ -2783,7 +2782,7 @@ namespace GrabCaster.Framework.Engine
                 FswEventFolder.Changed += EventFolderChanged;
                 FswEventFolder.Deleted += EventFolderChanged;
                 FswEventFolder.Renamed += EventFolderChanged;
-
+                ConfigurationUpdated = false;
                 new Task(CheckConfigurationupdated).Start();
 
             }

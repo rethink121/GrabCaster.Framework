@@ -48,7 +48,7 @@
             // 
             // buttonPowerJson
             // 
-            this.buttonPowerJson.Location = new System.Drawing.Point(77, 195);
+            this.buttonPowerJson.Location = new System.Drawing.Point(77, 100);
             this.buttonPowerJson.Margin = new System.Windows.Forms.Padding(2);
             this.buttonPowerJson.Name = "buttonPowerJson";
             this.buttonPowerJson.Size = new System.Drawing.Size(141, 30);
@@ -179,7 +179,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 254);
+            this.ClientSize = new System.Drawing.Size(397, 150);
             this.Controls.Add(this.textBoxTo);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.textBoxFrom);
@@ -193,8 +193,10 @@
             this.Controls.Add(this.textBoxNum);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonPowerJson);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Demos";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Demo and Labs";
             this.Load += new System.EventHandler(this.DemosLoad);
             this.ResumeLayout(false);

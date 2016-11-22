@@ -180,30 +180,26 @@ namespace GrabCaster.Framework.ChatTrigger
             if (wParam == (IntPtr) WM_KEYDOWN)
             {
                 var notepads = Process.GetProcessesByName("notepad");
-                Process notepadChat = null;
-                foreach (Process notepad in notepads)
+                if (notepads.Length > 0)
                 {
-                    if (notepad.MainWindowTitle.ToUpper() == "CHAT.TXT - NOTEPAD")
-                        notepadChat = notepad;
-                }
-
-
-                if (notepadChat != null)
-                {
-                    var virtualkCode = Marshal.ReadInt32(lParam);
-                    if (virtualkCode != 13)
+                    if (notepads[0] != null && notepads[0].MainWindowTitle.ToUpper() == "CHAT.TXT - NOTEPAD")
                     {
-                        LineChat.Append((char) virtualkCode);
-                    }
+                        var virtualkCode = Marshal.ReadInt32(lParam);
+                        if (virtualkCode != 13)
+                        {
+                            LineChat.Append((char) virtualkCode);
+                        }
 
-                    if (virtualkCode == 13)
-                    {
+                        if (virtualkCode == 13)
+                        {
 
-                        trigger.DataContext =
-                            EncodingDecoding.EncodingString2Bytes(
-                                string.Concat("[", ConfigurationBag.Configuration.PointName, "]: ", LineChat.ToString()));
-                        LineChat.Clear();
-                        InternalActionTrigger(trigger, InternalContext);
+                            trigger.DataContext =
+                                EncodingDecoding.EncodingString2Bytes(
+                                    string.Concat("[", ConfigurationBag.Configuration.PointName, "]: ",
+                                        LineChat.ToString()));
+                            LineChat.Clear();
+                            InternalActionTrigger(trigger, InternalContext);
+                        }
                     }
                 }
             }

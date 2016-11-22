@@ -17,6 +17,10 @@ call DeployTriggerDLLReleaseversion.cmd
 
 
 cd..
+copy ..\DefaultFiles\RestSharp.dll Setup\bin\Debug\Deploy\*  /y
+copy ..\DefaultFiles\Twilio.Api.dll Setup\bin\Debug\Deploy\*  /y
+copy ..\DefaultFiles\RestSharp.dll Setup\bin\Release\Deploy\*  /y
+copy ..\DefaultFiles\Twilio.Api.dll Setup\bin\Release\Deploy\*  /y
 
 xcopy ..\DefaultFiles\License.txt Setup\bin\Debug\Deploy\*  /y
 xcopy ..\DefaultFiles\License.txt Setup\bin\Release\Deploy\*  /y
