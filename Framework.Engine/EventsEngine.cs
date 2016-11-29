@@ -1419,8 +1419,15 @@ namespace GrabCaster.Framework.Engine
         public static void RefreshBubblingSetting(bool RefreshTriggersRunning)
         {
             //Instantiate vars
+            string ErrComponentType = String.Empty;
+            string ErrComponentId = String.Empty;
+            string ErrComponentIdConf = String.Empty;
+            string ErrComponentName = String.Empty;
+            string ErrComponentFile = String.Empty;
+
             try
             {
+
                 LogEngine.DirectEventViewerLog("Update Point settings...", 4);
 
                 SyncronizationConfigurationFileList = new List<SyncConfigurationFile>();
@@ -1449,6 +1456,7 @@ namespace GrabCaster.Framework.Engine
                 // For each trigger search for the trigger in event bubbling and set the properties
                 foreach (var triggerConfigurationsFile in triggerConfigurationsFiles)
                 {
+
                     TriggerConfiguration triggerConfiguration = null;
 
                     var fileLocked = true;
@@ -1461,6 +1469,13 @@ namespace GrabCaster.Framework.Engine
                                 JsonConvert.DeserializeObject<TriggerConfiguration>(
                                     File.ReadAllText(triggerConfigurationsFile));
                             fileLocked = false;
+
+                            //For logging
+                            ErrComponentId = triggerConfiguration.Trigger.IdComponent;
+                            ErrComponentIdConf = triggerConfiguration.Trigger.IdConfiguration;
+                            ErrComponentName = triggerConfiguration.Trigger.Name;
+                            ErrComponentFile = triggerConfigurationsFile;
+                            ErrComponentType = "Trigger";
 
 
                             //Check if can be executed by this point
@@ -1679,6 +1694,14 @@ namespace GrabCaster.Framework.Engine
                                 JsonConvert.DeserializeObject<EventConfiguration>(
                                     EncodingDecoding.EncodingBytes2String(propertyEventsByteContent));
 
+                            //For logging
+                            ErrComponentId = eventPropertyBag.Event.IdComponent;
+                            ErrComponentIdConf = eventPropertyBag.Event.IdConfiguration;
+                            ErrComponentName = eventPropertyBag.Event.Name;
+                            ErrComponentFile = propertyEventsFile;
+
+                            ErrComponentType = "Event";
+
                             // Add to the global list
                             string key = eventPropertyBag.Event.IdConfiguration + eventPropertyBag.Event.IdComponent;
                             eventPropertyBag.Event.CacheEventProperties = new Dictionary<string, EventProperty>();
@@ -1804,7 +1827,11 @@ namespace GrabCaster.Framework.Engine
                             chainPropertyBag =
                                 JsonConvert.DeserializeObject<ChainConfiguration>(
                                     EncodingDecoding.EncodingBytes2String(propertyChainsByteContent));
-
+                            //For logging
+                            ErrComponentId = chainPropertyBag.Chain.IdChain;
+                            ErrComponentName = chainPropertyBag.Chain.Name;
+                            ErrComponentFile = propertyChainsFile;
+                            ErrComponentType = "Chain";
                             // Add to the global list
                             ConfigurationJsonChainFileList.Add(chainPropertyBag);
                         }
@@ -1852,6 +1879,12 @@ namespace GrabCaster.Framework.Engine
                             componentPropertyBag =
                                 JsonConvert.DeserializeObject<ComponentConfiguration>(
                                     EncodingDecoding.EncodingBytes2String(propertyComponentsByteContent));
+
+                            //For logging
+                            ErrComponentId = componentPropertyBag.Component.IdComponent;
+                            ErrComponentName = componentPropertyBag.Component.Name;
+                            ErrComponentFile = propertyComponentsFile;
+                            ErrComponentType = "Component";
 
                             // Add to the global list
                             ConfigurationJsonComponentList.Add(componentPropertyBag);
@@ -1962,7 +1995,7 @@ namespace GrabCaster.Framework.Engine
             catch (Exception ex)
             {
                 LogEngine.WriteLog(ConfigurationBag.EngineName,
-                    $"Error in {MethodBase.GetCurrentMethod().Name}",
+                    $"Error in {MethodBase.GetCurrentMethod().Name} a configuration file or the related dll component could be wrong, last configuration loaded before error is: Type: {ErrComponentType} - Id: {ErrComponentId} IdConfiguration: {ErrComponentIdConf} - Name: {ErrComponentName} - File: {ErrComponentFile}",
                     Constant.LogLevelError,
                     Constant.TaskCategoriesError,
                     ex,
