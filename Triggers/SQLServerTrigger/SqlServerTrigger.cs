@@ -34,6 +34,7 @@
 
 using System;
 using System.Data.SqlClient;
+using System.Threading;
 using System.Xml;
 using GrabCaster.Framework.Base;
 using GrabCaster.Framework.Contracts.Attributes;
@@ -49,7 +50,7 @@ namespace GrabCaster.Framework.SqlServerTrigger
     /// </summary>
     [TriggerContract("{7920EE0F-CAC8-4ABB-82C2-1C69351EDD28}", "Sql Server Trigger",
          "Execute a Sql query or stored procedure.",
-         true, true, false)]
+         false, true, false)]
     public class SqlServerTrigger : ITriggerType
     {
         /// <summary>
@@ -59,8 +60,11 @@ namespace GrabCaster.Framework.SqlServerTrigger
         public string SqlQuery { get; set; }
 
         /// <summary>
-        ///     Gets or sets the connection string.
+        ///     Gets or sets the polling time.
         /// </summary>
+        [TriggerPropertyContract("PollingTime", "Polling time.")]
+        public int PollingTime { get; set; }
+
         [TriggerPropertyContract("ConnectionString", "ConnectionString")]
         public string ConnectionString { get; set; }
 
@@ -99,36 +103,40 @@ namespace GrabCaster.Framework.SqlServerTrigger
         {
             try
             {
-                Context = context;
-                ActionTrigger = actionTrigger;
-
-                using (var myConnection = new SqlConnection(ConnectionString))
+                while (true)
                 {
-                    var selectCommand = new SqlCommand(SqlQuery, myConnection);
-                    myConnection.Open();
-                    XmlReader readerResult = null;
-                    try
+                    using (var myConnection = new SqlConnection(ConnectionString))
                     {
-                        readerResult = selectCommand.ExecuteXmlReader();
-                        readerResult.Read();
-                    }
-                    catch (Exception)
-                    {
-                        return null;
-                    }
 
-                    if (readerResult.EOF)
-                    {
-                        return null;
-                    }
+                        var selectCommand = new SqlCommand(SqlQuery, myConnection);
+                        myConnection.Open();
+                        XmlReader readerResult = null;
+                        try
+                        {
+                            readerResult = selectCommand.ExecuteXmlReader();
+                            readerResult.Read();
+                        }
+                        catch (Exception)
+                        {
+                           
+                        }
 
-                    var xdoc = new XmlDocument();
-                    xdoc.Load(readerResult);
-                    if (xdoc.OuterXml != string.Empty)
-                    {
-                        DataContext = EncodingDecoding.EncodingString2Bytes(xdoc.OuterXml);
-                        myConnection.Close();
-                        actionTrigger(this, context);
+                        if (!readerResult.EOF)
+                        {
+
+
+                            var xdoc = new XmlDocument();
+                            xdoc.Load(readerResult);
+                            if (xdoc.OuterXml != string.Empty)
+                            {
+                                DataContext = EncodingDecoding.EncodingString2Bytes(xdoc.OuterXml);
+                                //myConnection.Close();
+                                actionTrigger(this, context);
+                            }
+                        }
+                        Thread.Sleep(PollingTime);
+
+
                     }
                 }
                 return null;
