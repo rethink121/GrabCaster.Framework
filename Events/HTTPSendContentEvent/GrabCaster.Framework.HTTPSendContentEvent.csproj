@@ -33,15 +33,11 @@
   <ItemGroup>
     <Reference Include="GrabCaster.Framework.Base, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Release\GrabCaster.Framework.Base.dll</HintPath>
+      <HintPath>..\..\Framework.Base\bin\Debug\GrabCaster.Framework.Base.dll</HintPath>
     </Reference>
     <Reference Include="GrabCaster.Framework.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Release\GrabCaster.Framework.Contracts.dll</HintPath>
-    </Reference>
-    <Reference Include="GrabCaster.Framework.Log, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Release\GrabCaster.Framework.Log.dll</HintPath>
+      <HintPath>..\..\Framework.Contracts\bin\Debug\GrabCaster.Framework.Contracts.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
