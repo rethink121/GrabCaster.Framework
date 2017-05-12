@@ -51,7 +51,7 @@
 "%25WIX%25\bin\heat.exe" dir "$(Solutiondir)Setup\bin\$(Configuration)\Deploy" -srd -dr INSTALLDIR_GRABCASTER -sfrag -sreg -cg SourceComponentGroup -var var.SourcePath -ag -out "$(SolutionDir).\Setup\SourceComponents.wxs"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>C:\GrabCaster\Certification\signmsi.cmd $(Configuration)</PostBuildEvent>
+    <PostBuildEvent />
   </PropertyGroup>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.

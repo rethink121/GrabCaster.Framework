@@ -196,6 +196,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrabCasterComponent", "DynamicDeployment\GrabCasterComponent\GrabCasterComponent.csproj", "{BD5F131C-C9C4-4CEF-8F47-B043CAF5CD7D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrabCaster.Framework.HTTPSendContentEvent", "Events\HTTPSendContentEvent\GrabCaster.Framework.HTTPSendContentEvent.csproj", "{DEDF50F1-9A60-4B04-800C-0652872ED57F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{14BA110C-7065-4099-BDE5-313F984B913D} = {14BA110C-7065-4099-BDE5-313F984B913D}
+		{48B1DC31-F74D-41D2-AA27-7A76F2E198B6} = {48B1DC31-F74D-41D2-AA27-7A76F2E198B6}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrabCaster.Framework.Log.AzureTableStorage", "Framework.Log.AzureTableStorage\GrabCaster.Framework.Log.AzureTableStorage.csproj", "{A54F4261-D584-4739-BAD4-2128A1FB0B1E}"
 EndProject
