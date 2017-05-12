@@ -35,6 +35,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
+using System.Threading;
 using GrabCaster.Framework.Base;
 using GrabCaster.Framework.Contracts.Attributes;
 using GrabCaster.Framework.Contracts.Globals;
@@ -57,12 +58,6 @@ namespace GrabCaster.Framework.EventViewerTrigger
         /// </summary>
         [TriggerPropertyContract("EventLog", "Event Source to monitor")]
         public string EventLog { get; set; }
-
-        /// <summary>
-        ///     Gets or sets the event message.
-        /// </summary>
-        [TriggerPropertyContract("EventMessage", "Event Message for the Event Viewer")]
-        public string EventMessage { get; set; }
 
         public string SupportBag { get; set; }
 
@@ -102,15 +97,17 @@ namespace GrabCaster.Framework.EventViewerTrigger
                 Context = context;
                 ActionTrigger = actionTrigger;
 
-                var myNewLog = new EventLog {Log = EventLog};
+                var myNewLog = new EventLog(EventLog);
 
                 myNewLog.EntryWritten += MyOnEntryWritten;
                 myNewLog.EnableRaisingEvents = true;
+                Thread.Sleep(Timeout.Infinite);
                 return null;
             }
             catch (Exception)
             {
                 // ignored
+                actionTrigger(this, null);
                 return null;
             }
         }
@@ -126,7 +123,6 @@ namespace GrabCaster.Framework.EventViewerTrigger
         /// </param>
         public void MyOnEntryWritten(object source, EntryWrittenEventArgs e)
         {
-            if (e.Entry.Source != "DEMOEV") return;
             var eventViewerMessage = new EventViewerMessage
             {
                 EntryType = e.Entry.EntryType,

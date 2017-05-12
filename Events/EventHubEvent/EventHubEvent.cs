@@ -32,6 +32,8 @@
 // 
 #region Usings
 
+using System.Diagnostics;
+using System.Reflection;
 using GrabCaster.Framework.Contracts.Attributes;
 using GrabCaster.Framework.Contracts.Events;
 using GrabCaster.Framework.Contracts.Globals;
@@ -103,7 +105,7 @@ namespace GrabCaster.Framework.EventHubEvent
             }
             catch
             {
-                // ignored
+                actionEvent(this, null);
                 return null;
             }
         }
